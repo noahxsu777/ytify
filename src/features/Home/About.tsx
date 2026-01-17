@@ -1,71 +1,70 @@
 export default function About() {
   const styles = {
     container: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      minHeight: '70vh',
-      padding: '20px',
-      fontFamily: 'system-ui, -apple-system, sans-serif',
+      "display": "flex",
+      "justify-content": "center",
+      "align-items": "center",
+      "min-height": "70vh",
+      "padding": "20px",
+      "font-family": "system-ui, -apple-system, sans-serif",
     },
     card: {
-      background: 'rgba(255, 255, 255, 0.03)',
-      backdropFilter: 'blur(12px)',
-      WebkitBackdropFilter: 'blur(12px)',
-      border: '1px solid rgba(255, 255, 255, 0.1)',
-      borderRadius: '28px',
-      padding: '40px 30px',
-      maxWidth: '450px',
-      width: '100%',
-      textAlign: 'center',
-      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+      "background": "rgba(255, 255, 255, 0.03)",
+      "backdrop-filter": "blur(12px)",
+      "-webkit-backdrop-filter": "blur(12px)",
+      "border": "1px solid rgba(255, 255, 255, 0.1)",
+      "border-radius": "28px",
+      "padding": "40px 30px",
+      "max-width": "450px",
+      "width": "100%",
+      "text-align": "center",
+      "box-shadow": "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
     },
     logoContainer: {
-      marginBottom: '20px',
-      display: 'inline-flex',
-      padding: '15px',
-      background: 'linear-gradient(135deg, rgba(0,210,255,0.1) 0%, rgba(58,123,213,0.1) 100%)',
-      borderRadius: '20px',
+      "margin-bottom": "20px",
+      "display": "inline-flex",
+      "padding": "15px",
+      "background": "linear-gradient(135deg, rgba(0,210,255,0.1) 0%, rgba(58,123,213,0.1) 100%)",
+      "border-radius": "20px",
     },
     title: {
-      fontSize: '2.8rem',
-      fontWeight: '800',
-      margin: '0',
-      background: 'linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%)',
-      WebkitBackgroundClip: 'text',
-      WebkitTextFillColor: 'transparent',
-      letterSpacing: '-1px',
+      "font-size": "2.8rem",
+      "font-weight": "800",
+      "margin": "0",
+      "background": "linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%)",
+      "-webkit-background-clip": "text",
+      "-webkit-text-fill-color": "transparent",
+      "letter-spacing": "-1px",
     },
     subtitle: {
-      fontSize: '1.1rem',
-      color: '#00d2ff',
-      marginTop: '5px',
-      fontWeight: '500',
-      letterSpacing: '2px',
-      textTransform: 'uppercase' as const,
+      "font-size": "1.1rem",
+      "color": "#00d2ff",
+      "margin-top": "5px",
+      "font-weight": "500",
+      "letter-spacing": "2px",
+      "text-transform": "uppercase",
     },
     text: {
-      color: '#a0a0a0',
-      lineHeight: '1.6',
-      fontSize: '1.05rem',
-      margin: '25px 0',
+      "color": "#a0a0a0",
+      "line-height": "1.6",
+      "font-size": "1.05rem",
+      "margin": "25px 0",
     },
     button: {
-      display: 'inline-block',
-      padding: '14px 32px',
-      background: '#fff',
-      color: '#000',
-      textDecoration: 'none',
-      borderRadius: '14px',
-      fontWeight: '600',
-      transition: 'all 0.3s ease',
+      "display": "inline-block",
+      "padding": "14px 32px",
+      "background": "#fff",
+      "color": "#000",
+      "text-decoration": "none",
+      "border-radius": "14px",
+      "font-weight": "600",
     },
     footer: {
-      marginTop: '40px',
-      borderTop: '1px solid rgba(255, 255, 255, 0.05)',
-      paddingTop: '20px',
-      fontSize: '0.85rem',
-      color: '#666',
+      "margin-top": "40px",
+      "border-top": "1px solid rgba(255, 255, 255, 0.05)",
+      "padding-top": "20px",
+      "font-size": "0.85rem",
+      "color": "#666",
     }
   };
 
@@ -96,9 +95,9 @@ export default function About() {
 
         <footer style={styles.footer}>
           <p>© 2026 Alliance Inside LLC</p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginTop: '10px' }}>
-            <a href="#" style={{ color: 'inherit', textDecoration: 'none' }}>Soporte</a>
-            <a href="#" style={{ color: 'inherit', textDecoration: 'none' }}>Privacidad</a>
+          <div style={{ "display": "flex", "justify-content": "center", "gap": "15px", "margin-top": "10px" }}>
+            <a href="#" style={{ "color": "inherit", "text-decoration": "none" }}>Soporte</a>
+            <a href="#" style={{ "color": "inherit", "text-decoration": "none" }}>Privacidad</a>
           </div>
         </footer>
       </div>
