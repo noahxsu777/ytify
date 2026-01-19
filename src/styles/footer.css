@@ -4,22 +4,29 @@ footer {
   flex-direction: column;
   position: relative;
   bottom: var(--height);
-  z-index: 2;
+  z-index: 100;
   width: 100dvmin;
   --height: var(--size-8);
   height: var(--height);
-  background: linear-gradient(rgb(from var(--onBg) r g b / 0.4), var(--trueBg));
-  backdrop-filter: blur(var(--size-px-4));
-  border-top-left-radius: var(--roundness);
-  border-top-right-radius: var(--roundness);
-  box-shadow: var(--shadow-2);
+
+  /* Improved Glassmorphism */
+  background: linear-gradient(to bottom, rgba(from var(--onBg) r g b / 0.6), rgba(from var(--bg) r g b / 0.95));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border-top-left-radius: var(--size-4);
+  border-top-right-radius: var(--size-4);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.2);
+
   overflow: hidden;
+  transition: height 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 
   &:has(.miniplayer) {
-    --height: calc(var(--size-9) + var(--size-7));
+    --height: calc(var(--size-9) + var(--size-8)); /* size-9 player + size-8 navbar area */
 
     @media(orientation:portrait) {
-      border-top: var(--border);
+      /* border-top: var(--border); removed in favor of global glass border */
 
       img {
         height: var(--size-8);
@@ -30,8 +37,9 @@ footer {
 
   @media(orientation:landscape) {
     margin: 0 auto;
-    border: var(--border);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-bottom: none;
+    border-radius: var(--size-4) var(--size-4) 0 0;
   }
 
 }

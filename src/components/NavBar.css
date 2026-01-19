@@ -1,22 +1,35 @@
 nav {
   display: flex;
   width: 100%;
+  justify-content: space-evenly;
+  align-items: center;
   margin: auto 0;
+  padding: 0 var(--size-1);
 
   i {
-    font-size: var(--font-size-3);
-    padding: 0 var(--size-2);
-    opacity: 0.5;
-    flex-grow: 1;
-    flex-basis: 0;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: var(--font-size-4);
+    width: var(--size-8);
+    height: var(--size-6);
+    border-radius: 2rem;
+    opacity: 0.6;
     color: var(--text);
-    height: var(--size-7);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.9;
+      background-color: rgb(from var(--text) r g b / 0.05);
+    }
   }
 
   .on {
     opacity: 1;
-    color: var(--text2);
-    font-weight: var(--font-weight-7);
+    background-color: var(--onBg2);
+    color: var(--text);
+    font-weight: var(--font-weight-6);
+    transform: scale(1.05);
   }
 }
