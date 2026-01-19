@@ -22,7 +22,10 @@ export default function() {
       class="settingsSection"
     >
       <header>
-        <p>ytify {Build}</p>
+        <div style="text-align: center;">
+          <p>Sonic {Build}</p>
+          <small style="opacity: 0.7; font-size: 0.8em; display: block;">BY ALLIANCE INSIDE LLC</small>
+        </div>
         <i
           aria-label={t('close')}
           class="ri-close-large-line" onclick={() => closeFeature('settings')}></i>

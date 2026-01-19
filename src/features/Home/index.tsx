@@ -32,7 +32,7 @@ export default function() {
 
       <header>
         <p>
-          {store.homeView ? t(map[store.homeView]) : 'ytify'}</p>
+          {store.homeView ? t(map[store.homeView]) : 'Sonic'}</p>
 
         <Show when={config.dbsync}>
           <i

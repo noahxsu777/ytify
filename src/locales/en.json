@@ -6,9 +6,9 @@
   "nav_settings": "App Configuration",
   "close": "Close",
   "loading": "Loading...",
-  "about_description": "ytify is a resource efficient audio streaming platform that leverages the YouTube & YTMusic library.",
+  "about_description": "Sonic is a resource efficient audio streaming platform that leverages the YouTube & YTMusic library.",
   "about_learn_more": "Learn more about how to use it effectively.",
-  "about_support_project": "Support the ytify project: Through UPI",
+  "about_support_project": "Support the Sonic project: Through UPI",
   "about_support_earth": "Support our Earth:",
   "about_lifestyle_changes": "Lifestyle Changes to tackle Climate Change",
   "about_crypto_any": "or any other cryptocurrency via Trocador",
@@ -220,7 +220,7 @@
   "sync_syncing": "Syncing",
   "library_migration_v1_v2": "Migrating Library v1 to v2...",
   "library_import_songshift": "Import Playlists from SongShift",
-  "library_about_ytify": "About ytify",
+  "library_about_ytify": "About Sonic",
   "nav_logout": "Logout",
   "player_video_resolution": "Resolution"
 }
