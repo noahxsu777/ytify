@@ -17,7 +17,7 @@ export let config = {
   manualOrdering: true,
   durationFilter: '',
   allowDuplicates: false,
-  similarContent: false,
+  similarContent: true,
   contextualFill: false,
   queuePrefetch: false,
   authorGrouping: false,
