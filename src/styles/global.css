@@ -18,8 +18,9 @@
   --gap: var(--size-fluid-2);
   --borderColor: oklch(from var(--text) l c h / 0.2);
   --border: var(--border-size-1) solid var(--borderColor);
-  --roundness: 0.4rem;
+  --roundness: 0.75rem;
   --blur: blur(var(--size-px-3));
+  --glass-blur: blur(12px);
   --player-bg: none;
   --player-bp: 0 0;
   --landscapeSections: 2;
