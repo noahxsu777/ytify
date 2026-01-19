@@ -7,8 +7,9 @@
 :root {
   --source: initial;
   --schemeMultiplier: initial;
-  --bg: initial;
-  --text: initial;
+  --bg: #000000;
+  --text: #ffffff;
+  --primary: #00e6a1;
   --chroma: 0;
   --scheme: color-mix(in srgb, oklch(from var(--source) 70% calc(c * var(--chroma)) h), var(--bg) 85%);
   --onBg: color-mix(in srgb, oklch(from var(--source) 85% calc(c * var(--chroma)) h), var(--bg) 85%);
@@ -20,12 +21,12 @@
   --border: var(--border-size-1) solid var(--borderColor);
   --roundness: 0.75rem;
   --blur: blur(var(--size-px-3));
-  --glass-blur: blur(12px);
-  --player-bg: none;
+  --glass-blur: blur(20px);
+  --player-bg: rgba(0, 0, 0, 0.7);
   --player-bp: 0 0;
   --landscapeSections: 2;
   --trueBg: var(--bg);
-  --font: ui-rounded, Segoe UI, source-sans-pro, Inter, Noto Sans, Oxygen, Calibri, Cantarell, Ubuntu, Roboto, system-ui, Open Sans, Helvetica Neue, sans-serif;
+  --font: 'Space Grotesk', ui-rounded, Segoe UI, source-sans-pro, Inter, Noto Sans, Oxygen, Calibri, Cantarell, Ubuntu, Roboto, system-ui, Open Sans, Helvetica Neue, sans-serif;
 }
 
 
@@ -62,7 +63,7 @@ main {
     scroll-snap-align: start;
     min-width: calc(100dvw / var(--landscapeSections));
     flex-shrink: 0;
-
+    padding-bottom: 160px;
   }
 
 
