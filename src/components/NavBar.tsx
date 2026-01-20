@@ -1,6 +1,6 @@
 import './NavBar.css';
 import { setConfig } from '@lib/utils';
-import { navStore, setNavStore, store, setStore, t } from '@lib/stores';
+import { navStore, setNavStore, store, setStore } from '@lib/stores';
 
 export default function() {
   type Nav = 'Hub' | 'Library' | 'Search' | 'Premium';

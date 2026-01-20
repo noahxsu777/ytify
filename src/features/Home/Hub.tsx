@@ -93,7 +93,7 @@ export default function() {
                             /* Actually, recents are tracks. ListItem expects url to be /artist, /playlist etc. */
                             /* If I pass /artist/${item.authorId}, it goes to artist. */
                             thumbnail={generateImageUrl(item.id, 'mq')}
-                            uploaderData={item.author}
+                            uploaderData={item.author || ''}
                         />
                     </div>
                 )}
