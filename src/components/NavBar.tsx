@@ -3,53 +3,56 @@ import { setConfig } from '@lib/utils';
 import { navStore, setNavStore, store, setStore, t } from '@lib/stores';
 
 export default function() {
+  type Nav = 'Hub' | 'Library' | 'Search' | 'Premium';
 
-
-  type Nav = 'Hub' | 'Library' | 'Search';
-
-  function saveHome(name: '' | Nav) {
-    if (store.homeView === name && navStore.home.state) {
-      setNavStore('home', 'state', false);
-    } else {
-      setStore('homeView', name);
-      setConfig('home', name);
-      setNavStore('home', 'state', true);
-      navStore.home.ref?.scrollIntoView();
+  function saveHome(name: Nav) {
+    setStore('homeView', name);
+    setConfig('home', name);
+    // Ensure the home feature is active
+    if (!navStore.home.state) {
+        setNavStore('home', 'state', true);
     }
   }
 
   const navView = (item: Nav) => navStore.home.state && store.homeView === item;
 
   return (
-    <nav>
-      <i
-        aria-label={t('nav_queue')}
-        class="ri-order-play-fill"
-        classList={{ on: navStore.queue.state }}
-        onclick={() => {
-          setNavStore('queue', 'state', !navStore.queue.state);
-        }}
-      ></i>
+    <nav class="bottom-nav">
+      <div
+        class="nav-item"
+        classList={{ 'active': navView('Hub') }}
+        onClick={() => saveHome('Hub')}
+      >
+        <i class={navView('Hub') ? "ri-store-2-line" : "ri-store-2-line"}></i>
+        <span>Home</span>
+      </div>
 
-      <i
-        aria-label={t('nav_hub')}
-        class="ri-store-2-line"
-        classList={{ 'on': navView('Hub') }}
-        onclick={() => saveHome('Hub')}
-      ></i>
-      <i
-        aria-label={t('nav_library')}
-        class="ri-archive-stack-line"
-        classList={{ 'on': navView('Library') }}
-        onclick={() => saveHome('Library')}
-      ></i>
-      <i
-        aria-label={t('nav_search')}
-        class="ri-search-2-line"
-        classList={{ 'on': navView('Search') }}
-        onclick={() => saveHome('Search')}
-      ></i>
+      <div
+        class="nav-item"
+        classList={{ 'active': navView('Search') }}
+        onClick={() => saveHome('Search')}
+      >
+        <i class={navView('Search') ? "ri-search-2-line" : "ri-search-2-line"}></i>
+        <span>Search</span>
+      </div>
 
+      <div
+        class="nav-item"
+        classList={{ 'active': navView('Library') }}
+        onClick={() => saveHome('Library')}
+      >
+        <i class={navView('Library') ? "ri-archive-stack-line" : "ri-archive-stack-line"}></i>
+        <span>Library</span>
+      </div>
+
+      <div
+        class="nav-item"
+        classList={{ 'active': navView('Premium') }}
+        onClick={() => saveHome('Premium')}
+      >
+        <i class={navView('Premium') ? "ri-star-fill" : "ri-star-line"}></i>
+        <span>Premium</span>
+      </div>
     </nav>
   );
 }

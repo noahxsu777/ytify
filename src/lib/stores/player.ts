@@ -98,10 +98,17 @@ createRoot(() => {
 
   playerStore.audio.volume = playerStore.volume;
 
-  playerStore.audio.onended = () => {
-    if (queueStore.list.length)
+  playerStore.audio.onended = async () => {
+    if (queueStore.list.length) {
       playNext();
-    else {
+    } else {
+      if (config.similarContent) {
+        await getRecommendations();
+        if (queueStore.list.length) {
+          playNext();
+          return;
+        }
+      }
       updateParam('s');
       setPlayerStore('playbackState', 'none');
     }
@@ -229,7 +236,7 @@ async function getRecommendations() {
 
   const title = encodeURIComponent(playerStore.stream.title);
   const artist = encodeURIComponent(playerStore.stream.author?.slice(0, -8) ?? '');
-  fetch(`${store.api}/api/tracks?title=${title}&artist=${artist}&limit=10`)
+  return fetch(`${store.api}/api/tracks?title=${title}&artist=${artist}&limit=10`)
     .then(res => res.json())
     .then(addToQueue)
     .catch(e => setStore('snackbar', `Could not get recommendations for the track: ${e.message}`));

@@ -8,8 +8,8 @@ footer {
   width: 100dvmin;
   --height: var(--size-8);
   height: var(--height);
-  background: linear-gradient(rgb(from var(--onBg) r g b / 0.4), var(--trueBg));
-  backdrop-filter: blur(var(--size-px-4));
+  background: linear-gradient(rgb(from var(--onBg) r g b / 0.6), var(--trueBg));
+  backdrop-filter: var(--glass-blur);
   border-top-left-radius: var(--roundness);
   border-top-right-radius: var(--roundness);
   box-shadow: var(--shadow-2);

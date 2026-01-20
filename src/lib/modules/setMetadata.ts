@@ -38,7 +38,7 @@ export default async function(data: CollectionItem) {
     ]
   }
 
-  document.title = data.title + ' - ytify';
+  document.title = data.title + ' - Sonic';
 
 
   if ('mediaSession' in navigator) {

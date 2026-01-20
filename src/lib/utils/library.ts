@@ -351,7 +351,7 @@ export async function fetchCollection(
   setNavStore('list', 'state', true);
   setListStore('isLoading', false);
 
-  document.title = display + ' - ytify';
+  document.title = display + ' - Sonic';
 
 }
 
