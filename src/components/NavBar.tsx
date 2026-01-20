@@ -20,10 +20,18 @@ export default function() {
 
   const navView = (item: Nav) => navStore.home.state && store.homeView === item;
 
+  // Extract labels to ensure 't' is seen as used
+  const labels = {
+    queue: t('nav_queue'),
+    hub: t('nav_hub'),
+    library: t('nav_library'),
+    search: t('nav_search')
+  };
+
   return (
     <nav>
       <i
-        aria-label={t('nav_queue')}
+        aria-label={labels.queue}
         class="ri-order-play-fill"
         classList={{ on: navStore.queue.state }}
         onclick={() => {
@@ -32,19 +40,19 @@ export default function() {
       ></i>
 
       <i
-        aria-label={t('nav_hub')}
+        aria-label={labels.hub}
         class="ri-store-2-line"
         classList={{ 'on': navView('Hub') }}
         onclick={() => saveHome('Hub')}
       ></i>
       <i
-        aria-label={t('nav_library')}
+        aria-label={labels.library}
         class="ri-archive-stack-line"
         classList={{ 'on': navView('Library') }}
         onclick={() => saveHome('Library')}
       ></i>
       <i
-        aria-label={t('nav_search')}
+        aria-label={labels.search}
         class="ri-search-2-line"
         classList={{ 'on': navView('Search') }}
         onclick={() => saveHome('Search')}
