@@ -3,9 +3,12 @@
   align-items: center;
   width: 100%;
   height: var(--size-9);
-  padding: var(--size-1);
+  padding: var(--size-2);
   animation: var(--animation-slide-in-up) forwards;
   cursor: pointer;
+  position: relative;
+  border-bottom: 1px solid var(--borderColor);
+  background: linear-gradient(to top, rgba(0,0,0,0.05), transparent);
 
   &,
   * {
@@ -13,15 +16,14 @@
   }
 
   img {
-    height: calc(var(--size-8) + var(--size-2));
+    height: 100%;
+    aspect-ratio: 1;
     object-fit: cover;
     border: var(--border);
-    border-radius: calc(var(--roundness) * 0.5);
+    border-radius: var(--roundness);
     box-shadow: var(--shadow-1);
     pointer-events: none;
   }
-
-
 
   button,
   i {
@@ -32,73 +34,93 @@
     aspect-ratio: 1;
     padding: 0;
     margin: 0 var(--size-1);
-    transition: transform 0.4s;
+    transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
 
     &:active {
-      transform: scale(0.75);
+      transform: scale(0.85);
+    }
+
+    &:hover {
+      opacity: 0.8;
     }
   }
 
   #playButton {
-    font-size: var(--size-7);
-    margin: 0;
-    margin-left: var(--size-2);
-    margin-right: var(--size-2);
+    font-size: var(--size-6);
+    margin: 0 var(--size-2);
+
+    /* Play button styling */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: var(--size-7);
+    height: var(--size-7);
+    background-color: var(--onBg2);
+    border-radius: 50%;
+    color: var(--text);
+    box-shadow: var(--shadow-1);
   }
 
   .ri-heart-line,
   .ri-heart-fill {
-    font-size: var(--size-6);
+    font-size: var(--size-5);
   }
 
   .mediaDetails {
     width: 100%;
     overflow: hidden;
     pointer-events: none;
-    margin-left: var(--size-2);
+    margin-left: var(--size-3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
     a {
       font-weight: var(--font-weight-6);
       font-size: var(--font-size-2);
       display: block;
+      margin-bottom: 2px;
     }
 
     a,
     p {
       white-space: nowrap;
-      overflow: clip;
+      overflow: hidden;
       text-overflow: ellipsis;
       color: var(--text);
     }
 
-
     p {
-      font-size: calc(var(--size-6) / 2);
+      font-size: calc(var(--size-6) / 2.2);
       font-weight: var(--font-weight-5);
-      opacity: 90%;
+      opacity: 0.7;
     }
   }
 
   progress {
     position: absolute;
-    z-index: -1;
-    top: 0;
+    z-index: 5;
+    bottom: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 2px;
     background-color: transparent;
-    accent-color: auto;
     appearance: none;
+    border: none;
+    pointer-events: none;
 
     &::-webkit-progress-bar {
       background: transparent;
     }
 
     &::-webkit-progress-value {
-      background: linear-gradient(transparent, var(--onBg2));
-      border-bottom: var(--border-size-1) solid var(--text2);
-      transition: all 1s linear;
+      background: var(--text2);
+      transition: width 0.5s linear;
+      box-shadow: 0 0 10px var(--text2);
+    }
+
+    &::-moz-progress-bar {
+       background: var(--text2);
     }
   }
-
 }

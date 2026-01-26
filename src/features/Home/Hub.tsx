@@ -100,7 +100,7 @@ export default function() {
                   stats={''}
                   title={item.name}
                   url={`/artist/${item.id}`}
-                  thumbnail={generateImageUrl(getThumbIdFromLink(item.thumbnail), '')}
+                  thumbnail={generateImageUrl(getThumbIdFromLink(item.thumbnail || ''), '')}
                   uploaderData={''}
                 />
               )}
