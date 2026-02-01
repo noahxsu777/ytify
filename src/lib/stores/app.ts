@@ -10,13 +10,13 @@ const storeInit: {
   actionsMenu?: CollectionItem,
   snackbar?: string,
   syncState?: SyncState,
-  homeView: '' | 'Hub' | 'Library' | 'Search',
+  homeView: '' | 'Hub' | 'Library' | 'Search' | 'Premium',
 } = {
   invidious: [],
   index: 0,
   api: Backend[Math.floor(Math.random() * Backend.length)],
   useSaavn: true,
-  homeView: config.home as "" | "Hub" | "Library" | "Search",
+  homeView: config.home as "" | "Hub" | "Library" | "Search" | "Premium",
 };
 
 export const [store, setStore] = createStore(storeInit);

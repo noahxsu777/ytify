@@ -1,220 +1,155 @@
 header {
   display: flex;
   justify-content: space-between;
-
-  label {
-    cursor: pointer;
-  }
-
-  input {
-    display: none;
-  }
-
-  #syncNow {
-    cursor: pointer;
-    font-size: var(--font-size-3);
-    margin-right: calc(var(--size-7) + var(--size-1));
-    margin-top: var(--size-0);
-
-    &.ri-loader-3-line {
-      pointer-events: none;
-    }
-
-    &.error {
-      color: #f20a;
-    }
-  }
-
-  .on {
-    background-color: var(--text) !important;
-    color: var(--bg) !important;
-  }
-
+  padding: var(--size-4) var(--size-4);
 }
 
-
-
-
-.library,
-.hub {
-  overflow-y: auto;
-  width: 100%;
-  margin-bottom: var(--size-10);
-
-  .gallery-article {
-    grid-column: span 2;
-
-    >div {
-      .listItem {
-        p.title {
-          max-height: var(--size-4) !important;
-        }
-      }
-    }
-  }
-
-  article {
-    margin-bottom: var(--size-5);
-
-
-    >p {
-      display: inline-block;
-      font-size: var(--font-size-3);
-      font-weight: var(--font-weight-4);
-      letter-spacing: var(--font-letterspacing-2);
-      color: var(--text2);
-      opacity: 0.7;
-      width: calc(100% - var(--size-8));
-
-    }
-
-
-    &.subfeed,
-    &.gallery-article {
-      >p {
-        width: calc(100% - var(--size-11) + var(--size-6));
-      }
-
-      >.loading {
-        display: inline-block;
-        animation: spinner 1s cubic-bezier(0.645, 0.045, 0.355, 1) infinite !important;
-
-        &::after {
-          display: none
-        }
-      }
-    }
-
-    >i {
-      font-size: var(--font-size-3);
-      cursor: pointer;
-      padding: var(--size-1) var(--size-2);
-      margin-right: var(--size-2);
-      border-radius: var(--roundness);
-
-      &:hover {
-        background: var(--onBg2);
-        color: var(--text2);
-      }
-
-    }
-
-    >div {
-      display: flex;
-      border-radius: var(--roundness);
-      background-color: var(--onBg);
-      border: var(--border);
-      margin: var(--size-2) 0;
-      overflow: hidden;
-    }
-
-    >div:has(.listItem) {
-      overflow-x: scroll;
-      padding: var(--size-2);
-      padding-bottom: 0;
-      gap: var(--size-1);
-
-      .listItem {
-        width: var(--size-11);
-        flex-shrink: 0;
-        margin: 0;
-        background-color: transparent;
-        border: none;
-
-      }
-
-    }
-
-    >.userArtists {
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-      padding-bottom: 0 !important;
-      border-bottom: 0;
-      margin-bottom: 0;
-    }
-
-    >.relatedPlaylists {
-      padding-top: 0 !important;
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-      border-top: 0;
-      margin: 0;
-
-      img {
-        border-top-left-radius: var(--radius-4);
-        border-bottom-right-radius: var(--radius-4);
-      }
-    }
-
-    >.relatedArtists {
-      img {
-        border-radius: var(--radius-round) !important;
-      }
-
-      margin: 0;
-      border-radius: 0;
-      border-top: 0;
-      border-bottom: 0;
-      padding-top: 0 !important;
-    }
-
-
-    >div:has(.streamItem) {
-      width: 100%;
-      flex-direction: column;
-
-      .streamItem {
-        margin-bottom: 0;
-        width: 100%;
-        border-radius: 0;
-        flex-shrink: 0;
-
-        .title {
-          height: var(--size-4);
-          text-overflow: clip;
-        }
-      }
-    }
-
-  }
-
-  a {
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-
-  a.clxn_item {
-    display: flex;
-    align-items: center;
-    padding: var(--size-1);
-    color: var(--text);
-    font-size: var(--font-size-2);
-
-    i {
-      margin-right: var(--size-2);
-    }
-
-    &:hover {
-      background-color: var(--onBg);
-      border-radius: var(--roundness);
-    }
-  }
-
-
-  input[type="text"] {
+.home {
     width: 100%;
-    outline: none;
-    border-radius: var(--roundness);
-    margin: 0;
-    margin-bottom: var(--gap);
-    background: var(--onBg);
-    border: var(--border);
+    height: 100%;
+    overflow-y: auto;
+    background: var(--bg);
+}
 
-    &::placeholder {
-      color: var(--text);
-    }
-  }
+/* Hub Container */
+.hub-container {
+  padding: var(--size-4);
+  padding-bottom: 160px; /* Safe area for nav/player */
+  color: var(--text);
+}
 
+/* Greeting */
+.greeting-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--size-6);
+  margin-top: var(--size-2);
+}
 
+.greeting-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.user-profile i {
+  font-size: 1.5rem;
+  padding: 8px;
+  background: var(--onBg);
+  border-radius: 50%;
+  color: var(--text);
+}
+
+/* Quick Access Grid */
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--size-3);
+  margin-bottom: var(--size-8);
+}
+
+.grid-item {
+  display: flex;
+  align-items: center;
+  padding: var(--size-3);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, filter 0.2s;
+  overflow: hidden;
+  height: 60px;
+  position: relative;
+}
+
+.grid-item:active {
+  transform: scale(0.98);
+  filter: brightness(0.9);
+}
+
+.grid-item i {
+  font-size: 1.5rem;
+  margin-right: var(--size-3);
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.grid-item span {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  z-index: 1;
+}
+
+/* Section Headers */
+.section-header h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: var(--size-4);
+  letter-spacing: -0.01em;
+}
+
+/* Horizontal Scroll */
+.horizontal-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: var(--size-4);
+  padding-bottom: var(--size-4);
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: var(--size-6);
+}
+
+.scroll-item {
+  flex: 0 0 160px; /* Fixed width for cards */
+  scroll-snap-align: start;
+}
+
+.horizontal-scroll .listItem {
+  width: 100%; /* Fill container */
+  display: block;
+  margin: 0;
+  background: transparent;
+  border: none;
+}
+
+.horizontal-scroll .listItem img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  margin: 0;
+  margin-bottom: var(--size-2);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.horizontal-scroll .listItem .title {
+  font-size: 0.95rem;
+  text-align: left;
+  margin-bottom: 2px;
+}
+
+.horizontal-scroll .listItem .uData {
+  text-align: left;
+  opacity: 0.7;
+}
+
+/* Round Avatars for Recently Played */
+.round-avatars .listItem img {
+  border-radius: 50%;
+  border: 2px solid transparent; /* Optional border */
+}
+
+.round-avatars .listItem .title {
+  text-align: center;
+}
+.round-avatars .listItem .uData {
+  text-align: center;
+}
+
+/* Empty State */
+.empty-state {
+    opacity: 0.5;
+    font-style: italic;
+    padding: var(--size-2);
 }

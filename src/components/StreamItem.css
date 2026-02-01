@@ -9,10 +9,11 @@
 	display: flex;
 	align-items: center;
 	position: relative;
-	transition: transform 0.4s;
+	transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 	text-decoration: none;
 	overflow: hidden;
 	cursor: pointer;
+	background: color-mix(in srgb, var(--onBg) 30%, transparent);
 
 	&.ravel {
 		* {
@@ -26,6 +27,8 @@
 		background: var(--onBg);
 		color: var(--text2);
 		border: var(--border);
+		transform: scale(1.01);
+		box-shadow: var(--shadow-3);
 	}
 
 	div,

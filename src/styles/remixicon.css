@@ -282,3 +282,14 @@
 .ri-calendar-schedule-fill:before {
   content: "\f3f2";
 }
+.ri-home-5-fill:before { content: "\ee1e"; }
+.ri-home-5-line:before { content: "\ee1f"; }
+.ri-search-2-fill:before { content: "\f0cc"; }
+.ri-stack-fill:before { content: "\f180"; }
+.ri-vip-diamond-fill:before { content: "\f28f"; }
+.ri-vip-diamond-line:before { content: "\f290"; }
+.ri-repeat-2-line:before { content: "\f072"; }
+.ri-time-line:before { content: "\f20f"; }
+.ri-music-2-fill:before { content: "\ef82"; }
+.ri-compass-3-fill:before { content: "\ebbd"; }
+.ri-mic-fill:before { content: "\ef4f"; }
