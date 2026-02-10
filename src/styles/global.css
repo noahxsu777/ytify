@@ -81,7 +81,7 @@ main {
 }
 
 /* Desktop / Landscape Overrides */
-@media (min-width: 769px) {
+@media (min-width: 901px) {
   /* Hide Mobile Navigation */
   nav:not(.sidebar) { display: none !important; }
   .miniplayer { display: none !important; }
