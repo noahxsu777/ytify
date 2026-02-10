@@ -63,7 +63,7 @@ export default function(_: {
           class="ri-skip-back-fill"
           id="playPrevButton"
           classList={{ disabled: !playerStore.history.length }}
-          onclick={() => { if (playerStore.history.length) playPrev(); }}
+          onclick={playPrev}
         ></button>
 
         <PlayButton />
@@ -73,7 +73,7 @@ export default function(_: {
           class="ri-skip-forward-fill"
           id="playNextButton"
           classList={{ disabled: !queueStore.list.length }}
-          onclick={() => { if (queueStore.list.length) playNext(); }}
+          onclick={playNext}
         ></button>
 
         <button
