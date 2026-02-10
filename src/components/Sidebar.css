@@ -114,6 +114,6 @@
 /* Mobile hiding handled in global or index */
 @media (max-width: 768px) {
   .sidebar {
-    display: none;
+    display: none !important;
   }
 }

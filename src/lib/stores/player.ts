@@ -130,11 +130,6 @@ createRoot(() => {
     if (config.history)
       historyTimeoutId = window.setTimeout(() => {
         if (historyID === id) {
-          if (
-            config.similarContent
-            && playerStore.isMusic
-          )
-            getRecommendations();
           addToCollection('history', [playerStore.stream]);
         }
       }, 1e4);
