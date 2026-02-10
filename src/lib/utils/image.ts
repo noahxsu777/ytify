@@ -1,4 +1,3 @@
-import { playerStore } from '@lib/stores';
 import { config } from './config';
 
 
@@ -115,21 +114,13 @@ function colorInjector(colorArray: number[]) {
 
 
 export function themer() {
-  const initColor = '29, 185, 84';
-  const { stream } = playerStore;
-  const { loadImage } = config;
-  if (loadImage && stream.id)
-    import('../modules/extractColorFromImage')
-      .then(mod => mod.default)
-      .then(e => e(generateImageUrl(stream.id, 'mq'), true))
-      .then(colorInjector);
-  else
-    colorInjector(
-      initColor
-        .split(',')
-        .map(s => parseInt(s))
-    );
-
+  const initColor = '29, 185, 84'; // Spotify Green
+  // Force Spotify Colors, disable extraction
+  colorInjector(
+    initColor
+      .split(',')
+      .map(s => parseInt(s))
+  );
 }
 
 if (config.roundness !== '0.4rem')

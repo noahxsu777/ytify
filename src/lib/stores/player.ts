@@ -4,7 +4,7 @@ import { addToCollection, config, cssVar, player, themer } from "@lib/utils";
 import { navStore, params, updateParam } from "./navigation";
 import { addToQueue, queueStore, setQueueStore } from "./queue";
 import audioErrorHandler from "@lib/modules/audioErrorHandler";
-import { setStore, store } from "./app";
+import { store } from "./app";
 import getStreamData from "../modules/getStreamData";
 
 const blankImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
@@ -248,7 +248,10 @@ async function getRecommendations() {
             throw new Error('API response is not an array');
         }
     })
-    .catch(e => setStore('snackbar', `Could not get recommendations for the track: ${e.message}`));
+    .catch(e => {
+        // Silently fail if recommendations cannot be fetched
+        console.warn('Background fetch for recommendations failed:', e.message);
+    });
 }
 
 
