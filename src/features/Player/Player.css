@@ -48,8 +48,8 @@
   }
 
   & i.on {
-    background-color: var(--text2);
-    color: var(--onBg2);
+    background-color: var(--spotifyGreen);
+    color: #000;
   }
 
 
@@ -77,8 +77,8 @@
 
   img {
     margin: 0 auto;
-    border-radius: calc(var(--roundness) * 1.5);
-    box-shadow: 0 8px 32px oklch(from var(--text) l c h / 0.15);
+    border-radius: var(--roundness);
+    box-shadow: 0 8px 24px oklch(from var(--text) l c h / 0.2);
     width: 100%;
   }
 
@@ -132,7 +132,7 @@
 .slider {
   input {
     width: 100%;
-    color: var(--text2);
+    color: var(--spotifyGreen);
   }
 
   margin-bottom:var(--size-2);
@@ -238,8 +238,8 @@
 
 .lyrics {
   aspect-ratio: 1;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--onBg), var(--bg) 20%) 0%, var(--onBg) 100%);
-  border-radius: calc(var(--roundness) * 1.5);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--onBg), var(--bg) 30%) 0%, var(--onBg) 100%);
+  border-radius: var(--roundness);
   padding: var(--size-5) var(--size-4);
   overflow: scroll;
   scrollbar-width: none;
@@ -254,15 +254,14 @@
     font-weight: var(--font-weight-7);
     opacity: 0.3;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    line-height: 1.4;
+    line-height: 1.5;
     letter-spacing: -0.01em;
 
     &.active {
       font-weight: var(--font-weight-9);
       opacity: 1;
-      font-size: var(--font-size-4);
-      color: var(--text2);
-      transform: scale(1.02);
+      font-size: var(--font-size-5);
+      color: var(--text);
     }
   }
 }

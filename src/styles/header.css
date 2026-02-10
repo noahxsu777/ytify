@@ -27,15 +27,14 @@ section>header {
   >i,
   div>i {
     font-size: var(--font-size-4);
-    opacity: 0.8;
+    opacity: 0.7;
     padding: 0 var(--size-2);
-    border-radius: calc(var(--roundness) * 1.5);
-    transition: all 0.2s ease;
+    border-radius: 50%;
+    transition: all 0.15s ease;
 
     &:hover {
       opacity: 1;
       background-color: var(--onBg2);
-      color: var(--text2);
     }
   }
 
@@ -105,8 +104,8 @@ section>header {
       list-style: none;
       overflow: hidden;
       border: none;
-      border-radius: calc(var(--roundness) * 1.5);
-      box-shadow: 0 4px 24px oklch(from var(--text) l c h / 0.12);
+      border-radius: var(--roundness);
+      box-shadow: 0 4px 24px oklch(from var(--text) l c h / 0.15);
 
       li {
         font-size: var(--font-size-1);

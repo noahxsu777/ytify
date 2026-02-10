@@ -3,8 +3,8 @@
   width: 100%;
   margin: auto;
   border: none;
-  border-radius: calc(var(--roundness) * 2) calc(var(--roundness) * 2) 0 0;
-  background: color-mix(in srgb, var(--onBg), var(--bg) 30%);
+  border-radius: calc(var(--roundness) * 1.5) calc(var(--roundness) * 1.5) 0 0;
+  background: color-mix(in srgb, var(--onBg), var(--bg) 20%);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   overflow: auto;

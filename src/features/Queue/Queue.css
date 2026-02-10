@@ -21,7 +21,7 @@
   margin-bottom: var(--size-3);
   box-shadow: none;
   border: none;
-  border-radius: calc(var(--roundness) * 2);
+  border-radius: var(--roundness);
   background: var(--onBg);
 
   li {
@@ -29,10 +29,10 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    border-radius: calc(var(--roundness) * 1.5);
+    border-radius: calc(var(--roundness) * 0.8);
     cursor: pointer;
     font-size: var(--font-size-1);
-    font-weight: var(--font-weight-6);
+    font-weight: var(--font-weight-5);
     padding: var(--size-2) var(--size-1);
     letter-spacing: -0.01em;
     --liBg: var(--onBg2);
@@ -46,19 +46,20 @@
     text-align: center;
     gap: var(--size-1);
     border: none;
-    transition: all 0.2s ease;
+    transition: background-color 0.15s ease;
 
     &.on {
-      --liBg: var(--text2);
+      --liBg: var(--spotifyGreen);
+      color: #000 !important;
     }
 
     &:hover {
       text-decoration: none;
-      transform: scale(1.02);
+      background: color-mix(in srgb, var(--liBg), transparent 70%) !important;
     }
 
     &:active {
-      transform: scale(0.97);
+      background: color-mix(in srgb, var(--liBg), transparent 60%) !important;
     }
 
     &:last-child {

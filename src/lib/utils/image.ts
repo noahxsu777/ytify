@@ -80,7 +80,7 @@ const palette = {
     multiplier: '1.1',
   },
   dark: {
-    bg: '#000',
+    bg: '#121212',
     text: '#fff',
     multiplier: '0.9'
   }
@@ -132,7 +132,7 @@ export function themer() {
 
 }
 
-if (config.roundness !== '0.4rem')
+if (config.roundness !== '0.4rem' && config.roundness !== '0.5rem')
   cssVar('--roundness', config.roundness);
 if (config.landscapeSections !== '2')
   cssVar('--landscapeSections', config.landscapeSections);

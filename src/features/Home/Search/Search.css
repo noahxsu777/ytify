@@ -13,10 +13,10 @@
 
 .search {
 
-  --inputround: calc(var(--roundness) * 3);
+  --inputround: var(--roundness);
 
   &:has(li) {
-    --inputround: calc(var(--roundness) * 3) calc(var(--roundness) * 3) 0 0;
+    --inputround: var(--roundness) var(--roundness) 0 0;
   }
 
   .superInputContainer {

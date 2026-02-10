@@ -2,28 +2,26 @@
   width: calc(50% - calc(var(--gap) / 2));
   height: auto;
   margin: var(--size-2) 0;
-  transition: all 0.25s ease;
+  transition: background-color 0.2s ease;
   display: inline-block;
   color: var(--text);
   text-decoration: none;
   cursor: pointer;
   background-color: var(--onBg);
-  border-radius: calc(var(--roundness) * 1.2);
+  border-radius: var(--roundness);
   border: none;
 
   * {
     pointer-events: none;
-    transition: all 0.3s;
+    transition: opacity 0.2s;
   }
 
   &:hover {
     background-color: var(--onBg2);
-    color: var(--text2);
-    transform: scale(1.02);
   }
 
   &:active {
-    transform: scale(0.97);
+    background-color: var(--onBg2);
   }
 
   &.ravel {
@@ -36,8 +34,8 @@
   img {
     height: auto;
     width: calc(100% - var(--size-2));
-    border-radius: calc(var(--roundness) * 0.8);
-    box-shadow: 0 2px 8px oklch(from var(--text) l c h / 0.08);
+    border-radius: calc(var(--roundness) * 0.6);
+    box-shadow: 0 4px 12px oklch(from var(--text) l c h / 0.12);
     margin: var(--size-1);
     margin-bottom: var(--size-2);
   }
@@ -50,7 +48,7 @@
 
   p.title {
     font-size: var(--font-size-1);
-    font-weight: var(--font-weight-7);
+    font-weight: var(--font-weight-6);
     max-height: var(--size-12);
     line-height: var(--size-4);
     overflow: hidden;
@@ -63,14 +61,14 @@
     font-size: var(--font-size-0);
     line-height: var(--size-3);
     overflow: hidden;
-    opacity: 0.6;
+    opacity: 0.55;
   }
 
   p.stats {
     font-size: var(--font-size-0);
     height: var(--size-3);
     line-height: var(--size-3);
-    opacity: 0.5;
+    opacity: 0.45;
   }
 
 }

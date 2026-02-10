@@ -24,7 +24,7 @@ export default function() {
     <nav>
       <i
         aria-label={t('nav_queue')}
-        class="ri-order-play-fill"
+        class="ri-play-list-fill"
         classList={{ on: navStore.queue.state }}
         onclick={() => {
           setNavStore('queue', 'state', !navStore.queue.state);
@@ -35,7 +35,7 @@ export default function() {
 
       <i
         aria-label={t('nav_hub')}
-        class="ri-store-2-line"
+        class="ri-home-5-fill"
         classList={{ 'on': navView('Hub') }}
         onclick={() => saveHome('Hub')}
       >
@@ -43,7 +43,7 @@ export default function() {
       </i>
       <i
         aria-label={t('nav_library')}
-        class="ri-archive-stack-line"
+        class="ri-folder-music-fill"
         classList={{ 'on': navView('Library') }}
         onclick={() => saveHome('Library')}
       >
@@ -51,7 +51,7 @@ export default function() {
       </i>
       <i
         aria-label={t('nav_search')}
-        class="ri-search-2-line"
+        class="ri-search-line"
         classList={{ 'on': navView('Search') }}
         onclick={() => saveHome('Search')}
       >

@@ -8,19 +8,19 @@ footer {
   width: 100dvmin;
   --height: var(--size-8);
   height: var(--height);
-  background: color-mix(in srgb, var(--trueBg), transparent 20%);
+  background: color-mix(in srgb, var(--trueBg), transparent 5%);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border-top-left-radius: calc(var(--roundness) * 2);
-  border-top-right-radius: calc(var(--roundness) * 2);
-  box-shadow: 0 -1px 0 oklch(from var(--text) l c h / 0.06);
+  border-top: 1px solid oklch(from var(--text) l c h / 0.06);
+  border-radius: 0;
+  box-shadow: none;
   overflow: hidden;
 
   &:has(.miniplayer) {
     --height: calc(var(--size-9) + var(--size-7));
 
     @media(orientation:portrait) {
-      border-top: none;
+      border-top: 1px solid oklch(from var(--text) l c h / 0.06);
 
       img {
         height: var(--size-8);
