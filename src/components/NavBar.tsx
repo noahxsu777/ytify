@@ -33,21 +33,30 @@ export default function() {
 
       <i
         aria-label={t('nav_hub')}
-        class="ri-store-2-line"
-        classList={{ 'on': navView('Hub') }}
+        class="ri-home-4-line"
+        classList={{
+          'on': navView('Hub'),
+          'ri-home-4-fill': navView('Hub')
+        }}
         onclick={() => saveHome('Hub')}
       ></i>
       <i
-        aria-label={t('nav_library')}
-        class="ri-archive-stack-line"
-        classList={{ 'on': navView('Library') }}
-        onclick={() => saveHome('Library')}
+        aria-label={t('nav_search')}
+        class="ri-search-line"
+        classList={{
+          'on': navView('Search'),
+          'ri-search-fill': navView('Search')
+        }}
+        onclick={() => saveHome('Search')}
       ></i>
       <i
-        aria-label={t('nav_search')}
-        class="ri-search-2-line"
-        classList={{ 'on': navView('Search') }}
-        onclick={() => saveHome('Search')}
+        aria-label={t('nav_library')}
+        class="ri-book-3-line"
+        classList={{
+          'on': navView('Library'),
+          'ri-book-3-fill': navView('Library')
+        }}
+        onclick={() => saveHome('Library')}
       ></i>
 
     </nav>

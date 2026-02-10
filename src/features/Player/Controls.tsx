@@ -50,6 +50,15 @@ export default function(_: {
       <div class="mainShelf">
 
         <button
+          aria-label={t('player_seek_backward')}
+          class="ri-replay-15-line"
+          id="seekBwdButton"
+          onclick={() => {
+            playerStore.audio.currentTime -= 15;
+          }}
+        ></button>
+
+        <button
           aria-label={t('player_play_previous')}
           class="ri-skip-back-fill"
           id="playPrevButton"
@@ -63,6 +72,15 @@ export default function(_: {
           class="ri-skip-forward-fill"
           id="playNextButton"
           onclick={playNext}
+        ></button>
+
+        <button
+          aria-label={t('player_seek_forward')}
+          class="ri-forward-15-line"
+          id="seekFwdButton"
+          onclick={() => {
+            playerStore.audio.currentTime += 15;
+          }}
         ></button>
 
       </div>
