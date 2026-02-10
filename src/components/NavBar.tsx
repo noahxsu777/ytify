@@ -23,23 +23,20 @@ export default function() {
   return (
     <nav>
       <i
-        aria-label={t('nav_queue')}
-        class="ri-play-list-fill"
-        classList={{ on: navStore.queue.state }}
-        onclick={() => {
-          setNavStore('queue', 'state', !navStore.queue.state);
-        }}
-      >
-        <span class="navLabel">{t('nav_queue')}</span>
-      </i>
-
-      <i
         aria-label={t('nav_hub')}
         class="ri-home-5-fill"
         classList={{ 'on': navView('Hub') }}
         onclick={() => saveHome('Hub')}
       >
         <span class="navLabel">{t('nav_hub')}</span>
+      </i>
+      <i
+        aria-label={t('nav_search')}
+        class="ri-search-line"
+        classList={{ 'on': navView('Search') }}
+        onclick={() => saveHome('Search')}
+      >
+        <span class="navLabel">{t('nav_search')}</span>
       </i>
       <i
         aria-label={t('nav_library')}
@@ -50,12 +47,14 @@ export default function() {
         <span class="navLabel">{t('nav_library')}</span>
       </i>
       <i
-        aria-label={t('nav_search')}
-        class="ri-search-line"
-        classList={{ 'on': navView('Search') }}
-        onclick={() => saveHome('Search')}
+        aria-label={t('nav_queue')}
+        class="ri-play-list-fill"
+        classList={{ on: navStore.queue.state }}
+        onclick={() => {
+          setNavStore('queue', 'state', !navStore.queue.state);
+        }}
       >
-        <span class="navLabel">{t('nav_search')}</span>
+        <span class="navLabel">{t('nav_queue')}</span>
       </i>
 
     </nav>

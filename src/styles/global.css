@@ -15,7 +15,7 @@
   --onBg2: color-mix(in srgb, oklch(from var(--source) 80% calc(35% * var(--chroma)) h), var(--bg) 70%);
   --blurMix: color-mix(in srgb, oklch(from var(--onBg) l calc(c * var(--chroma)) / 0.1), var(--bg) 40%);
   --text2: color-mix(in srgb, oklch(from var(--source) 50% calc(80% * var(--chroma)) h), var(--text) 75%);
-  --spotifyGreen: #1DB954;
+  --spotifyGreen: #1ed760;
   --gap: var(--size-fluid-2);
   --borderColor: oklch(from var(--text) l c h / 0.08);
   --border: var(--border-size-1) solid var(--borderColor);

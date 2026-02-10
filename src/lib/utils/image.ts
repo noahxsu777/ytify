@@ -81,7 +81,7 @@ const palette = {
   },
   dark: {
     bg: '#121212',
-    text: '#fff',
+    text: '#e1e3e3',
     multiplier: '0.9'
   }
 };

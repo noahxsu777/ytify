@@ -8,7 +8,7 @@
   animation: var(--animation-slide-in-up) forwards;
   cursor: pointer;
   border-radius: var(--roundness);
-  background: var(--onBg);
+  background: color-mix(in srgb, var(--onBg), var(--bg) 30%);
 
   &,
   * {
@@ -20,7 +20,7 @@
     aspect-ratio: 1;
     object-fit: cover;
     border: none;
-    border-radius: calc(var(--roundness) * 0.6);
+    border-radius: calc(var(--roundness) * 0.5);
     box-shadow: none;
     pointer-events: none;
   }
@@ -80,7 +80,7 @@
     p {
       font-size: calc(var(--size-6) / 2);
       font-weight: var(--font-weight-4);
-      opacity: 60%;
+      opacity: 55%;
     }
   }
 
@@ -90,13 +90,13 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 2px;
-    background-color: oklch(from var(--text) l c h / 0.1);
+    height: 3px;
+    background-color: oklch(from var(--text) l c h / 0.08);
     accent-color: var(--spotifyGreen);
     appearance: none;
 
     &::-webkit-progress-bar {
-      background: oklch(from var(--text) l c h / 0.1);
+      background: oklch(from var(--text) l c h / 0.08);
     }
 
     &::-webkit-progress-value {
