@@ -29,11 +29,7 @@ header {
     background-color: var(--text) !important;
     color: var(--bg) !important;
   }
-
 }
-
-
-
 
 .library,
 .hub {
@@ -41,141 +37,154 @@ header {
   width: 100%;
   margin-bottom: var(--size-10);
 
-  .gallery-article {
-    grid-column: span 2;
+  /* Greeting Section */
+  .greeting-section {
+    padding: 16px 0;
+    margin-bottom: 24px;
 
-    >div {
-      .listItem {
-        p.title {
-          max-height: var(--size-4) !important;
-        }
+    h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .greeting-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+
+      @media (min-width: 600px) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      @media (min-width: 900px) {
+        grid-template-columns: repeat(4, 1fr);
       }
     }
   }
 
+  /* Shared Article Styles */
   article {
-    margin-bottom: var(--size-5);
+    margin-bottom: 24px;
 
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
 
-    >p {
-      display: inline-block;
-      font-size: var(--font-size-3);
-      font-weight: var(--font-weight-4);
-      letter-spacing: var(--font-letterspacing-2);
-      color: var(--text2);
-      opacity: 0.7;
-      width: calc(100% - var(--size-8));
-
-    }
-
-
-    &.subfeed,
-    &.gallery-article {
-      >p {
-        width: calc(100% - var(--size-11) + var(--size-6));
+      p {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--text);
       }
 
-      >.loading {
-        display: inline-block;
-        animation: spinner 1s cubic-bezier(0.645, 0.045, 0.355, 1) infinite !important;
+      .controls i {
+        font-size: 20px;
+        cursor: pointer;
+        padding: 8px;
+        color: var(--text2);
+        transition: color 0.2s;
 
-        &::after {
-          display: none
+        &:hover {
+          color: var(--text);
+        }
+
+        &.loading {
+          animation: spinner 1s linear infinite;
         }
       }
     }
 
-    >i {
-      font-size: var(--font-size-3);
-      cursor: pointer;
-      padding: var(--size-1) var(--size-2);
-      margin-right: var(--size-2);
-      border-radius: var(--roundness);
-
-      &:hover {
-        background: var(--onBg2);
-        color: var(--text2);
-      }
-
-    }
-
-    >div {
+    /* Horizontal Scroll Container */
+    .horizontal-scroll {
       display: flex;
-      border-radius: var(--roundness);
-      background-color: var(--onBg);
-      border: var(--border);
-      margin: var(--size-2) 0;
-      overflow: hidden;
-    }
+      overflow-x: auto;
+      gap: 16px;
+      padding-bottom: 16px;
 
-    >div:has(.listItem) {
-      overflow-x: scroll;
-      padding: var(--size-2);
-      padding-bottom: 0;
-      gap: var(--size-1);
+      /* Hide scrollbar */
+      scrollbar-width: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
 
       .listItem {
-        width: var(--size-11);
-        flex-shrink: 0;
-        margin: 0;
-        background-color: transparent;
-        border: none;
+         width: 150px;
+         flex-shrink: 0;
+         margin: 0;
+         background: #181818;
+         padding: 16px;
+         border-radius: 6px;
+         transition: background 0.3s;
+         border: none;
+         display: block;
+         height: auto;
 
+         &:hover {
+           background: #282828;
+         }
+
+         img {
+           width: 100%;
+           aspect-ratio: 1;
+           object-fit: cover;
+           border-radius: 4px; /* Default square-ish */
+           margin: 0;
+           margin-bottom: 12px;
+           box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+         }
+
+         /* Circular images for Artists if needed - check if listItem has class or parent has class */
+
+         div {
+           text-align: left;
+
+           .title {
+             font-size: 16px;
+             font-weight: 700;
+             margin-bottom: 4px;
+             white-space: nowrap;
+             overflow: hidden;
+             text-overflow: ellipsis;
+             max-height: none;
+           }
+
+           .stats, .uData {
+             font-size: 14px;
+             color: var(--text2);
+           }
+         }
       }
-
     }
 
-    >.userArtists {
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-      padding-bottom: 0 !important;
-      border-bottom: 0;
-      margin-bottom: 0;
-    }
-
-    >.relatedPlaylists {
-      padding-top: 0 !important;
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-      border-top: 0;
-      margin: 0;
-
-      img {
-        border-top-left-radius: var(--radius-4);
-        border-bottom-right-radius: var(--radius-4);
-      }
-    }
-
-    >.relatedArtists {
-      img {
-        border-radius: var(--radius-round) !important;
-      }
-
-      margin: 0;
-      border-radius: 0;
-      border-top: 0;
-      border-bottom: 0;
-      padding-top: 0 !important;
-    }
-
-
+    /* Legacy StreamItem Container Styles (Vertical List) */
     >div:has(.streamItem) {
-      width: 100%;
+      display: flex;
       flex-direction: column;
+      gap: 0;
+      background: transparent;
+      border: none;
+      margin: 0;
+      padding: 0;
+      width: 100%;
 
       .streamItem {
-        margin-bottom: 0;
         width: 100%;
-        border-radius: 0;
-        flex-shrink: 0;
+        margin-bottom: 0;
+        border-radius: 4px;
+        padding: 8px;
+
+        &:hover {
+          background-color: var(--onBg);
+        }
 
         .title {
-          height: var(--size-4);
-          text-overflow: clip;
+          height: auto;
+          text-overflow: ellipsis;
         }
       }
     }
-
   }
 
   a {
@@ -183,38 +192,22 @@ header {
     cursor: pointer;
   }
 
-
-  a.clxn_item {
-    display: flex;
-    align-items: center;
-    padding: var(--size-1);
-    color: var(--text);
-    font-size: var(--font-size-2);
-
-    i {
-      margin-right: var(--size-2);
-    }
-
-    &:hover {
-      background-color: var(--onBg);
-      border-radius: var(--roundness);
-    }
-  }
-
-
   input[type="text"] {
     width: 100%;
     outline: none;
-    border-radius: var(--roundness);
-    margin: 0;
-    margin-bottom: var(--gap);
+    border-radius: 20px;
+    padding: 10px 16px;
+    margin-bottom: 24px;
     background: var(--onBg);
-    border: var(--border);
+    border: 1px solid transparent;
+    color: var(--text);
+
+    &:focus {
+      border-color: var(--text2);
+    }
 
     &::placeholder {
-      color: var(--text);
+      color: var(--text2);
     }
   }
-
-
 }

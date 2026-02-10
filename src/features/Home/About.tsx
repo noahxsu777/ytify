@@ -1,3 +1,5 @@
+import { setStore } from "@lib/stores";
+
 export default function About() {
   return (
     <div class="sonic-wrapper">
@@ -146,7 +148,14 @@ export default function About() {
           La evolución del streaming eficiente. Música ilimitada con la potencia de la red global, optimizada para ofrecerte una experiencia de audio pura y sin interrupciones.
         </p>
 
-        <a href="#" class="sonic-btn">Comenzar ahora</a>
+        <a
+          href="#"
+          class="sonic-btn"
+          onclick={(e) => {
+            e.preventDefault();
+            setStore('homeView', 'Hub');
+          }}
+        >Comenzar ahora</a>
 
         <hr class="sonic-footer-divider" />
 
