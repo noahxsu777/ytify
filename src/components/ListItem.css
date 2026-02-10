@@ -2,23 +2,28 @@
   width: calc(50% - calc(var(--gap) / 2));
   height: auto;
   margin: var(--size-2) 0;
-  transition: all 0.3s ease-out;
+  transition: all 0.25s ease;
   display: inline-block;
   color: var(--text);
   text-decoration: none;
   cursor: pointer;
   background-color: var(--onBg);
-  border-radius: var(--roundness);
-  border: var(--border);
+  border-radius: calc(var(--roundness) * 1.2);
+  border: none;
 
   * {
     pointer-events: none;
-    transition: all 0.4s;
+    transition: all 0.3s;
   }
 
   &:hover {
     background-color: var(--onBg2);
     color: var(--text2);
+    transform: scale(1.02);
+  }
+
+  &:active {
+    transform: scale(0.97);
   }
 
   &.ravel {
@@ -31,8 +36,8 @@
   img {
     height: auto;
     width: calc(100% - var(--size-2));
-    border-radius: calc(var(--roundness) * 0.5);
-    box-shadow: var(--shadow-1);
+    border-radius: calc(var(--roundness) * 0.8);
+    box-shadow: 0 2px 8px oklch(from var(--text) l c h / 0.08);
     margin: var(--size-1);
     margin-bottom: var(--size-2);
   }
@@ -45,24 +50,27 @@
 
   p.title {
     font-size: var(--font-size-1);
-    font-weight: var(--font-weight-6);
+    font-weight: var(--font-weight-7);
     max-height: var(--size-12);
     line-height: var(--size-4);
     overflow: hidden;
     text-overflow: ellipsis;
     margin-bottom: var(--size-1);
+    letter-spacing: -0.01em;
   }
 
   p.uData {
     font-size: var(--font-size-0);
     line-height: var(--size-3);
     overflow: hidden;
+    opacity: 0.6;
   }
 
   p.stats {
     font-size: var(--font-size-0);
     height: var(--size-3);
     line-height: var(--size-3);
+    opacity: 0.5;
   }
 
 }

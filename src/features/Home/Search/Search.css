@@ -13,10 +13,10 @@
 
 .search {
 
-  --inputround: var(--roundness);
+  --inputround: calc(var(--roundness) * 3);
 
   &:has(li) {
-    --inputround: var(--roundness) var(--roundness) 0 0;
+    --inputround: calc(var(--roundness) * 3) calc(var(--roundness) * 3) 0 0;
   }
 
   .superInputContainer {
@@ -27,7 +27,7 @@
     top: calc(var(--size-9) - var(--border-size-2));
     z-index: 5;
     padding: calc(var(--gap) / 2) var(--gap);
-    border: var(--border);
+    border: none;
     border-radius: var(--inputround);
     display: flex;
     align-items: center;
@@ -35,7 +35,7 @@
     transition-duration: 0ms;
 
     &:focus-within {
-      box-shadow: var(--shadow-1);
+      box-shadow: 0 2px 12px oklch(from var(--text) l c h / 0.08);
     }
 
     .superInput {
@@ -55,7 +55,7 @@
 
       &::placeholder {
         color: inherit;
-        opacity: 75%;
+        opacity: 50%;
       }
     }
 
@@ -71,7 +71,7 @@
       background-color: var(--scheme);
       border: var(--border);
       border-radius: 0 0 var(--roundness) var(--roundness);
-      box-shadow: var(--shadow-1);
+      box-shadow: 0 4px 16px oklch(from var(--text) l c h / 0.1);
       display: block;
       user-select: none;
       overflow: hidden;
@@ -84,6 +84,7 @@
         font-size: var(--font-size-1);
         height: var(--size-fluid-4);
         opacity: 0.7;
+        transition: all 0.2s ease;
 
         &:hover,
         &:focus,

@@ -6,17 +6,19 @@ nav {
   i {
     font-size: var(--font-size-3);
     padding: 0 var(--size-2);
-    opacity: 0.5;
+    opacity: 0.45;
     flex-grow: 1;
     flex-basis: 0;
     text-align: center;
     color: var(--text);
     height: var(--size-7);
+    transition: opacity 0.2s ease, transform 0.2s ease;
   }
 
   .on {
     opacity: 1;
     color: var(--text2);
     font-weight: var(--font-weight-7);
+    transform: scale(1.1);
   }
 }

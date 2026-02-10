@@ -12,6 +12,9 @@
   > div {
     width: 100%;
     margin-bottom: var(--size-8);
+    background: var(--onBg);
+    border-radius: calc(var(--roundness) * 1.5);
+    padding: var(--size-1) var(--size-2);
 
     >span {
       display: flex;
@@ -19,10 +22,16 @@
       align-items: center;
       width: 100%;
       margin: 0 auto;
-      padding: var(--size-2) 0;
+      padding: var(--size-2) var(--size-1);
+      border-bottom: var(--border-size-1) solid oklch(from var(--text) l c h / 0.06);
+      transition: background-color 0.2s ease;
+
+      &:last-child {
+        border-bottom: none;
+      }
 
       &:hover {
-        background-color: var(--onBg);
+        background-color: var(--onBg2);
         border-radius: var(--roundness);
       }
 

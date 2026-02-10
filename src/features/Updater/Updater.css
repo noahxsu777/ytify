@@ -6,10 +6,10 @@
 
   ul {
     background-color: var(--onBg);
-    border-radius: var(--roundness);
+    border-radius: calc(var(--roundness) * 2);
     color: var(--text);
-    box-shadow: var(--shadow-1);
-    border: var(--border);
+    box-shadow: 0 4px 24px oklch(from var(--text) l c h / 0.08);
+    border: none;
     padding: var(--size-3);
     overflow: hidden scroll;
     max-height: calc(100% - var(--size-fluid-7));
@@ -21,7 +21,7 @@
 
       &:first-child {
         font-size: var(--font-size-5);
-        font-weight: var(--font-weight-6);
+        font-weight: var(--font-weight-7);
         margin-bottom: var(--size-5);
       }
 
@@ -32,7 +32,7 @@
       }
 
       margin-bottom:var(--size-2);
-      border-bottom:var(--border);
+      border-bottom:var(--border-size-1) solid oklch(from var(--text) l c h / 0.06);
     }
 
   }
@@ -50,12 +50,14 @@
       font-size: var(--font-size-3);
       font-weight: var(--font-weight-6);
       width: calc(50% - var(--size-4));
-      box-shadow: var(--shadow-1);
-      border-radius: var(--roundness);
+      box-shadow: 0 2px 8px oklch(from var(--text) l c h / 0.06);
+      border-radius: calc(var(--roundness) * 3);
+      transition: all 0.2s ease;
 
       &:hover {
         background-color: var(--onBg2);
         color: var(--text2);
+        transform: scale(1.02);
       }
     }
   }

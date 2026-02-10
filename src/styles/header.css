@@ -29,7 +29,8 @@ section>header {
     font-size: var(--font-size-4);
     opacity: 0.8;
     padding: 0 var(--size-2);
-    border-radius: var(--roundness);
+    border-radius: calc(var(--roundness) * 1.5);
+    transition: all 0.2s ease;
 
     &:hover {
       opacity: 1;
@@ -96,24 +97,26 @@ section>header {
     }
 
     ul {
-      background: rgb(from var(--onBg) r g b / 0.8);
-      backdrop-filter: blur(var(--size-px-2));
+      background: color-mix(in srgb, var(--onBg), var(--bg) 20%);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
       color: var(--text);
       padding: 0;
       list-style: none;
       overflow: hidden;
-      border: var(--border);
-      border-radius: var(--roundness);
-      box-shadow: var(--shadow-2);
+      border: none;
+      border-radius: calc(var(--roundness) * 1.5);
+      box-shadow: 0 4px 24px oklch(from var(--text) l c h / 0.12);
 
       li {
         font-size: var(--font-size-1);
-        padding: var(--size-1) var(--size-2);
-        border-bottom: var(--border);
+        padding: var(--size-2) var(--size-3);
+        border-bottom: var(--border-size-1) solid oklch(from var(--text) l c h / 0.06);
         display: flex;
         align-items: center;
         user-select: none;
         cursor: pointer;
+        transition: background-color 0.2s ease;
 
         &:last-child {
           border: none;

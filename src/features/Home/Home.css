@@ -101,9 +101,9 @@ header {
 
     >div {
       display: flex;
-      border-radius: var(--roundness);
+      border-radius: calc(var(--roundness) * 1.2);
       background-color: var(--onBg);
-      border: var(--border);
+      border: none;
       margin: var(--size-2) 0;
       overflow: hidden;
     }
@@ -197,7 +197,7 @@ header {
 
     &:hover {
       background-color: var(--onBg);
-      border-radius: var(--roundness);
+      border-radius: calc(var(--roundness) * 1.2);
     }
   }
 
@@ -205,14 +205,15 @@ header {
   input[type="text"] {
     width: 100%;
     outline: none;
-    border-radius: var(--roundness);
+    border-radius: calc(var(--roundness) * 3);
     margin: 0;
     margin-bottom: var(--gap);
     background: var(--onBg);
-    border: var(--border);
+    border: none;
 
     &::placeholder {
       color: var(--text);
+      opacity: 0.5;
     }
   }
 

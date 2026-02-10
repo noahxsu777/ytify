@@ -77,8 +77,8 @@
 
   img {
     margin: 0 auto;
-    border-radius: var(--roundness);
-    box-shadow: var(--shadow-2);
+    border-radius: calc(var(--roundness) * 1.5);
+    box-shadow: 0 8px 32px oklch(from var(--text) l c h / 0.15);
     width: 100%;
   }
 
@@ -110,14 +110,16 @@
   a {
     display: block;
     font-size: var(--size-4);
-    font-weight: var(--font-weight-6);
+    font-weight: var(--font-weight-7);
     color: inherit;
     text-decoration-color: inherit;
+    letter-spacing: -0.02em;
   }
 
   p {
     display: inline;
     font-size: var(--size-3);
+    opacity: 0.6;
   }
 
   @media(orientation:landscape) {
@@ -166,6 +168,7 @@
 .mainShelf {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   :first-child {
     animation: var(--animation-slide-in-down) forwards;
@@ -177,7 +180,7 @@
   }
 
   #playButton {
-    transform: scale(1.5)
+    transform: scale(1.6);
   }
 
 }
@@ -213,18 +216,20 @@
 .lyrics {
   aspect-ratio: 1;
   background-color: var(--onBg);
-  border-radius: var(--roundness);
+  border-radius: calc(var(--roundness) * 1.5);
   padding: 0 var(--size-3);
   overflow: scroll;
 
   p {
     margin: var(--size-5) 0;
     font-size: var(--font-size-1);
-    opacity: 0.7;
+    opacity: 0.5;
+    transition: all 0.3s ease;
 
     &.active {
-      font-weight: var(--font-weight-6);
+      font-weight: var(--font-weight-7);
       opacity: 1;
+      font-size: var(--font-size-2);
     }
   }
 }
@@ -235,7 +240,7 @@
   video {
     width: 100%;
     aspect-ratio: 16/9;
-    border-radius: var(--roundness);
+    border-radius: calc(var(--roundness) * 1.5);
   }
 
   select {

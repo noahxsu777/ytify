@@ -1,8 +1,8 @@
 /* === range theme and appearance === */
 input[type="range"] {
   font-size: 1.5rem;
-  --thumb-height: 0.625em;
-  --track-height: 0.125em;
+  --thumb-height: 0.5em;
+  --track-height: 0.2em;
   --track-color: var(--onBg);
   --brightness-hover: 180%;
   --brightness-down: 80%;
@@ -11,6 +11,7 @@ input[type="range"] {
   position: relative;
   background: #fff0;
   overflow: hidden;
+  border-radius: 1em;
 }
 
 

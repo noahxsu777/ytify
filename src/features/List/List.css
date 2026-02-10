@@ -70,7 +70,7 @@
 }
 
 .list-thumbnail {
-  border-radius: var(--roundness);
+  border-radius: calc(var(--roundness) * 1.5);
 }
 
 #listSection {
@@ -79,7 +79,7 @@
   &:has(>img) {
 
     .listContainer {
-      border-radius: var(--roundness);
+      border-radius: calc(var(--roundness) * 1.2);
       overflow: hidden;
       margin-top: var(--gap);
     }
@@ -112,10 +112,10 @@
   display: flex;
   overflow: auto;
   background-color: var(--onBg);
-  border-radius: var(--roundness);
+  border-radius: calc(var(--roundness) * 1.2);
   margin-bottom: var(--size-2);
   padding: var(--size-1);
-  border: var(--border);
+  border: none;
 
   .listItem {
     width: var(--size-11);
