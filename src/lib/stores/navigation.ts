@@ -6,6 +6,7 @@ const Queue = lazy(() => import('../../features/Queue'));
 const Player = lazy(() => import('../../features/Player'));
 const Settings = lazy(() => import('../../features/Settings'));
 const Updater = lazy(() => import('../../features/Updater'));
+const Premium = lazy(() => import('../../features/Premium'));
 
 export const params = (new URL(location.href)).searchParams;
 
@@ -22,7 +23,8 @@ export const [navStore, setNavStore] = createStore<Nav>({
   home: { ref: null, state: false, component: Home },
   list: { ref: null, state: false, component: List },
   settings: { ref: null, state: false, component: Settings },
-  updater: { ref: null, state: false, component: Updater }
+  updater: { ref: null, state: false, component: Updater },
+  premium: { ref: null, state: false, component: Premium }
 });
 
 

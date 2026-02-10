@@ -8,7 +8,7 @@ declare global {
 
   type SyncState = 'synced' | 'syncing' | 'dirty' | 'error';
 
-  type Features = 'home' | 'player' | 'list' | 'settings' | 'queue' | 'updater';
+  type Features = 'home' | 'player' | 'list' | 'settings' | 'queue' | 'updater' | 'premium';
   type Context = 'link' | 'search' | 'hub' | 'playlists' | 'collection' | 'channels' | 'queue' | 'standby';
 
   type StreamItem = {

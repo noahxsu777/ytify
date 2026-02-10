@@ -50,6 +50,15 @@ export default function() {
         onclick={() => saveHome('Search')}
       ></i>
 
+      <i
+        aria-label={t('premium_title')}
+        class="ri-vip-crown-2-line"
+        classList={{ on: navStore.premium.state }}
+        onclick={() => {
+          setNavStore('premium', 'state', !navStore.premium.state);
+        }}
+      ></i>
+
     </nav>
   );
 }

@@ -221,5 +221,17 @@
     "library_import_songshift": "Importar listas de reproducción desde SongShift",
     "library_about_ytify": "Acerca de ytify",
     "nav_logout": "Cerrar sesión",
-    "player_video_resolution": "Resolución"
+    "player_video_resolution": "Resolución",
+    "premium_title": "Premium",
+    "premium_subtitle": "Desbloquea la mejor experiencia de audio con funciones exclusivas",
+    "premium_high_quality": "Audio de Alta Calidad",
+    "premium_high_quality_desc": "Escucha con calidad cristalina con streaming de audio sin pérdida de hasta 320kbps",
+    "premium_offline": "Escucha Sin Conexión",
+    "premium_offline_desc": "Descarga tus pistas favoritas y escúchalas en cualquier lugar sin conexión a internet",
+    "premium_no_ads": "Sin Anuncios",
+    "premium_no_ads_desc": "Disfruta de música ininterrumpida sin distracciones ni interrupciones",
+    "premium_unlimited_skips": "Saltos Ilimitados",
+    "premium_unlimited_skips_desc": "Salta todas las pistas que quieras sin límites",
+    "premium_get_premium": "Obtener Premium",
+    "premium_note": "Las funciones Premium están llegando pronto. ¡Mantente atento a las actualizaciones!"
 }
