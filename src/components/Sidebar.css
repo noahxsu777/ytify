@@ -1,9 +1,9 @@
 .sidebar {
-  width: 240px;
+  width: 200px; /* Reduced from 240px */
   background-color: #000;
   display: flex;
   flex-direction: column;
-  padding: 24px 0;
+  padding: 16px 0; /* Reduced padding */
   height: 100vh;
   position: sticky;
   top: 0;

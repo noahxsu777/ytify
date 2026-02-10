@@ -236,14 +236,19 @@ createRoot(() => {
 });
 
 async function getRecommendations() {
-
   const title = encodeURIComponent(playerStore.stream.title);
   const artist = encodeURIComponent(playerStore.stream.author?.slice(0, -8) ?? '');
   return fetch(`${store.api}/api/tracks?title=${title}&artist=${artist}&limit=10`)
     .then(res => res.json())
-    .then(addToQueue)
+    .then(data => {
+        if (Array.isArray(data)) {
+            addToQueue(data);
+        } else {
+            console.error('getRecommendations: API response is not an array', data);
+            throw new Error('API response is not an array');
+        }
+    })
     .catch(e => setStore('snackbar', `Could not get recommendations for the track: ${e.message}`));
-
 }
 
 
