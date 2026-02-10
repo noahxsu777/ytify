@@ -1,36 +1,36 @@
 .sidebar {
-  width: 200px; /* Reduced from 240px */
+  width: 140px; /* Drastically reduced */
   background-color: #000;
   display: flex;
   flex-direction: column;
-  padding: 16px 0; /* Reduced padding */
+  padding: 16px 0;
   height: 100vh;
   position: sticky;
   top: 0;
   flex-shrink: 0;
   color: #b3b3b3;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 12px; /* Smaller font */
 }
 
 .sidebar-logo {
   display: flex;
   align-items: center;
-  padding: 0 24px;
+  padding: 0 16px;
   margin-bottom: 24px;
   color: #fff;
-  font-size: 24px;
+  font-size: 18px; /* Smaller */
   font-weight: 700;
 
   i {
     margin-right: 8px;
-    font-size: 40px; /* Large Spotify-like icon */
+    font-size: 28px; /* Smaller icon */
   }
 }
 
 .nav-links, .library-links {
   list-style: none;
-  padding: 0 24px;
+  padding: 0 16px;
   margin: 0;
 
   li {
@@ -54,12 +54,12 @@
     }
 
     i {
-      font-size: 24px;
-      margin-right: 16px;
+      font-size: 20px;
+      margin-right: 12px;
     }
 
     span {
-      font-size: 14px;
+      font-size: 13px;
     }
 
     /* Special styling for icon-box */
