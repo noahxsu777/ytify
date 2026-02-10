@@ -49,7 +49,7 @@
 
   & i.on {
     background-color: var(--spotifyGreen);
-    color: #000;
+    color: var(--bg);
   }
 
 

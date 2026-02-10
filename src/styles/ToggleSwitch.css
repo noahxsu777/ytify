@@ -57,6 +57,6 @@
 
   input:checked+span:before {
     transform: translateX(calc(2.6rem - 100% - 4px));
-    background-color: #000;
+    background-color: var(--bg);
   }
 }

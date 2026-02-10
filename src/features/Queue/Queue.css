@@ -50,7 +50,7 @@
 
     &.on {
       --liBg: var(--spotifyGreen);
-      color: #000 !important;
+      color: var(--bg) !important;
     }
 
     &:hover {
