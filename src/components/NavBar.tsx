@@ -29,26 +29,34 @@ export default function() {
         onclick={() => {
           setNavStore('queue', 'state', !navStore.queue.state);
         }}
-      ></i>
+      >
+        <span class="navLabel">{t('nav_queue')}</span>
+      </i>
 
       <i
         aria-label={t('nav_hub')}
         class="ri-store-2-line"
         classList={{ 'on': navView('Hub') }}
         onclick={() => saveHome('Hub')}
-      ></i>
+      >
+        <span class="navLabel">{t('nav_hub')}</span>
+      </i>
       <i
         aria-label={t('nav_library')}
         class="ri-archive-stack-line"
         classList={{ 'on': navView('Library') }}
         onclick={() => saveHome('Library')}
-      ></i>
+      >
+        <span class="navLabel">{t('nav_library')}</span>
+      </i>
       <i
         aria-label={t('nav_search')}
         class="ri-search-2-line"
         classList={{ 'on': navView('Search') }}
         onclick={() => saveHome('Search')}
-      ></i>
+      >
+        <span class="navLabel">{t('nav_search')}</span>
+      </i>
 
     </nav>
   );

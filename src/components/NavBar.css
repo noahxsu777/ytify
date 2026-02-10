@@ -2,6 +2,7 @@ nav {
   display: flex;
   width: 100%;
   margin: auto 0;
+  padding: var(--size-1) 0;
 
   i {
     font-size: var(--font-size-3);
@@ -11,14 +12,30 @@ nav {
     flex-basis: 0;
     text-align: center;
     color: var(--text);
-    height: var(--size-7);
+    height: auto;
     transition: opacity 0.2s ease, transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+
+    .navLabel {
+      font-family: var(--font);
+      font-style: normal;
+      font-size: 0.6rem;
+      font-weight: var(--font-weight-5);
+      letter-spacing: 0;
+    }
   }
 
   .on {
     opacity: 1;
     color: var(--text2);
     font-weight: var(--font-weight-7);
-    transform: scale(1.1);
+    transform: scale(1.05);
+
+    .navLabel {
+      font-weight: var(--font-weight-7);
+    }
   }
 }
