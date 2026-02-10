@@ -1,5 +1,5 @@
 import { For, onMount, Show } from "solid-js";
-import { getSearchResults, getSearchSuggestions, playerStore, searchStore, setSearchStore, t } from "@lib/stores";
+import { getSearchResults, getSearchSuggestions, playerStore, searchStore, setSearchStore } from "@lib/stores";
 import { config, drawer, idFromURL, player } from "@lib/utils";
 
 export default function() {
@@ -28,10 +28,10 @@ export default function() {
     <>
       <input
         value={searchStore.query}
-        placeholder={t("search_placeholder")}
+        placeholder="What do you want to listen to?"
         type="search"
         ref={superInput}
-        class="superInput"
+        class="search-input"
         autocomplete="off"
         onpaste={async (e) => {
           const pastedText = e.clipboardData?.getData('text');

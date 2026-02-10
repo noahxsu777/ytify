@@ -1,4 +1,3 @@
-import { For, Show } from "solid-js";
 import { navStore, setNavStore, setStore, store, t } from "@lib/stores";
 import './Sidebar.css';
 

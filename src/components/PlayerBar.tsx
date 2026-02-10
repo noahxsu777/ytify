@@ -1,6 +1,6 @@
 import { createSignal, Show } from "solid-js";
-import { playerStore, setPlayerStore, navStore, setNavStore, t } from "@lib/stores";
-import { queueStore, setQueueStore } from "@lib/stores/queue";
+import { playerStore, setPlayerStore, navStore, setNavStore } from "@lib/stores";
+import { setQueueStore } from "@lib/stores/queue";
 import { playNext, playPrev } from "@lib/stores/player";
 import { convertSStoHHMMSS, setConfig } from "@lib/utils";
 import { LikeButton, PlayButton } from "./MediaPartials";

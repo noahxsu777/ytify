@@ -1,10 +1,10 @@
 import { For, Show, createSignal, createMemo } from "solid-js";
 import { updateSubfeed, updateGallery } from "@lib/modules/hub";
-import { fetchCollection, getCollection, getTracksMap, drawer, setDrawer, generateImageUrl, getThumbIdFromLink } from "@lib/utils";
+import { getCollection, getTracksMap, drawer, generateImageUrl, getThumbIdFromLink } from "@lib/utils";
 import ListItem from "@components/ListItem";
 import StreamItem from "@components/StreamItem";
 import GreetingCard from "@components/GreetingCard";
-import { setListStore, setNavStore, t } from "@lib/stores";
+import { t } from "@lib/stores";
 
 export default function() {
   const [subfeed, setSubfeed] = createSignal(drawer.subfeed);
