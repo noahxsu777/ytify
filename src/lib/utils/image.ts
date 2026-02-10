@@ -80,7 +80,7 @@ const palette = {
     multiplier: '1.1',
   },
   dark: {
-    bg: '#000',
+    bg: '#121212',
     text: '#fff',
     multiplier: '0.9'
   }
@@ -115,7 +115,7 @@ function colorInjector(colorArray: number[]) {
 
 
 export function themer() {
-  const initColor = '220, 220, 220';
+  const initColor = '29, 185, 84';
   const { stream } = playerStore;
   const { loadImage } = config;
   if (loadImage && stream.id)

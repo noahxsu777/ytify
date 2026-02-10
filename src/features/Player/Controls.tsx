@@ -1,5 +1,5 @@
-import { LikeButton, PlayButton, PlayNextButton } from "@components/MediaPartials";
-import { params, playerStore, playPrev, queueStore, setPlayerStore, updateParam, t } from "@lib/stores";
+import { LikeButton, PlayButton } from "@components/MediaPartials";
+import { params, playerStore, playPrev, playNext, setPlayerStore, updateParam, t } from "@lib/stores";
 import { convertSStoHHMMSS, setConfig } from "@lib/utils";
 import { Accessor, createSignal, onMount, Setter, Show } from "solid-js";
 
@@ -49,37 +49,21 @@ export default function(_: {
 
       <div class="mainShelf">
 
-        <Show when={playerStore.history.length}>
-          <button
-            aria-label={t('player_play_previous')}
-            class="ri-skip-back-line"
-            id="playPrevButton"
-            onclick={playPrev}
-          ></button>
-        </Show>
-
         <button
-          aria-label={t('player_seek_backward')}
-          class="ri-replay-15-line"
-          id="seekBwdButton"
-          onclick={() => {
-            playerStore.audio.currentTime -= 15;
-          }}
+          aria-label={t('player_play_previous')}
+          class="ri-skip-back-fill"
+          id="playPrevButton"
+          onclick={playPrev}
         ></button>
 
         <PlayButton />
 
         <button
-          aria-label={t('player_seek_forward')}
-          class="ri-forward-15-line"
-          id="seekFwdButton"
-          onclick={() => {
-            playerStore.audio.currentTime += 15;
-          }}
+          aria-label={t('player_play_next')}
+          class="ri-skip-forward-fill"
+          id="playNextButton"
+          onclick={playNext}
         ></button>
-        <Show when={queueStore.list.length}>
-          <PlayNextButton />
-        </Show>
 
       </div>
 
@@ -137,7 +121,7 @@ export default function(_: {
         >
           <i
             aria-label={t('player_lyrics')}
-            class="ri-music-2-line"
+            class="ri-mic-line"
             classList={{
               on: _.showLyrics()
             }}

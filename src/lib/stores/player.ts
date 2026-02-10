@@ -70,10 +70,20 @@ const createInitialState = (): PlayerStore => ({
 
 const [playerStore, setPlayerStore] = createStore(createInitialState());
 
-export function playNext() {
+export async function playNext() {
   const { stream } = playerStore;
-  const { list } = queueStore;
-  const nextStream = list[0];
+
+  if (queueStore.list.length === 0) {
+    await getRecommendations();
+  }
+
+  if (queueStore.list.length === 0) {
+    updateParam('s');
+    setPlayerStore('playbackState', 'none');
+    return;
+  }
+
+  const nextStream = queueStore.list[0];
   setPlayerStore('history', h => [{ ...stream }, ...h]);
   setPlayerStore('stream', nextStream);
   setQueueStore('list', l => l.slice(1));
@@ -82,7 +92,17 @@ export function playNext() {
 }
 
 export function playPrev() {
-  const { history, stream } = playerStore;
+  const { history, stream, audio } = playerStore;
+
+  if (audio.currentTime > 3) {
+    audio.currentTime = 0;
+    return;
+  }
+
+  if (history.length === 0) {
+    audio.currentTime = 0;
+    return;
+  }
 
   const prevStream = history[0];
   setPlayerStore('history', h => h.slice(1));
@@ -99,12 +119,7 @@ createRoot(() => {
   playerStore.audio.volume = playerStore.volume;
 
   playerStore.audio.onended = () => {
-    if (queueStore.list.length)
-      playNext();
-    else {
-      updateParam('s');
-      setPlayerStore('playbackState', 'none');
-    }
+    playNext();
   }
 
   playerStore.audio.onplaying = () => {
@@ -229,7 +244,7 @@ async function getRecommendations() {
 
   const title = encodeURIComponent(playerStore.stream.title);
   const artist = encodeURIComponent(playerStore.stream.author?.slice(0, -8) ?? '');
-  fetch(`${store.api}/api/tracks?title=${title}&artist=${artist}&limit=10`)
+  return fetch(`${store.api}/api/tracks?title=${title}&artist=${artist}&limit=10`)
     .then(res => res.json())
     .then(addToQueue)
     .catch(e => setStore('snackbar', `Could not get recommendations for the track: ${e.message}`));
