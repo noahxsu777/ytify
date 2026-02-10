@@ -5,6 +5,8 @@ import '../styles/global.css';
 import { navStore, playerStore, setStore, store } from '@lib/stores';
 import { config } from '@lib/utils';
 import NavBar from '@components/NavBar.tsx';
+import Sidebar from '@components/Sidebar';
+import PlayerBar from '@components/PlayerBar';
 
 const MiniPlayer = lazy(() => import('../components/MiniPlayer'));
 const ActionsMenu = lazy(() => import('../components/ActionsMenu'));
@@ -29,20 +31,29 @@ export default function() {
   return (
     <>
       <main>
-        <For each={Object.values(navStore)}>
-          {(item) =>
-            <Show when={item.state}>
-              <item.component />
-            </Show>
-          }
-        </For>
+        <Sidebar />
+        <div class="main-content">
+          <For each={Object.values(navStore)}>
+            {(item) =>
+              <Show when={item.state}>
+                <item.component />
+              </Show>
+            }
+          </For>
+        </div>
       </main>
+
       <footer>
         <Show when={!navStore.player.state && playerStore.playbackState !== 'none'}>
           <MiniPlayer />
         </Show >
         <NavBar />
+
+        <Show when={playerStore.playbackState !== 'none' || playerStore.isMusic}>
+           <PlayerBar />
+        </Show>
       </footer>
+
       <Show when={store.actionsMenu?.id}>
         <ActionsMenu />
       </Show>
