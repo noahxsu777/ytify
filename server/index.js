@@ -14,12 +14,13 @@ const io = new Server(httpServer, {
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Endpoints for Remote Control
 
 // Play a song by query (e.g., "Despacito")
 app.post('/api/play', (req, res) => {
-  const { query } = req.body;
+  const query = req.body.query || req.body.song || req.body.text;
   if (!query) {
     return res.status(400).json({ error: 'Query is required' });
   }
@@ -51,7 +52,7 @@ app.post('/api/prev', (req, res) => {
 
 // Add to Queue (optional, similar to play but appends)
 app.post('/api/queue', (req, res) => {
-  const { query } = req.body;
+  const query = req.body.query || req.body.song || req.body.text;
   if (!query) {
     return res.status(400).json({ error: 'Query is required' });
   }
