@@ -5,6 +5,7 @@ import '../styles/global.css';
 import { navStore, playerStore, setStore, store } from '@lib/stores';
 import { config } from '@lib/utils';
 import NavBar from '@components/NavBar.tsx';
+import RemoteControl from './RemoteControl';
 
 const MiniPlayer = lazy(() => import('../components/MiniPlayer'));
 const ActionsMenu = lazy(() => import('../components/ActionsMenu'));
@@ -47,6 +48,7 @@ export default function() {
       <Show when={store.snackbar}>
         <SnackBar />
       </Show>
+      <RemoteControl />
     </>
   );
 }

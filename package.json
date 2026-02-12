@@ -4,18 +4,26 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "server": "node server/index.js",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3",
     "solid-js": "1.9.10",
-    "sortablejs": "^1.15.6"
+    "sortablejs": "^1.15.6",
+    "tiktok-live-connector": "^2.1.1-beta1"
   },
   "devDependencies": {
     "@netlify/blobs": "^10.5.0",
     "@netlify/edge-functions": "^3.0.3",
     "@netlify/functions": "^5.1.2",
-    "@types/node": "^25.0.7",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.2.3",
     "@types/sortablejs": "^1.15.9",
     "@vercel/node": "^5.5.17",
     "autoprefixer": "^10.4.23",
