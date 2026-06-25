@@ -31,8 +31,8 @@ export default function() {
     <section class="home" ref={homeRef}>
 
       <header>
-        <p>
-          {store.homeView ? t(map[store.homeView]) : 'ytify'}</p>
+        <p class="home-title">
+          {store.homeView === 'Hub' ? 'Listen Now' : store.homeView ? t(map[store.homeView]) : 'Sonic Boom'}</p>
 
         <Show when={config.dbsync}>
           <i

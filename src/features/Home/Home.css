@@ -2,6 +2,14 @@ header {
   display: flex;
   justify-content: space-between;
 
+  .home-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.01em;
+  }
+
   label {
     cursor: pointer;
   }
@@ -35,8 +43,189 @@ header {
 
 
 
-.library,
+/* ── Hub Apple Music layout ── */
 .hub {
+  padding: 0 0 32px;
+
+  .hub-section {
+    margin-bottom: 32px;
+
+    .hub-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+      margin-bottom: 12px;
+
+      h2 {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: #fff;
+      }
+
+      button {
+        font-family: 'Inter', sans-serif;
+        font-size: 12px;
+        font-weight: 600;
+        color: #FF5F1F;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+
+        i { font-size: 16px; }
+        &.loading i { animation: spinner 1s cubic-bezier(0.645,0.045,0.355,1) infinite; }
+      }
+    }
+
+    .hub-scroll {
+      display: flex;
+      overflow-x: auto;
+      gap: 12px;
+      padding: 0 16px 4px;
+      scrollbar-width: none;
+      &::-webkit-scrollbar { display: none; }
+    }
+
+    .hub-card {
+      flex-shrink: 0;
+      width: 140px;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+      &:active { transform: scale(0.95); }
+
+      .hub-card-art {
+        width: 140px;
+        height: 140px;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.08);
+        margin-bottom: 6px;
+        background: #18181b;
+        box-shadow: 0 8px 20px -4px rgba(255, 95, 31, 0.12);
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+    }
+
+    .hub-featured {
+      position: relative;
+      margin: 0 16px;
+      border-radius: 18px;
+      overflow: hidden;
+      aspect-ratio: 16/9;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 10px 30px -8px rgba(255,95,31,0.2);
+      transition: transform 0.2s ease;
+      &:active { transform: scale(0.98); }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .hub-featured-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 50%, transparent 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 20px;
+
+        .hub-featured-label {
+          font-family: 'Inter', sans-serif;
+          font-size: 10px;
+          font-weight: 700;
+          color: #FF5F1F;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          margin-bottom: 4px;
+        }
+
+        .hub-featured-title {
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          font-size: 22px;
+          font-weight: 700;
+          color: #fff;
+          line-height: 1.2;
+          margin-bottom: 4px;
+        }
+
+        .hub-featured-sub {
+          font-family: 'Inter', sans-serif;
+          font-size: 14px;
+          color: rgba(255,255,255,0.65);
+        }
+      }
+    }
+
+    .hub-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 0 16px;
+
+      .hub-grid-card {
+        cursor: pointer;
+        transition: transform 0.15s ease;
+        &:active { transform: scale(0.95); }
+
+        .hub-grid-art {
+          width: 100%;
+          aspect-ratio: 1;
+          border-radius: 12px;
+          overflow: hidden;
+          border: 1px solid rgba(255,255,255,0.08);
+          margin-bottom: 6px;
+          background: #18181b;
+          box-shadow: 0 6px 16px -4px rgba(255,95,31,0.1);
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+      }
+    }
+  }
+
+  .hub-card-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 2px;
+  }
+
+  .hub-card-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: #a1a1aa;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.library,
+.hub-old {
   overflow-y: auto;
   width: 100%;
   margin-bottom: var(--size-10);

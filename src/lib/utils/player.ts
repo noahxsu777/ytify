@@ -69,7 +69,8 @@ export async function player(id?: string, isRetry = false) {
     ));
 
 
-    if (config.similarContent && !enforceVideo)
+    // Always enqueue related videos so autoplay keeps going
+    if (!enforceVideo)
       import('../modules/enqueueRelatedStreams')
         .then(mod => mod.default(invidiousData.recommendedVideos));
 

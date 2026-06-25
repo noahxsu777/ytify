@@ -1,13 +1,13 @@
 import { LikeButton, PlayButton, PlayNextButton } from "@components/MediaPartials";
-import { params, playerStore, playPrev, setPlayerStore, updateParam, t } from "@lib/stores";
+import { params, playerStore, playPrev, setPlayerStore, t } from "@lib/stores";
 import { convertSStoHHMMSS, setConfig } from "@lib/utils";
-import { Accessor, createSignal, onMount, Setter, Show } from "solid-js";
+import { Accessor, createSignal, onMount, Setter } from "solid-js";
 
 export default function(_: {
   showLyrics: Accessor<boolean>,
   setShowLyrics: Setter<boolean>
 }) {
-  const [isPointed, setPointed] = createSignal(params.has('t'));
+  const [_isPointed, _setPointed] = createSignal(params.has('t'));
   let slider!: HTMLInputElement;
 
   onMount(() => {
@@ -98,28 +98,13 @@ export default function(_: {
           <option value="2.00">2x</option>
         </select>
 
-        <Show
-          when={playerStore.isMusic}
-          fallback={
-            <i
-              aria-label={t('player_save_progress')}
-              class="ri-signpost-line"
-              classList={{ on: isPointed() }}
-              onclick={() => {
-                if (isPointed()) { updateParam('t'); setPointed(false); }
-                else { updateParam('t', playerStore.currentTime.toString()); setPointed(true); }
-              }}
-            />
-          }
-        >
-          {/* Lyrics button */}
-          <i
-            aria-label={t('player_lyrics')}
-            class="ri-music-2-line"
-            classList={{ on: _.showLyrics() }}
-            onclick={() => _.setShowLyrics(!_.showLyrics())}
-          />
-        </Show>
+        {/* Lyrics button — always visible */}
+        <i
+          aria-label={t('player_lyrics')}
+          class="ri-music-2-line"
+          classList={{ on: _.showLyrics() }}
+          onclick={() => _.setShowLyrics(!_.showLyrics())}
+        />
 
         <LikeButton />
 

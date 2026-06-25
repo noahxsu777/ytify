@@ -82,6 +82,7 @@ export default function() {
           <Lyrics onClose={() => setShowLyrics(false)} />
         </Show>
 
+
         <Show when={(!playerStore.isWatching || playerStore.isMusic) && config.loadImage && !showLyrics()}>
           <MediaArtwork />
         </Show>

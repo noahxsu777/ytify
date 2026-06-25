@@ -5,7 +5,8 @@ footer {
   bottom: var(--height);
   z-index: 2;
   width: 100dvmin;
-  --height: calc(68px + var(--size-1)); /* nav height */
+  --nav-height: calc(68px + env(safe-area-inset-bottom, 0px));
+  --height: var(--nav-height);
   height: var(--height);
   background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(24px);
@@ -14,7 +15,7 @@ footer {
   overflow: hidden;
 
   &:has(.miniplayer) {
-    --height: calc(68px + 76px); /* nav + mini-player card */
+    --height: calc(var(--nav-height) + 76px); /* nav + mini-player card */
   }
 
   @media (orientation: landscape) {

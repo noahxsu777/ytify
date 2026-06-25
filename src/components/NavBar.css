@@ -2,8 +2,9 @@ nav {
   display: flex;
   width: 100%;
   align-items: flex-start;
-  padding-top: 8px;
-  height: 68px;
+  padding-top: 10px;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  height: calc(68px + env(safe-area-inset-bottom, 0px));
 
   .nav-item {
     display: flex;
@@ -18,10 +19,10 @@ nav {
     font-family: 'Inter', sans-serif;
     font-size: 10px;
     font-weight: 500;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
-    padding-top: 2px;
 
     .ms {
       font-size: 24px;

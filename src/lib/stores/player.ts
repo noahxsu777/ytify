@@ -4,7 +4,7 @@ import { addToCollection, config, cssVar, player, themer } from "@lib/utils";
 import { navStore, params, updateParam } from "./navigation";
 import { addToQueue, queueStore, setQueueStore } from "./queue";
 import audioErrorHandler from "@lib/modules/audioErrorHandler";
-import { setStore, store } from "./app";
+import { store } from "./app";
 import getStreamData from "../modules/getStreamData";
 
 const blankImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
@@ -99,11 +99,12 @@ createRoot(() => {
   playerStore.audio.volume = playerStore.volume;
 
   playerStore.audio.onended = () => {
-    if (queueStore.list.length)
+    if (queueStore.list.length) {
       playNext();
-    else {
-      updateParam('s');
-      setPlayerStore('playbackState', 'none');
+    } else {
+      // Queue is empty — fetch related tracks from Invidious recommendedVideos
+      // that were stored on the last loaded track, then play next.
+      autoFillAndPlay();
     }
   }
 
@@ -226,14 +227,57 @@ createRoot(() => {
 });
 
 async function getRecommendations() {
-
   const title = encodeURIComponent(playerStore.stream.title);
   const artist = encodeURIComponent(playerStore.stream.author?.slice(0, -8) ?? '');
-  fetch(`${store.api}/api/tracks?title=${title}&artist=${artist}&limit=10`)
-    .then(res => res.json())
-    .then(addToQueue)
-    .catch(e => setStore('snackbar', `Could not get recommendations for the track: ${e.message}`));
+  const apiUrl = store.api
+    ? `${store.api}/api/tracks?title=${title}&artist=${artist}&limit=10`
+    : null;
 
+  if (apiUrl) {
+    fetch(apiUrl)
+      .then(res => { if (!res.ok) throw new Error('api'); return res.json(); })
+      .then(addToQueue)
+      .catch(() => fillFromInvidious());
+  } else {
+    fillFromInvidious();
+  }
+}
+
+// Fill queue using the recommendedVideos Invidious already returned for the
+// current track (stored in playerStore.data).
+function fillFromInvidious() {
+  const data = playerStore.data as Invidious;
+  if (data?.recommendedVideos?.length) {
+    import('../modules/enqueueRelatedStreams')
+      .then(mod => mod.default(data.recommendedVideos));
+  }
+}
+
+// Called when the song ends and queue is empty.
+// Tries to get recommendations; if the queue is still empty after a short
+// wait, falls back to Invidious related videos and plays the first one.
+async function autoFillAndPlay() {
+  // First try Invidious related videos (immediate, no network call needed)
+  const data = playerStore.data as Invidious;
+  if (data?.recommendedVideos?.length) {
+    import('../modules/enqueueRelatedStreams')
+      .then(mod => {
+        mod.default(data.recommendedVideos);
+        // Give the store a tick to update then play next
+        setTimeout(() => {
+          if (queueStore.list.length) playNext();
+          else {
+            updateParam('s');
+            setPlayerStore('playbackState', 'none');
+          }
+        }, 100);
+      });
+    return;
+  }
+
+  // No Invidious data available
+  updateParam('s');
+  setPlayerStore('playbackState', 'none');
 }
 
 
