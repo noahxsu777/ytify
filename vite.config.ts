@@ -28,6 +28,13 @@ export default defineConfig(({ command }) => ({
     solidPlugin(),
     injectEruda(command === 'serve'),
     VitePWA({
+      registerType: 'autoUpdate',
+      workbox: {
+        navigateFallbackDenylist: [/^\/api\//],
+        cleanupOutdatedCaches: true,
+        skipWaiting: true,
+        clientsClaim: true,
+      },
       manifest: {
         "short_name": "Ytify",
         "name": "Listen with ytify",
