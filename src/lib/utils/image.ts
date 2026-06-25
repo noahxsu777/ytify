@@ -80,7 +80,7 @@ const palette = {
     multiplier: '1.1',
   },
   dark: {
-    bg: '#000',
+    bg: '#121212',
     text: '#fff',
     multiplier: '0.9'
   }

@@ -1,0 +1,256 @@
+/* Spotify-inspired theme overrides */
+
+:root {
+  --roundness: 0.5rem;
+}
+
+html, body {
+  background: var(--bg) !important;
+  color: var(--text);
+}
+
+main {
+  background: linear-gradient(180deg, #1f1f1f 0%, var(--bg) 280px);
+
+  section {
+    background: transparent;
+  }
+
+  section > header > p {
+    font-size: var(--font-size-5);
+    font-weight: var(--font-weight-8);
+    letter-spacing: -0.02em;
+    opacity: 1;
+    color: #fff;
+  }
+}
+
+/* Stream / list rows: Spotify track-row feel */
+.streamItem {
+  border-radius: var(--roundness);
+  padding: var(--size-2);
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: var(--cardHover) !important;
+    border: var(--border-size-1) solid transparent !important;
+  }
+
+  span img {
+    border-radius: calc(var(--roundness) * 0.5);
+    box-shadow: 0 4px 12px #0008;
+  }
+
+  div .title {
+    font-weight: var(--font-weight-6);
+    color: #fff;
+  }
+
+  div .avu p {
+    color: #b3b3b3;
+    opacity: 1;
+  }
+}
+
+/* List items (albums/playlists/artists) as Spotify cards */
+.listItem {
+  background: var(--card);
+  border-radius: var(--roundness);
+  padding: var(--size-3) !important;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: var(--cardHover) !important;
+  }
+
+  img, .list-thumbnail {
+    border-radius: calc(var(--roundness) * 0.6);
+    box-shadow: 0 8px 24px #000a;
+  }
+}
+
+/* Footer: Spotify-style now-playing bar */
+footer {
+  background: #181818 !important;
+  backdrop-filter: none !important;
+  border-top: 1px solid #282828 !important;
+  border-radius: 0 !important;
+  box-shadow: 0 -2px 12px #0006;
+}
+
+.miniplayer {
+  background: transparent;
+
+  .mediaDetails a {
+    color: #fff;
+    font-weight: var(--font-weight-6);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .mediaDetails p {
+    color: #b3b3b3;
+    opacity: 1;
+  }
+
+  #playButton {
+    background: #fff;
+    color: #000;
+    border-radius: 50%;
+    width: var(--size-7);
+    height: var(--size-7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      transform: scale(1.06);
+    }
+  }
+
+  .ri-heart-fill {
+    color: var(--accent);
+  }
+
+  progress::-webkit-progress-value {
+    background: var(--accent) !important;
+    border-bottom: none !important;
+  }
+}
+
+/* Bottom nav: Spotify-style icons */
+nav {
+  background: transparent;
+
+  i {
+    transition: color 0.2s ease, opacity 0.2s ease;
+    opacity: 0.7;
+    color: #b3b3b3;
+
+    &:hover {
+      opacity: 1;
+      color: #fff;
+    }
+  }
+
+  .on {
+    opacity: 1;
+    color: #fff !important;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+  }
+}
+
+/* Player section: Spotify "now playing" full view */
+#playerSection {
+  background: linear-gradient(180deg, #2a2a2a 0%, var(--bg) 60%);
+
+  .topShelf p {
+    text-transform: uppercase;
+    font-size: var(--font-size-0);
+    letter-spacing: 0.1em;
+    font-weight: var(--font-weight-7);
+    color: #b3b3b3;
+  }
+}
+
+/* Search input */
+input[type="search"], input[type="text"] {
+  background: #242424 !important;
+  border-radius: 500px !important;
+  border: 1px solid transparent !important;
+  color: #fff !important;
+  transition: border-color 0.2s ease;
+
+  &:focus {
+    border-color: #fff !important;
+    outline: none;
+  }
+}
+
+/* Filter chips */
+.filters button, .filters a {
+  background: var(--card);
+  color: #fff;
+  border-radius: 500px;
+  padding: var(--size-2) var(--size-3);
+  border: none;
+  font-weight: var(--font-weight-6);
+  transition: background-color 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    background: var(--cardHover);
+  }
+
+  &.on, &.active {
+    background: #fff !important;
+    color: #000 !important;
+  }
+}
+
+/* Primary action buttons → Spotify green pill */
+button.primary, .playAll, #playAllBtn {
+  background: var(--accent) !important;
+  color: #000 !important;
+  border-radius: 500px !important;
+  font-weight: var(--font-weight-7) !important;
+  padding: var(--size-2) var(--size-5) !important;
+  border: none !important;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+
+  &:hover {
+    background: var(--accentHover) !important;
+    transform: scale(1.04);
+  }
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #535353;
+  border-radius: 6px;
+  border: 3px solid var(--bg);
+
+  &:hover {
+    background: #7a7a7a;
+  }
+}
+
+/* Selection highlight */
+::selection {
+  background: var(--accent);
+  color: #000;
+}
+
+/* Grid for albums/playlists in landscape */
+@media (orientation: landscape) {
+  main section:only-child .searchlist,
+  main section:only-child .listContainer {
+    .listItem {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--size-2);
+    }
+  }
+}

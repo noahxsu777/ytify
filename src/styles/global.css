@@ -3,12 +3,18 @@
 @import 'header.css';
 @import 'footer.css';
 @import 'tooltips.css';
+@import 'spotify.css';
 
 :root {
-  --source: initial;
-  --schemeMultiplier: initial;
-  --bg: initial;
-  --text: initial;
+  --source: oklch(72% 0.18 145);
+  --schemeMultiplier: 0.9;
+  --bg: #121212;
+  --text: #fff;
+  --accent: #1DB954;
+  --accentHover: #1ED760;
+  --sidebar: #000;
+  --card: #181818;
+  --cardHover: #282828;
   --chroma: 0;
   --scheme: color-mix(in srgb, oklch(from var(--source) 70% calc(c * var(--chroma)) h), var(--bg) 85%);
   --onBg: color-mix(in srgb, oklch(from var(--source) 85% calc(c * var(--chroma)) h), var(--bg) 85%);
