@@ -1,104 +1,137 @@
 .miniplayer {
   display: flex;
   align-items: center;
-  width: 100%;
-  height: var(--size-9);
-  padding: var(--size-1);
-  animation: var(--animation-slide-in-up) forwards;
+  width: calc(100% - 24px);
+  margin: 8px 12px;
+  padding: 10px 12px;
+  padding-bottom: 14px; /* room for progress bar */
+  border-radius: 16px;
+  background: rgba(24, 24, 27, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   cursor: pointer;
-
-  &,
-  * {
-    transition: all 0.4s ease;
-  }
+  position: relative;
+  overflow: hidden;
+  animation: var(--animation-slide-in-up) forwards;
+  gap: 10px;
 
   img {
-    height: calc(var(--size-8) + var(--size-2));
+    height: 44px;
+    width: 44px;
+    min-width: 44px;
     object-fit: cover;
-    border: var(--border);
-    border-radius: calc(var(--roundness) * 0.5);
-    box-shadow: var(--shadow-1);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     pointer-events: none;
-  }
-
-
-
-  button,
-  i {
-    background: none;
-    border: none;
-    color: var(--text);
-    font-size: var(--size-5);
-    aspect-ratio: 1;
-    padding: 0;
-    margin: 0 var(--size-1);
-    transition: transform 0.4s;
-
-    &:active {
-      transform: scale(0.75);
-    }
-  }
-
-  #playButton {
-    font-size: var(--size-7);
-    margin: 0;
-    margin-left: var(--size-2);
-    margin-right: var(--size-2);
-  }
-
-  .ri-heart-line,
-  .ri-heart-fill {
-    font-size: var(--size-6);
   }
 
   .mediaDetails {
-    width: 100%;
-    overflow: hidden;
+    flex: 1;
+    min-width: 0;
     pointer-events: none;
-    margin-left: var(--size-2);
 
     a {
-      font-weight: var(--font-weight-6);
-      font-size: var(--font-size-2);
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      color: #fff;
       display: block;
-    }
-
-    a,
-    p {
       white-space: nowrap;
-      overflow: clip;
+      overflow: hidden;
       text-overflow: ellipsis;
-      color: var(--text);
     }
 
-
     p {
-      font-size: calc(var(--size-6) / 2);
-      font-weight: var(--font-weight-5);
-      opacity: 90%;
+      font-size: 12px;
+      color: #a1a1aa;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
     }
   }
 
+  .mp-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  /* Play button — white pill */
+  #playButton {
+    background: #fff;
+    color: #000;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    padding: 0;
+    margin: 0;
+    transition: transform 0.15s ease;
+
+    &:active { transform: scale(0.88); }
+  }
+
+  /* Skip / like buttons */
+  button:not(#playButton),
+  i {
+    background: none;
+    border: none;
+    color: #a1a1aa;
+    font-size: 22px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    border-radius: 50%;
+    transition: color 0.15s ease;
+    aspect-ratio: 1;
+
+    &:active { transform: scale(0.88); }
+    &:hover  { color: #fff; }
+
+    &.ri-heart-fill { color: #FF5F1F; }
+  }
+
+  /* Orange progress bar at very bottom */
   progress {
     position: absolute;
-    z-index: -1;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: transparent;
-    accent-color: auto;
+    bottom: 0;
+    left: 12px;
+    right: 12px;
+    width: calc(100% - 24px);
+    height: 2px;
+    top: auto;
+    border-radius: 99px;
     appearance: none;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 2;
 
     &::-webkit-progress-bar {
-      background: transparent;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 99px;
     }
 
     &::-webkit-progress-value {
-      background: linear-gradient(transparent, var(--onBg2));
-      border-bottom: var(--border-size-1) solid var(--text2);
-      transition: all 1s linear;
+      background: #FF5F1F;
+      border-radius: 99px;
+      border: none;
+      transition: width 1s linear;
+    }
+
+    &::-moz-progress-bar {
+      background: #FF5F1F;
+      border-radius: 99px;
     }
   }
-
 }

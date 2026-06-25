@@ -5,26 +5,32 @@ import { LikeButton, MediaDetails, PlayButton, PlayNextButton } from "./MediaPar
 import { playerStore, setNavStore } from "@lib/stores";
 import { queueStore } from "@lib/stores/queue";
 
-
-const MediaArtwork = lazy(() => import('./MediaPartials/MediaArtwork'))
+const MediaArtwork = lazy(() => import('./MediaPartials/MediaArtwork'));
 
 export default function() {
-
   return (
     <div class='miniplayer' onclick={(e) => {
-      if (!e.target.matches('button'))
+      if (!(e.target as HTMLElement).closest('button'))
         setNavStore('player', 'state', true);
-    }
-    }>
-      <progress value={((playerStore.currentTime / playerStore.fullDuration) || 0).toFixed(3)}></progress>
+    }}>
+      {/* Progress bar — sits at bottom of the card */}
+      <progress value={((playerStore.currentTime / playerStore.fullDuration) || 0).toFixed(3)} />
+
+      {/* Artwork */}
       <Show when={config.loadImage}>
         <MediaArtwork />
       </Show>
+
+      {/* Title + artist */}
       <MediaDetails />
-      <PlayButton />
-      <Show when={queueStore.list.length} fallback={<LikeButton />}>
-        <PlayNextButton />
-      </Show>
+
+      {/* Controls */}
+      <div class="mp-controls">
+        <PlayButton />
+        <Show when={queueStore.list.length} fallback={<LikeButton />}>
+          <PlayNextButton />
+        </Show>
+      </div>
     </div>
-  )
+  );
 }

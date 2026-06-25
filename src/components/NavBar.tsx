@@ -3,8 +3,6 @@ import { setConfig } from '@lib/utils';
 import { navStore, setNavStore, store, setStore, t } from '@lib/stores';
 
 export default function() {
-
-
   type Nav = 'Hub' | 'Library' | 'Search';
 
   function saveHome(name: '' | Nav) {
@@ -22,34 +20,61 @@ export default function() {
 
   return (
     <nav>
-      <i
-        aria-label={t('nav_queue')}
-        class="ri-order-play-fill"
-        classList={{ on: navStore.queue.state }}
-        onclick={() => {
-          setNavStore('queue', 'state', !navStore.queue.state);
-        }}
-      ></i>
-
-      <i
-        aria-label={t('nav_hub')}
-        class="ri-store-2-line"
-        classList={{ 'on': navView('Hub') }}
+      {/* Home / Hub */}
+      <div
+        class="nav-item"
+        classList={{ on: navView('Hub') }}
         onclick={() => saveHome('Hub')}
-      ></i>
-      <i
-        aria-label={t('nav_library')}
-        class="ri-archive-stack-line"
-        classList={{ 'on': navView('Library') }}
-        onclick={() => saveHome('Library')}
-      ></i>
-      <i
-        aria-label={t('nav_search')}
-        class="ri-search-2-line"
-        classList={{ 'on': navView('Search') }}
-        onclick={() => saveHome('Search')}
-      ></i>
+        aria-label={t('nav_hub')}
+      >
+        <span class="ms material-symbols-outlined"
+          style={{ 'font-variation-settings': navView('Hub') ? "'FILL' 1" : "'FILL' 0" }}>
+          home
+        </span>
+        <span>Home</span>
+      </div>
 
+      {/* Search */}
+      <div
+        class="nav-item"
+        classList={{ on: navView('Search') }}
+        onclick={() => saveHome('Search')}
+        aria-label={t('nav_search')}
+      >
+        <span class="ms material-symbols-outlined"
+          style={{ 'font-variation-settings': navView('Search') ? "'FILL' 1" : "'FILL' 0" }}>
+          search
+        </span>
+        <span>Search</span>
+      </div>
+
+      {/* Library */}
+      <div
+        class="nav-item"
+        classList={{ on: navView('Library') }}
+        onclick={() => saveHome('Library')}
+        aria-label={t('nav_library')}
+      >
+        <span class="ms material-symbols-outlined"
+          style={{ 'font-variation-settings': navView('Library') ? "'FILL' 1" : "'FILL' 0" }}>
+          library_music
+        </span>
+        <span>Library</span>
+      </div>
+
+      {/* Queue */}
+      <div
+        class="nav-item"
+        classList={{ on: navStore.queue.state }}
+        onclick={() => setNavStore('queue', 'state', !navStore.queue.state)}
+        aria-label={t('nav_queue')}
+      >
+        <span class="ms material-symbols-outlined"
+          style={{ 'font-variation-settings': navStore.queue.state ? "'FILL' 1" : "'FILL' 0" }}>
+          queue_music
+        </span>
+        <span>Queue</span>
+      </div>
     </nav>
   );
 }

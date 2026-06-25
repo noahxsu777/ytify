@@ -1,269 +1,388 @@
-/* Spotify-inspired theme overrides */
+/* ============================================================
+   SonicBoom Design System — Dark / Orange
+   ============================================================ */
 
-/* Force fixed Spotify colors. These use !important so they override the
-   inline custom properties that image.ts/colorInjector sets at runtime
-   based on the album artwork (which otherwise washes out the theme). */
+/* -- Tokens ------------------------------------------------- */
 :root {
-  --roundness: 0.5rem !important;
-  --bg: #121212 !important;
-  --trueBg: #121212 !important;
-  --text: #ffffff !important;
-  --text2: #1DB954 !important;
-  --source: oklch(72% 0.18 145) !important;
-  --chroma: 0 !important;
-  --scheme: #121212 !important;
-  --onBg: #181818 !important;
-  --onBg2: #282828 !important;
-  --borderColor: #2a2a2a !important;
+  --sp-primary:        #FF5F1F !important;
+  --sp-bg:             #000000 !important;
+  --sp-surface:        #000000 !important;
+  --sp-surface-lo:     #121212 !important;
+  --sp-surface-mid:    #18181b !important;
+  --sp-surface-hi:     #27272a !important;
+  --sp-surface-var:    #1a1a1a !important;
+  --sp-text:           #ffffff !important;
+  --sp-text-dim:       #a1a1aa !important;
+  --sp-outline:        #3f3f46 !important;
+  --sp-outline-var:    #27272a !important;
+
+  /* Override ytify vars so existing components pick up new colours */
+  --bg:          var(--sp-bg)         !important;
+  --trueBg:      var(--sp-bg)         !important;
+  --text:        var(--sp-text)       !important;
+  --text2:       var(--sp-primary)    !important;
+  --onBg:        var(--sp-surface-mid) !important;
+  --onBg2:       var(--sp-surface-hi)  !important;
+  --scheme:      var(--sp-surface-lo)  !important;
+  --borderColor: var(--sp-outline-var) !important;
+  --roundness:   0.5rem               !important;
+  --chroma:      0                    !important;
+  --font: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif !important;
 }
 
+/* -- Base --------------------------------------------------- */
 html, body {
-  background: #121212 !important;
+  background: #000 !important;
   color: #fff !important;
+  font-family: 'Inter', system-ui, sans-serif !important;
+  -webkit-tap-highlight-color: transparent;
 }
 
+/* -- Main layout ------------------------------------------- */
 main {
-  background: linear-gradient(180deg, #1f1f1f 0%, var(--bg) 280px);
+  background: #000 !important;
 
   section {
-    background: transparent;
+    background: transparent !important;
   }
 
+  /* Section headings */
   section > header > p {
-    font-size: var(--font-size-5);
-    font-weight: var(--font-weight-8);
-    letter-spacing: -0.02em;
-    opacity: 1;
-    color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.01em !important;
+    opacity: 1 !important;
+    color: #fff !important;
   }
 }
 
-/* Stream / list rows: Spotify track-row feel */
+/* -- Stream rows ------------------------------------------- */
 .streamItem {
-  border-radius: var(--roundness);
-  padding: var(--size-2);
-  transition: background-color 0.15s ease;
+  border-radius: 10px !important;
+  padding: 10px 8px !important;
+  margin-bottom: 4px !important;
+  transition: background-color 0.15s ease !important;
+  border: none !important;
 
   &:hover {
-    background: var(--cardHover) !important;
-    border: var(--border-size-1) solid transparent !important;
+    background: #1a1a1a !important;
+    border: none !important;
   }
 
   span img {
-    border-radius: calc(var(--roundness) * 0.5);
-    box-shadow: 0 4px 12px #0008;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6) !important;
   }
 
   div .title {
-    font-weight: var(--font-weight-6);
-    color: #fff;
+    font-weight: 600 !important;
+    color: #fff !important;
+    font-size: 14px !important;
   }
 
   div .avu p {
-    color: #b3b3b3;
-    opacity: 1;
+    color: #a1a1aa !important;
+    opacity: 1 !important;
+    font-size: 12px !important;
   }
 }
 
-/* List items (albums/playlists/artists) as Spotify cards */
+/* -- List cards (albums / playlists / artists) ------------- */
 .listItem {
-  background: var(--card);
-  border-radius: var(--roundness);
-  padding: var(--size-3) !important;
-  transition: background-color 0.2s ease;
+  background: #18181b !important;
+  border-radius: 10px !important;
+  border: none !important;
+  transition: background-color 0.2s ease !important;
 
-  &:hover {
-    background: var(--cardHover) !important;
-  }
+  &:hover { background: #27272a !important; }
 
   img, .list-thumbnail {
-    border-radius: calc(var(--roundness) * 0.6);
-    box-shadow: 0 8px 24px #000a;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.7) !important;
   }
 }
 
-/* Footer: Spotify-style now-playing bar */
+/* -- Footer (mini-player + nav) ---------------------------- */
 footer {
-  background: #181818 !important;
-  backdrop-filter: none !important;
-  border-top: 1px solid #282828 !important;
+  background: rgba(0,0,0,0.85) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border-top: 1px solid #27272a !important;
   border-radius: 0 !important;
-  box-shadow: 0 -2px 12px #0006;
+  box-shadow: 0 -1px 0 #27272a !important;
+  --height: calc(var(--size-9) + 68px) !important; /* room for nav labels */
 }
 
+/* -- Mini-player ------------------------------------------- */
 .miniplayer {
-  background: transparent;
+  background: rgba(24,24,27,0.7) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 16px !important;
+  margin: 8px 12px !important;
+  padding: 10px 12px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+  position: relative !important;
 
-  .mediaDetails a {
-    color: #fff;
-    font-weight: var(--font-weight-6);
+  img {
+    border-radius: 10px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
+    height: 44px !important;
+    width: 44px !important;
+    object-fit: cover !important;
+  }
 
-    &:hover {
-      text-decoration: underline;
+  .mediaDetails {
+    a {
+      font-family: 'Inter', sans-serif !important;
+      font-weight: 600 !important;
+      font-size: 14px !important;
+      color: #fff !important;
+    }
+    p {
+      color: #a1a1aa !important;
+      opacity: 1 !important;
+      font-size: 12px !important;
     }
   }
 
-  .mediaDetails p {
-    color: #b3b3b3;
-    opacity: 1;
-  }
-
+  /* Play button — white circle */
   #playButton {
-    background: #fff;
-    color: #000;
-    border-radius: 50%;
-    width: var(--size-7);
-    height: var(--size-7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &:hover {
-      transform: scale(1.06);
-    }
-  }
-
-  .ri-heart-fill {
-    color: var(--accent);
-  }
-
-  progress::-webkit-progress-value {
-    background: var(--accent) !important;
-    border-bottom: none !important;
-  }
-}
-
-/* Bottom nav: Spotify-style icons */
-nav {
-  background: transparent;
-
-  i {
-    transition: color 0.2s ease, opacity 0.2s ease;
-    opacity: 0.7;
-    color: #b3b3b3;
-
-    &:hover {
-      opacity: 1;
-      color: #fff;
-    }
-  }
-
-  .on {
-    opacity: 1;
-    color: #fff !important;
-    position: relative;
-
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: var(--accent);
-    }
-  }
-}
-
-/* Player section: Spotify "now playing" full view */
-#playerSection {
-  background: linear-gradient(180deg, #2a2a2a 0%, var(--bg) 60%);
-
-  .topShelf p {
-    text-transform: uppercase;
-    font-size: var(--font-size-0);
-    letter-spacing: 0.1em;
-    font-weight: var(--font-weight-7);
-    color: #b3b3b3;
-  }
-}
-
-/* Search input */
-input[type="search"], input[type="text"] {
-  background: #242424 !important;
-  border-radius: 500px !important;
-  border: 1px solid transparent !important;
-  color: #fff !important;
-  transition: border-color 0.2s ease;
-
-  &:focus {
-    border-color: #fff !important;
-    outline: none;
-  }
-}
-
-/* Filter chips */
-.filters button, .filters a {
-  background: var(--card);
-  color: #fff;
-  border-radius: 500px;
-  padding: var(--size-2) var(--size-3);
-  border: none;
-  font-weight: var(--font-weight-6);
-  transition: background-color 0.15s ease, transform 0.15s ease;
-
-  &:hover {
-    background: var(--cardHover);
-  }
-
-  &.on, &.active {
     background: #fff !important;
     color: #000 !important;
+    border-radius: 50% !important;
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 4px !important;
+    transition: transform 0.15s ease !important;
+
+    &:hover { transform: scale(1.06) !important; }
+  }
+
+  /* Like / next buttons */
+  button:not(#playButton), i {
+    color: #a1a1aa !important;
+    font-size: 22px !important;
+    transition: color 0.15s ease !important;
+
+    &:hover { color: #fff !important; }
+  }
+
+  /* Progress bar at bottom */
+  progress {
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 12px !important;
+    right: 12px !important;
+    width: calc(100% - 24px) !important;
+    height: 2px !important;
+    border-radius: 99px !important;
+    top: auto !important;
+    background: rgba(255,255,255,0.1) !important;
+
+    &::-webkit-progress-bar   { background: rgba(255,255,255,0.1); border-radius: 99px; }
+    &::-webkit-progress-value { background: var(--sp-primary) !important; border-radius: 99px; border: none !important; transition: none !important; }
+    &::-moz-progress-bar      { background: var(--sp-primary) !important; border-radius: 99px; }
   }
 }
 
-/* Primary action buttons → Spotify green pill */
-button.primary, .playAll, #playAllBtn {
-  background: var(--accent) !important;
-  color: #000 !important;
-  border-radius: 500px !important;
-  font-weight: var(--font-weight-7) !important;
-  padding: var(--size-2) var(--size-5) !important;
-  border: none !important;
-  transition: transform 0.15s ease, background-color 0.15s ease;
+/* -- Bottom nav -------------------------------------------- */
+nav {
+  background: transparent !important;
+  height: 68px !important;
+  padding-bottom: 8px !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  padding-top: 8px !important;
 
-  &:hover {
-    background: var(--accentHover) !important;
-    transform: scale(1.04);
+  /* Each nav item */
+  .nav-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    flex: 1 !important;
+    cursor: pointer !important;
+    color: #a1a1aa !important;
+    transition: color 0.2s ease !important;
+    font-size: 10px !important;
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.03em !important;
+    -webkit-tap-highlight-color: transparent !important;
+
+    .ms { font-size: 24px !important; }
+
+    &:active { transform: scale(0.9); }
+    &.on { color: #fff !important; }
+  }
+
+  /* Hide the old bare <i> icons so only .nav-item shows */
+  > i { display: none !important; }
+}
+
+/* -- Player full screen ------------------------------------ */
+#playerSection {
+  background: linear-gradient(180deg, #1a1a1a 0%, #000 55%) !important;
+
+  .topShelf p {
+    text-transform: uppercase !important;
+    font-size: 11px !important;
+    letter-spacing: 0.1em !important;
+    font-weight: 600 !important;
+    color: #a1a1aa !important;
+    opacity: 1 !important;
+  }
+
+  article img {
+    border-radius: 16px !important;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.8) !important;
+  }
+
+  /* Progress slider */
+  .slider input[type=range] {
+    accent-color: var(--sp-primary) !important;
+  }
+
+  /* Play button in full player */
+  .mainShelf #playButton {
+    background: #fff !important;
+    color: #000 !important;
+    border-radius: 50% !important;
+    padding: 16px !important;
+    transform: scale(1) !important;
+    transition: transform 0.15s ease !important;
+
+    &:hover { transform: scale(1.04) !important; }
+  }
+
+  /* Secondary controls */
+  .mainShelf button:not(#playButton) {
+    color: #fff !important;
+    font-size: 26px !important;
+  }
+
+  /* Bottom shelf icons */
+  .bottomShelf i {
+    color: #a1a1aa !important;
+    &.on { color: var(--sp-primary) !important; background: transparent !important; }
+    &:hover { color: #fff !important; }
+  }
+
+  /* Lyrics panel */
+  .lyrics {
+    background: #18181b !important;
+    border-radius: 16px !important;
+    p { color: #a1a1aa !important; &.active { color: #fff !important; } }
   }
 }
 
-/* Scrollbars */
-::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
-}
+/* -- Search page ------------------------------------------- */
+.search {
+  .superInputContainer {
+    background: #18181b !important;
+    border: none !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
+    &:focus-within {
+      box-shadow: 0 0 0 2px rgba(255,95,31,0.4) !important;
+    }
 
-::-webkit-scrollbar-thumb {
-  background: #535353;
-  border-radius: 6px;
-  border: 3px solid var(--bg);
-
-  &:hover {
-    background: #7a7a7a;
+    .superInput {
+      color: #fff !important;
+      font-size: 16px !important;
+      &::placeholder { color: #a1a1aa !important; opacity: 1 !important; }
+    }
   }
-}
 
-/* Selection highlight */
-::selection {
-  background: var(--accent);
-  color: #000;
-}
+  /* Category grid */
+  .category-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+    margin-top: 20px !important;
+  }
 
-/* Grid for albums/playlists in landscape */
-@media (orientation: landscape) {
-  main section:only-child .searchlist,
-  main section:only-child .listContainer {
-    .listItem {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: var(--size-2);
+  .category-card {
+    aspect-ratio: 1 !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    position: relative !important;
+    cursor: pointer !important;
+    transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1) !important;
+
+    &:active { transform: scale(0.95) !important; }
+
+    span.cat-label {
+      position: absolute !important;
+      top: 14px !important;
+      left: 14px !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+      font-size: 16px !important;
+      font-weight: 700 !important;
+      color: #fff !important;
+      z-index: 2 !important;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.4) !important;
+    }
+
+    img.cat-thumb {
+      position: absolute !important;
+      right: -10px !important;
+      bottom: -10px !important;
+      width: 90px !important;
+      height: 90px !important;
+      object-fit: cover !important;
+      border-radius: 8px !important;
+      transform: rotate(25deg) !important;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6) !important;
     }
   }
 }
+
+/* -- Header ------------------------------------------------ */
+section > header {
+  background: rgba(0,0,0,0.85) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+
+  > p {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    color: #fff !important;
+    opacity: 1 !important;
+  }
+}
+
+/* -- Inputs ------------------------------------------------ */
+input[type="search"], input[type="text"] {
+  background: #18181b !important;
+  border-radius: 12px !important;
+  border: 1px solid transparent !important;
+  color: #fff !important;
+  transition: border-color 0.2s ease !important;
+  &:focus { border-color: rgba(255,95,31,0.4) !important; outline: none !important; }
+}
+
+/* -- Active nav dot (legacy i icons still used as fallback) -- */
+nav i.on {
+  color: #fff !important;
+  font-weight: 700 !important;
+}
+
+/* -- Scrollbars -------------------------------------------- */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #52525b; }
+
+/* -- Selection --------------------------------------------- */
+::selection { background: rgba(255,95,31,0.3); color: var(--sp-primary); }
