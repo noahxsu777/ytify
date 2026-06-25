@@ -15,7 +15,7 @@ export default defineConfig(({ command }) => ({
     Locales: readdirSync(resolve(__dirname, './src/locales')).map(file => file.slice(0, 2)),
     Build: JSON.stringify('v' + require('./package.json').version),
     Backend: JSON.stringify([
-      'https://ytify-zeta.vercel.app',
+      '',
     ]),
   },
   resolve: {
