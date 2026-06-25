@@ -1,4 +1,4 @@
-import { params, setNavStore, setStore, setPlayerStore, getList, setSearchStore, playerStore } from '@lib/stores';
+import { params, setNavStore, setStore, setPlayerStore, getList, setSearchStore, playerStore, store } from '@lib/stores';
 import { config, getDownloadLink, idFromURL, fetchCollection, player, setConfig, cleanseLibraryData, fetchUma } from '@lib/utils';
 
 
@@ -24,12 +24,15 @@ export default async function() {
 
   await fetchUma()
     .then(data => {
+      // Merge Uma instances with the built-in fallbacks (dedup, Uma first)
+      const merged = [...new Set([...data, ...store.invidious])];
       setStore({
-        invidious: data,
+        invidious: merged,
         index: 0
       })
     })
     .catch(() => {
+      // Keep the built-in fallback instances already in the store
       setStore('snackbar', '⚠️  Failed to Fetch Instances from Uma');
     });
 

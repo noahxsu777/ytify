@@ -1,12 +1,25 @@
 /* Spotify-inspired theme overrides */
 
+/* Force fixed Spotify colors. These use !important so they override the
+   inline custom properties that image.ts/colorInjector sets at runtime
+   based on the album artwork (which otherwise washes out the theme). */
 :root {
-  --roundness: 0.5rem;
+  --roundness: 0.5rem !important;
+  --bg: #121212 !important;
+  --trueBg: #121212 !important;
+  --text: #ffffff !important;
+  --text2: #1DB954 !important;
+  --source: oklch(72% 0.18 145) !important;
+  --chroma: 0 !important;
+  --scheme: #121212 !important;
+  --onBg: #181818 !important;
+  --onBg2: #282828 !important;
+  --borderColor: #2a2a2a !important;
 }
 
 html, body {
-  background: var(--bg) !important;
-  color: var(--text);
+  background: #121212 !important;
+  color: #fff !important;
 }
 
 main {

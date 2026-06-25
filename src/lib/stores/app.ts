@@ -12,7 +12,14 @@ const storeInit: {
   syncState?: SyncState,
   homeView: '' | 'Hub' | 'Library' | 'Search',
 } = {
-  invidious: [],
+  // Fallback Invidious instances used when Uma fails to provide a list,
+  // so search and playback keep working out of the box.
+  invidious: [
+    'https://invidious.nikkosphere.com',
+    'https://inv.nadeko.net',
+    'https://invidious.jing.rocks',
+    'https://yt.omada.cafe',
+  ],
   index: 0,
   api: Backend[Math.floor(Math.random() * Backend.length)],
   useSaavn: true,
