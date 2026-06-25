@@ -1,16 +1,14 @@
 nav {
   display: flex;
   width: 100%;
-  align-items: flex-start;
-  padding-top: 10px;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  height: calc(68px + env(safe-area-inset-bottom, 0px));
+  align-items: center; /* vertically center items in the 68px nav */
+  height: 68px;
 
   .nav-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 3px;
     flex: 1;
     cursor: pointer;
@@ -23,6 +21,7 @@ nav {
     text-transform: uppercase;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    height: 100%;
 
     .ms {
       font-size: 24px;
