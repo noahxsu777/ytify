@@ -1,388 +1,341 @@
 /* ============================================================
-   SonicBoom Design System — Dark / Orange
+   SonicBoom — iOS 26 Liquid Glass Design System
    ============================================================ */
 
-/* -- Tokens ------------------------------------------------- */
+/* ── Glass primitives ────────────────────────────────────── */
 :root {
-  --sp-primary:        #FF5F1F !important;
-  --sp-bg:             #000000 !important;
-  --sp-surface:        #000000 !important;
-  --sp-surface-lo:     #121212 !important;
-  --sp-surface-mid:    #18181b !important;
-  --sp-surface-hi:     #27272a !important;
-  --sp-surface-var:    #1a1a1a !important;
-  --sp-text:           #ffffff !important;
-  --sp-text-dim:       #a1a1aa !important;
-  --sp-outline:        #3f3f46 !important;
-  --sp-outline-var:    #27272a !important;
+  --gl-blur:        blur(60px) saturate(180%);
+  --gl-blur-heavy:  blur(80px) saturate(200%) brightness(1.15);
+  --gl-bg:          rgba(18, 18, 18, 0.55);
+  --gl-bg-light:    rgba(255, 255, 255, 0.07);
+  --gl-border:      rgba(255, 255, 255, 0.14);
+  --gl-border-top:  rgba(255, 255, 255, 0.22);
+  --gl-shadow:      0 0 0 0.5px rgba(255,255,255,0.08) inset,
+                    0 1px 0 rgba(255,255,255,0.14) inset,
+                    0 24px 64px rgba(0,0,0,0.55);
+  --gl-shadow-sm:   0 0 0 0.5px rgba(255,255,255,0.06) inset,
+                    0 1px 0 rgba(255,255,255,0.1) inset,
+                    0 8px 32px rgba(0,0,0,0.4);
+  --gl-radius:      22px;
+  --gl-radius-sm:   14px;
 
-  /* Override ytify vars so existing components pick up new colours */
+  /* Brand tokens */
+  --sp-primary:     #FF5F1F;
+  --sp-bg:          #050505;
+  --sp-text:        #ffffff;
+  --sp-text-dim:    #8e8e93;
+  --sp-surface:     rgba(28, 28, 30, 0.8);
+
+  /* Override ytify vars */
   --bg:          var(--sp-bg)         !important;
   --trueBg:      var(--sp-bg)         !important;
   --text:        var(--sp-text)       !important;
   --text2:       var(--sp-primary)    !important;
-  --onBg:        var(--sp-surface-mid) !important;
-  --onBg2:       var(--sp-surface-hi)  !important;
-  --scheme:      var(--sp-surface-lo)  !important;
-  --borderColor: var(--sp-outline-var) !important;
-  --roundness:   0.5rem               !important;
+  --onBg:        rgba(44,44,46,0.9)   !important;
+  --onBg2:       rgba(58,58,60,0.9)   !important;
+  --scheme:      rgba(28,28,30,0.8)   !important;
+  --borderColor: rgba(255,255,255,0.1) !important;
+  --roundness:   0.6rem               !important;
   --chroma:      0                    !important;
   --font: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif !important;
 }
 
-/* -- Base --------------------------------------------------- */
+/* ── Base ──────────────────────────────────────────────── */
 html, body {
-  background: #000 !important;
+  background: var(--sp-bg) !important;
   color: #fff !important;
-  font-family: 'Inter', system-ui, sans-serif !important;
   -webkit-tap-highlight-color: transparent;
 }
 
-/* -- Main layout ------------------------------------------- */
+/* Ambient gradient behind everything */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(255,95,31,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(168,85,247,0.08) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
 main {
-  background: #000 !important;
+  position: relative;
+  z-index: 1;
+  background: transparent !important;
+  section { background: transparent !important; }
 
-  section {
-    background: transparent !important;
-  }
-
-  /* Section headings */
   section > header > p {
     font-family: 'Plus Jakarta Sans', sans-serif !important;
     font-size: 22px !important;
     font-weight: 700 !important;
-    letter-spacing: -0.01em !important;
-    opacity: 1 !important;
     color: #fff !important;
-  }
-}
-
-/* -- Stream rows ------------------------------------------- */
-.streamItem {
-  border-radius: 10px !important;
-  padding: 10px 8px !important;
-  margin-bottom: 4px !important;
-  transition: background-color 0.15s ease !important;
-  border: none !important;
-
-  &:hover {
-    background: #1a1a1a !important;
-    border: none !important;
-  }
-
-  span img {
-    border-radius: 8px !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.6) !important;
-  }
-
-  div .title {
-    font-weight: 600 !important;
-    color: #fff !important;
-    font-size: 14px !important;
-  }
-
-  div .avu p {
-    color: #a1a1aa !important;
     opacity: 1 !important;
-    font-size: 12px !important;
   }
 }
 
-/* -- List cards (albums / playlists / artists) ------------- */
-.listItem {
-  background: #18181b !important;
-  border-radius: 10px !important;
-  border: none !important;
-  transition: background-color 0.2s ease !important;
-
-  &:hover { background: #27272a !important; }
-
-  img, .list-thumbnail {
-    border-radius: 8px !important;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.7) !important;
-  }
-}
-
-/* -- Footer (mini-player + nav) ---------------------------- */
+/* ── Footer glass bar ───────────────────────────────────── */
 footer {
-  background: rgba(0,0,0,0.85) !important;
-  backdrop-filter: blur(24px) !important;
-  -webkit-backdrop-filter: blur(24px) !important;
-  border-top: 1px solid #27272a !important;
-  border-radius: 0 !important;
-  box-shadow: 0 -1px 0 #27272a !important;
-  --height: calc(var(--size-9) + 68px) !important; /* room for nav labels */
+  background: rgba(10,10,10,0.7) !important;
+  backdrop-filter: var(--gl-blur-heavy) !important;
+  -webkit-backdrop-filter: var(--gl-blur-heavy) !important;
+  border-top: 1px solid var(--gl-border-top) !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.12) inset,
+    0 -20px 60px rgba(0,0,0,0.6) !important;
 }
 
-/* -- Mini-player ------------------------------------------- */
+/* ── Mini-player — liquid glass card ───────────────────── */
 .miniplayer {
-  background: rgba(24,24,27,0.7) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  border: 1px solid rgba(255,255,255,0.08) !important;
-  border-radius: 16px !important;
-  margin: 8px 12px !important;
-  padding: 10px 12px !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+  background: rgba(30,30,32,0.6) !important;
+  backdrop-filter: var(--gl-blur-heavy) !important;
+  -webkit-backdrop-filter: var(--gl-blur-heavy) !important;
+  border: 1px solid var(--gl-border) !important;
+  border-top-color: var(--gl-border-top) !important;
+  border-radius: 20px !important;
+  margin: 8px 10px !important;
+  padding: 10px 14px !important;
+  box-shadow: var(--gl-shadow-sm) !important;
   position: relative !important;
+  overflow: hidden !important;
+
+  /* Specular sheen */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.25) 50%, transparent 100%);
+    pointer-events: none;
+  }
 
   img {
-    border-radius: 10px !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.6) !important;
     height: 44px !important;
     width: 44px !important;
     object-fit: cover !important;
   }
 
   .mediaDetails {
-    a {
-      font-family: 'Inter', sans-serif !important;
-      font-weight: 600 !important;
-      font-size: 14px !important;
-      color: #fff !important;
-    }
-    p {
-      color: #a1a1aa !important;
-      opacity: 1 !important;
-      font-size: 12px !important;
-    }
+    a { font-family: 'Inter', sans-serif !important; font-weight: 600 !important; font-size: 14px !important; color: #fff !important; }
+    p { color: #8e8e93 !important; opacity: 1 !important; font-size: 12px !important; }
   }
 
-  /* Play button — white circle */
   #playButton {
-    background: #fff !important;
+    background: rgba(255,255,255,0.95) !important;
     color: #000 !important;
     border-radius: 50% !important;
-    width: 36px !important;
-    height: 36px !important;
+    width: 36px !important; height: 36px !important;
     font-size: 20px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    margin: 0 4px !important;
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    margin: 0 2px !important;
+    box-shadow: 0 2px 12px rgba(255,255,255,0.2) !important;
     transition: transform 0.15s ease !important;
-
     &:hover { transform: scale(1.06) !important; }
   }
 
-  /* Like / next buttons */
   button:not(#playButton), i {
-    color: #a1a1aa !important;
+    color: rgba(255,255,255,0.55) !important;
     font-size: 22px !important;
     transition: color 0.15s ease !important;
-
     &:hover { color: #fff !important; }
   }
 
-  /* Progress bar at bottom */
   progress {
-    position: absolute !important;
-    bottom: 0 !important;
-    left: 12px !important;
-    right: 12px !important;
-    width: calc(100% - 24px) !important;
-    height: 2px !important;
-    border-radius: 99px !important;
-    top: auto !important;
-    background: rgba(255,255,255,0.1) !important;
-
-    &::-webkit-progress-bar   { background: rgba(255,255,255,0.1); border-radius: 99px; }
-    &::-webkit-progress-value { background: var(--sp-primary) !important; border-radius: 99px; border: none !important; transition: none !important; }
-    &::-moz-progress-bar      { background: var(--sp-primary) !important; border-radius: 99px; }
+    position: absolute !important; bottom: 0 !important;
+    left: 0 !important; right: 0 !important;
+    width: 100% !important; height: 2px !important;
+    border-radius: 0 !important; top: auto !important;
+    background: rgba(255,255,255,0.08) !important;
+    &::-webkit-progress-bar   { background: rgba(255,255,255,0.08); }
+    &::-webkit-progress-value { background: var(--sp-primary) !important; border: none !important; transition: none !important; }
+    &::-moz-progress-bar      { background: var(--sp-primary) !important; }
   }
 }
 
-/* -- Bottom nav -------------------------------------------- */
+/* ── Bottom nav ─────────────────────────────────────────── */
 nav {
   background: transparent !important;
   height: 68px !important;
-  padding-bottom: 8px !important;
   display: flex !important;
   align-items: flex-start !important;
-  padding-top: 8px !important;
+  padding-top: 6px !important;
 
-  /* Each nav item */
   .nav-item {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 3px !important;
-    flex: 1 !important;
-    cursor: pointer !important;
-    color: #a1a1aa !important;
+    display: flex !important; flex-direction: column !important;
+    align-items: center !important; justify-content: center !important;
+    gap: 3px !important; flex: 1 !important; cursor: pointer !important;
+    color: rgba(255,255,255,0.35) !important;
     transition: color 0.2s ease !important;
     font-size: 10px !important;
     font-family: 'Inter', sans-serif !important;
-    font-weight: 500 !important;
-    letter-spacing: 0.03em !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.04em !important;
     -webkit-tap-highlight-color: transparent !important;
+    height: 62px !important;
+    padding-top: 4px !important;
 
-    .ms { font-size: 24px !important; }
+    .ms { font-size: 25px !important; }
 
     &:active { transform: scale(0.9); }
-    &.on { color: #fff !important; }
+
+    &.on {
+      color: #fff !important;
+      .ms { filter: drop-shadow(0 0 8px rgba(255,255,255,0.4)) !important; }
+    }
   }
 
-  /* Hide the old bare <i> icons so only .nav-item shows */
   > i { display: none !important; }
 }
 
-/* -- Player full screen ------------------------------------ */
+/* ── Full-screen Player ─────────────────────────────────── */
 #playerSection {
-  background: linear-gradient(180deg, #1a1a1a 0%, #000 55%) !important;
-
-  .topShelf p {
-    text-transform: uppercase !important;
-    font-size: 11px !important;
-    letter-spacing: 0.1em !important;
-    font-weight: 600 !important;
-    color: #a1a1aa !important;
-    opacity: 1 !important;
-  }
+  background: linear-gradient(180deg, rgba(30,20,10,0.9) 0%, rgba(5,5,5,0.98) 50%) !important;
+  backdrop-filter: blur(40px) !important;
+  -webkit-backdrop-filter: blur(40px) !important;
 
   article img {
-    border-radius: 16px !important;
-    box-shadow: 0 16px 48px rgba(0,0,0,0.8) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.06) !important;
   }
 
-  /* Progress slider */
-  .slider input[type=range] {
-    accent-color: var(--sp-primary) !important;
+  .topShelf p {
+    text-transform: uppercase !important; font-size: 11px !important;
+    letter-spacing: 0.1em !important; font-weight: 600 !important;
+    color: #8e8e93 !important; opacity: 1 !important;
   }
 
-  /* Play button in full player */
+  .slider input[type=range] { accent-color: var(--sp-primary) !important; }
+
   .mainShelf #playButton {
-    background: #fff !important;
-    color: #000 !important;
-    border-radius: 50% !important;
+    background: rgba(255,255,255,0.95) !important;
+    color: #000 !important; border-radius: 50% !important;
     padding: 16px !important;
-    transform: scale(1) !important;
+    box-shadow: 0 4px 20px rgba(255,255,255,0.25) !important;
     transition: transform 0.15s ease !important;
-
     &:hover { transform: scale(1.04) !important; }
   }
 
-  /* Secondary controls */
-  .mainShelf button:not(#playButton) {
-    color: #fff !important;
-    font-size: 26px !important;
-  }
+  .mainShelf button:not(#playButton) { color: #fff !important; font-size: 26px !important; }
 
-  /* Bottom shelf icons */
   .bottomShelf i {
-    color: #a1a1aa !important;
+    color: #8e8e93 !important;
     &.on { color: var(--sp-primary) !important; background: transparent !important; }
     &:hover { color: #fff !important; }
   }
 
-  /* Lyrics panel */
   .lyrics {
-    background: #18181b !important;
-    border-radius: 16px !important;
-    p { color: #a1a1aa !important; &.active { color: #fff !important; } }
-  }
-}
-
-/* -- Search page ------------------------------------------- */
-.search {
-  .superInputContainer {
-    background: #18181b !important;
-    border: none !important;
-    border-radius: 12px !important;
-    box-shadow: none !important;
-
-    &:focus-within {
-      box-shadow: 0 0 0 2px rgba(255,95,31,0.4) !important;
-    }
-
-    .superInput {
-      color: #fff !important;
-      font-size: 16px !important;
-      &::placeholder { color: #a1a1aa !important; opacity: 1 !important; }
-    }
-  }
-
-  /* Category grid */
-  .category-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px !important;
-    margin-top: 20px !important;
-  }
-
-  .category-card {
-    aspect-ratio: 1 !important;
-    border-radius: 12px !important;
-    overflow: hidden !important;
-    position: relative !important;
-    cursor: pointer !important;
-    transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1) !important;
-
-    &:active { transform: scale(0.95) !important; }
-
-    span.cat-label {
-      position: absolute !important;
-      top: 14px !important;
-      left: 14px !important;
-      font-family: 'Plus Jakarta Sans', sans-serif !important;
-      font-size: 16px !important;
-      font-weight: 700 !important;
-      color: #fff !important;
-      z-index: 2 !important;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.4) !important;
-    }
-
-    img.cat-thumb {
-      position: absolute !important;
-      right: -10px !important;
-      bottom: -10px !important;
-      width: 90px !important;
-      height: 90px !important;
-      object-fit: cover !important;
-      border-radius: 8px !important;
-      transform: rotate(25deg) !important;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.6) !important;
+    background: rgba(255,255,255,0.04) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255,255,255,0.07) !important;
+    border-radius: 20px !important;
+    p {
+      color: rgba(255,255,255,0.22) !important;
+      &.active { color: #fff !important; text-shadow: 0 0 20px rgba(255,255,255,0.3) !important; }
+      &.plain { color: rgba(255,255,255,0.55) !important; }
     }
   }
 }
 
-/* -- Header ------------------------------------------------ */
-section > header {
-  background: rgba(0,0,0,0.85) !important;
+/* ── Hub glass cards ────────────────────────────────────── */
+.hub-featured {
+  border: 1px solid var(--gl-border) !important;
+  border-top-color: var(--gl-border-top) !important;
+  box-shadow: var(--gl-shadow) !important;
+  border-radius: 24px !important;
+}
+
+.hub-genre-card {
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  border-top-color: rgba(255,255,255,0.22) !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.15) inset,
+    0 8px 24px rgba(0,0,0,0.3) !important;
+}
+
+.hub-list-row {
+  border-radius: 14px !important;
+  transition: background 0.15s ease !important;
+  &:hover { background: rgba(255,255,255,0.06) !important; }
+  &:active { background: rgba(255,255,255,0.09) !important; }
+}
+
+/* ── Stream rows — glass surface ───────────────────────── */
+.streamItem {
+  border-radius: 12px !important;
+  padding: 10px 8px !important;
+  margin-bottom: 4px !important;
+  transition: background-color 0.15s ease !important;
+  border: none !important;
+  &:hover { background: rgba(255,255,255,0.05) !important; }
+  span img { border-radius: 10px !important; box-shadow: 0 4px 14px rgba(0,0,0,0.6) !important; }
+  div .title { font-weight: 600 !important; color: #fff !important; font-size: 14px !important; }
+  div .avu p { color: #8e8e93 !important; opacity: 1 !important; font-size: 12px !important; }
+}
+
+.listItem {
+  background: rgba(28,28,30,0.7) !important;
   backdrop-filter: blur(20px) !important;
   -webkit-backdrop-filter: blur(20px) !important;
-
-  > p {
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
-    font-size: 22px !important;
-    font-weight: 700 !important;
-    color: #fff !important;
-    opacity: 1 !important;
-  }
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-top-color: rgba(255,255,255,0.14) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3) !important;
+  transition: background-color 0.2s ease !important;
+  &:hover { background: rgba(44,44,46,0.8) !important; }
+  img, .list-thumbnail { border-radius: 10px !important; box-shadow: 0 8px 24px rgba(0,0,0,0.7) !important; }
 }
 
-/* -- Inputs ------------------------------------------------ */
+/* ── Section headers ────────────────────────────────────── */
+section > header {
+  background: rgba(5,5,5,0.75) !important;
+  backdrop-filter: blur(40px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+  > p { font-family: 'Plus Jakarta Sans', sans-serif !important; font-size: 22px !important; font-weight: 700 !important; color: #fff !important; opacity: 1 !important; }
+}
+
+/* ── Search ─────────────────────────────────────────────── */
+.search .superInputContainer {
+  background: rgba(28,28,30,0.8) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  border-top-color: rgba(255,255,255,0.18) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.08) inset !important;
+  &:focus-within { box-shadow: 0 0 0 2px rgba(255,95,31,0.35) !important; border-color: rgba(255,95,31,0.4) !important; }
+  .superInput { color: #fff !important; font-size: 16px !important; &::placeholder { color: #8e8e93 !important; opacity: 1 !important; } }
+}
+
+/* ── Inputs ─────────────────────────────────────────────── */
 input[type="search"], input[type="text"] {
-  background: #18181b !important;
+  background: rgba(28,28,30,0.8) !important;
   border-radius: 12px !important;
-  border: 1px solid transparent !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
   color: #fff !important;
   transition: border-color 0.2s ease !important;
   &:focus { border-color: rgba(255,95,31,0.4) !important; outline: none !important; }
 }
 
-/* -- Active nav dot (legacy i icons still used as fallback) -- */
-nav i.on {
-  color: #fff !important;
-  font-weight: 700 !important;
+/* ── Settings ───────────────────────────────────────────── */
+.settingsSection {
+  background: var(--sp-bg) !important;
+}
+.settings-group-body {
+  background: rgba(28,28,30,0.8) !important;
+  backdrop-filter: blur(40px) !important;
+  -webkit-backdrop-filter: blur(40px) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-top-color: rgba(255,255,255,0.14) !important;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 4px 16px rgba(0,0,0,0.2) !important;
 }
 
-/* -- Scrollbars -------------------------------------------- */
-::-webkit-scrollbar { width: 6px; height: 6px; }
+/* ── Scrollbars ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #52525b; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
 
-/* -- Selection --------------------------------------------- */
+/* ── Selection ──────────────────────────────────────────── */
 ::selection { background: rgba(255,95,31,0.3); color: var(--sp-primary); }
