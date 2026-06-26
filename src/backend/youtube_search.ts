@@ -1,4 +1,5 @@
 const YOUTUBE_MUSIC_SEARCH_URL = 'https://music.youtube.com/youtubei/v1/search';
+const INNERTUBE_SEARCH_URL = 'https://youtubei.googleapis.com/youtubei/v1/search';
 
 const SEARCH_PARAMS = {
   songs: 'Eg-KAQwIARAA',
@@ -8,7 +9,66 @@ const SEARCH_PARAMS = {
   playlists: 'Eg-KAQwIzhAA'
 };
 
+// Primary search: YouTube InnerTube WEB client via googleapis.com.
+// This endpoint is reachable from serverless IPs (unlike music.youtube.com,
+// which often gets blocked), and returns the stable videoRenderer structure.
+async function searchInnertube(query: string): Promise<YTStreamItem[]> {
+  const res = await fetch(INNERTUBE_SEARCH_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      context: { client: { clientName: 'WEB', clientVersion: '2.20240814.00.00', hl: 'en', gl: 'US' } },
+      query,
+    }),
+  });
+  if (!res.ok) throw new Error(`innertube search ${res.status}`);
+  const data = await res.json();
+
+  const sections = data?.contents?.twoColumnSearchResultsRenderer?.primaryContents?.sectionListRenderer?.contents || [];
+  const results: YTStreamItem[] = [];
+
+  for (const section of sections) {
+    const items = section?.itemSectionRenderer?.contents;
+    if (!items) continue;
+    for (const item of items) {
+      const v = item.videoRenderer;
+      if (!v?.videoId) continue;
+      const title = v.title?.runs?.[0]?.text;
+      const ownerRun = v.ownerText?.runs?.[0] || v.longBylineText?.runs?.[0];
+      const author = ownerRun?.text || '';
+      const authorId = ownerRun?.navigationEndpoint?.browseEndpoint?.browseId || '';
+      const duration = v.lengthText?.simpleText || '';
+      const views = v.viewCountText?.simpleText || '';
+      const uploaded = v.publishedTimeText?.simpleText || '';
+      if (!title || !duration) continue; // skip live/upcoming with no duration
+      results.push({
+        id: v.videoId,
+        title,
+        author,
+        duration,
+        authorId,
+        views,
+        img: v.videoId,
+        uploaded,
+        type: 'video',
+      } as YTStreamItem);
+    }
+  }
+  return results;
+}
+
 export async function searchYouTubeMusic(query: string, filter: string): Promise<(YTStreamItem | YTListItem)[]> {
+  // Try the reliable InnerTube WEB search first.
+  try {
+    const r = await searchInnertube(query);
+    if (r.length) return r;
+  } catch (e) {
+    console.error('InnerTube search failed, falling back to music.youtube:', e);
+  }
+  return searchYouTubeMusicLegacy(query, filter);
+}
+
+async function searchYouTubeMusicLegacy(query: string, filter: string): Promise<(YTStreamItem | YTListItem)[]> {
   const param = SEARCH_PARAMS[filter as keyof typeof SEARCH_PARAMS] || '';
   
   const requestBody = {
