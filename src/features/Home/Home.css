@@ -43,9 +43,9 @@ header {
 
 
 
-/* ── Hub Spotify-level layout ── */
+/* ── Hub — Professional streaming layout ── */
 .hub {
-  padding: 0 0 48px;
+  padding: 0 0 24px;
 
   .hub-section {
     margin-bottom: 32px;
@@ -93,23 +93,25 @@ header {
       &::-webkit-scrollbar { display: none; }
     }
 
+    /* ── Round cards (Recently Played / Top Picks) ── */
     .hub-card {
       flex-shrink: 0;
-      width: 130px;
+      width: 96px;
       cursor: pointer;
       transition: transform 0.18s ease;
-      &:active { transform: scale(0.94); }
+      text-align: center;
+      &:active { transform: scale(0.93); }
 
       .hub-card-art {
         position: relative;
-        width: 130px;
-        height: 130px;
-        border-radius: 14px;
+        width: 88px;
+        height: 88px;
+        border-radius: 50%;
         overflow: hidden;
-        border: 1px solid rgba(255,255,255,0.08);
-        margin-bottom: 8px;
+        margin: 0 auto 8px;
         background: #1a1a1a;
-        box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+        border: 2px solid rgba(255,255,255,0.06);
 
         img {
           width: 100%;
@@ -118,38 +120,22 @@ header {
           transition: transform 0.3s ease;
         }
 
-        &::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: rgba(0,0,0,0);
-          transition: background 0.2s ease;
-        }
-
         .hub-play-btn {
           position: absolute;
-          bottom: 8px;
-          right: 8px;
-          width: 40px;
-          height: 40px;
-          background: #FF5F1F;
+          inset: 0;
+          background: rgba(0,0,0,0.45);
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
           opacity: 0;
-          transform: translateY(6px);
-          transition: opacity 0.2s ease, transform 0.2s ease;
-          z-index: 2;
-          box-shadow: 0 4px 12px rgba(255,95,31,0.5);
-
-          .ms { font-size: 20px; color: #fff; }
+          transition: opacity 0.2s ease;
+          .ms { font-size: 28px; color: #fff; }
         }
 
         &:hover {
-          img { transform: scale(1.04); }
-          &::after { background: rgba(0,0,0,0.2); }
-          .hub-play-btn { opacity: 1; transform: translateY(0); }
+          img { transform: scale(1.06); }
+          .hub-play-btn { opacity: 1; }
         }
       }
     }
@@ -244,56 +230,73 @@ header {
       }
     }
 
-    .hub-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
+    /* ── Compact list rows (Frequently Played / Trending) ── */
+    .hub-list {
+      display: flex;
+      flex-direction: column;
       padding: 0 16px;
+      gap: 2px;
 
-      .hub-grid-card {
+      .hub-list-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 10px;
+        border-radius: 10px;
         cursor: pointer;
-        transition: transform 0.18s ease;
-        &:active { transform: scale(0.94); }
+        transition: background 0.15s ease;
+        &:active { background: rgba(255,255,255,0.06); }
+        &:hover  { background: rgba(255,255,255,0.05); }
 
-        .hub-grid-art {
-          position: relative;
-          width: 100%;
-          aspect-ratio: 1;
-          border-radius: 14px;
+        .hub-list-art {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
           overflow: hidden;
-          border: 1px solid rgba(255,255,255,0.07);
-          margin-bottom: 8px;
+          flex-shrink: 0;
           background: #1a1a1a;
-          box-shadow: 0 6px 20px -4px rgba(0,0,0,0.5);
+          border: 1.5px solid rgba(255,255,255,0.06);
 
           img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.3s ease;
+          }
+        }
+
+        .hub-list-info {
+          flex: 1;
+          min-width: 0;
+
+          p:first-child {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 2px;
           }
 
-          &:hover img { transform: scale(1.06); }
-
-          .hub-grid-play {
-            position: absolute;
-            bottom: 6px;
-            right: 6px;
-            width: 34px;
-            height: 34px;
-            background: #FF5F1F;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transform: translateY(4px);
-            transition: opacity 0.2s ease, transform 0.2s ease;
-            box-shadow: 0 4px 10px rgba(255,95,31,0.5);
-            .ms { font-size: 16px; color: #fff; }
+          p:last-child {
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            color: #71717a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
+        }
 
-          &:hover .hub-grid-play { opacity: 1; transform: translateY(0); }
+        .hub-list-num {
+          font-family: 'Inter', sans-serif;
+          font-size: 12px;
+          font-weight: 700;
+          color: #3f3f46;
+          width: 20px;
+          text-align: right;
+          flex-shrink: 0;
         }
       }
     }
@@ -301,22 +304,24 @@ header {
 
   .hub-card-title {
     font-family: 'Inter', sans-serif;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     color: #fff;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     margin-bottom: 2px;
+    text-align: center;
   }
 
   .hub-card-sub {
     font-family: 'Inter', sans-serif;
-    font-size: 12px;
-    color: #a1a1aa;
+    font-size: 11px;
+    color: #71717a;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    text-align: center;
   }
 
   .hub-loading {

@@ -41,6 +41,7 @@ function playItem(item: CollectionItem | FeedItem, contextId: string, contextSrc
   player(item.id);
 }
 
+/* Circular card — used for Recently Played & Top Picks */
 function SongCard(props: { item: CollectionItem | FeedItem; contextId: string; contextSrc: Context }) {
   const img = () => generateImageUrl(props.item.id, 'mq', props.item.author?.endsWith('- Topic'));
   return (
@@ -57,6 +58,7 @@ function SongCard(props: { item: CollectionItem | FeedItem; contextId: string; c
   );
 }
 
+/* Large featured banner card */
 function FeaturedCard(props: { item: CollectionItem | FeedItem; contextId: string; contextSrc: Context; label?: string }) {
   const img = () => generateImageUrl(props.item.id, '480', props.item.author?.endsWith('- Topic'));
   return (
@@ -74,18 +76,21 @@ function FeaturedCard(props: { item: CollectionItem | FeedItem; contextId: strin
   );
 }
 
-function GridCard(props: { item: CollectionItem | FeedItem; contextId: string; contextSrc: Context }) {
+/* Compact list row — used for Frequently Played & Trending */
+function ListRow(props: { item: CollectionItem | FeedItem; contextId: string; contextSrc: Context; rank?: number }) {
   const img = () => generateImageUrl(props.item.id, 'mq', props.item.author?.endsWith('- Topic'));
   return (
-    <div class="hub-grid-card" onclick={() => playItem(props.item, props.contextId, props.contextSrc)}>
-      <div class="hub-grid-art">
+    <div class="hub-list-row" onclick={() => playItem(props.item, props.contextId, props.contextSrc)}>
+      <div class="hub-list-art">
         <img src={img()} alt={props.item.title} loading="lazy" />
-        <div class="hub-grid-play">
-          <span class="ms material-symbols-outlined">play_arrow</span>
-        </div>
       </div>
-      <p class="hub-card-title">{props.item.title}</p>
-      <p class="hub-card-sub">{props.item.author?.replace(' - Topic', '')}</p>
+      <div class="hub-list-info">
+        <p>{props.item.title}</p>
+        <p>{props.item.author?.replace(' - Topic', '')}</p>
+      </div>
+      <Show when={props.rank !== undefined}>
+        <span class="hub-list-num">#{props.rank! + 1}</span>
+      </Show>
     </div>
   );
 }
@@ -124,14 +129,14 @@ export default function() {
 
   const tracksMap = getTracksMap();
   const recents = () => getCollection('history')
-    .slice(0, 10)
+    .slice(0, 12)
     .map(id => tracksMap[id])
     .filter(Boolean) as CollectionItem[];
 
   const frequent = () => Object.values(getTracksMap())
     .filter(t => t.plays && t.plays > 1)
     .sort((a, b) => (b.plays as number) - (a.plays as number))
-    .slice(0, 6) as CollectionItem[];
+    .slice(0, 5) as CollectionItem[];
 
   function goToSearch(query: string) {
     import('@lib/stores').then(({ setStore }) => setStore('homeView', 'Search'));
@@ -153,7 +158,7 @@ export default function() {
         <p>What do you want to listen to?</p>
       </div>
 
-      {/* Recently Played */}
+      {/* Recently Played — circular cards */}
       <Show when={recents().length > 0}>
         <section class="hub-section">
           <div class="hub-section-header">
@@ -168,7 +173,7 @@ export default function() {
         </section>
       </Show>
 
-      {/* Top Picks / Featured */}
+      {/* Top Picks — featured banner + circular scroll */}
       <Show when={featuredItems().length > 0}>
         <section class="hub-section">
           <div class="hub-section-header">
@@ -179,15 +184,10 @@ export default function() {
               setNavStore('list', 'state', true);
             }}>SEE ALL</button>
           </div>
-          <FeaturedCard
-            item={featuredItems()[0]}
-            contextId="top_picks"
-            contextSrc="hub"
-            label="Playlist of the Day"
-          />
+          <FeaturedCard item={featuredItems()[0]} contextId="top_picks" contextSrc="hub" label="Playlist of the Day" />
           <Show when={featuredItems().length > 1}>
-            <div class="hub-scroll" style={{ 'margin-top': '16px' }}>
-              <For each={featuredItems().slice(1, 7)}>
+            <div class="hub-scroll" style={{ 'margin-top': '14px' }}>
+              <For each={featuredItems().slice(1, 8)}>
                 {item => <SongCard item={item} contextId="top_picks" contextSrc="hub" />}
               </For>
             </div>
@@ -203,7 +203,7 @@ export default function() {
         </div>
       </Show>
 
-      {/* Frequently Played */}
+      {/* Frequently Played — compact list rows */}
       <Show when={frequent().length > 0}>
         <section class="hub-section">
           <div class="hub-section-header">
@@ -213,23 +213,23 @@ export default function() {
               setNavStore('list', 'state', true);
             }}>SEE ALL</button>
           </div>
-          <div class="hub-grid">
-            <For each={frequent().slice(0, 4)}>
-              {item => <GridCard item={item} contextId={t('hub_frequently_played')} contextSrc="hub" />}
+          <div class="hub-list">
+            <For each={frequent()}>
+              {(item, i) => <ListRow item={item} contextId={t('hub_frequently_played')} contextSrc="hub" rank={i()} />}
             </For>
           </div>
         </section>
       </Show>
 
-      {/* New Releases */}
-      <Show when={trending().length >= 4}>
+      {/* Trending Now — compact list rows */}
+      <Show when={trending().length >= 3}>
         <section class="hub-section">
           <div class="hub-section-header">
             <h2>Trending Now</h2>
           </div>
-          <div class="hub-grid">
-            <For each={trending().slice(0, 4)}>
-              {item => <GridCard item={item} contextId="trending_now" contextSrc="hub" />}
+          <div class="hub-list">
+            <For each={trending().slice(0, 5)}>
+              {(item, i) => <ListRow item={item} contextId="trending_now" contextSrc="hub" rank={i()} />}
             </For>
           </div>
         </section>
