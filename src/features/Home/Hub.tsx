@@ -17,6 +17,13 @@ const CATEGORIES = [
 
 type FeedItem = { id: string; title: string; author: string; duration: string; authorId: string };
 
+function greeting() {
+  const h = new Date().getHours();
+  if (h < 12) return 'Good morning';
+  if (h < 18) return 'Good afternoon';
+  return 'Good evening';
+}
+
 function playItem(item: CollectionItem | FeedItem, contextId: string, contextSrc: Context) {
   setPlayerStore('stream', {
     id: item.id,
@@ -40,6 +47,9 @@ function SongCard(props: { item: CollectionItem | FeedItem; contextId: string; c
     <div class="hub-card" onclick={() => playItem(props.item, props.contextId, props.contextSrc)}>
       <div class="hub-card-art">
         <img src={img()} alt={props.item.title} loading="lazy" />
+        <div class="hub-play-btn">
+          <span class="ms material-symbols-outlined">play_arrow</span>
+        </div>
       </div>
       <p class="hub-card-title">{props.item.title}</p>
       <p class="hub-card-sub">{props.item.author?.replace(' - Topic', '')}</p>
@@ -56,6 +66,9 @@ function FeaturedCard(props: { item: CollectionItem | FeedItem; contextId: strin
         <span class="hub-featured-label">{props.label || 'Top Pick'}</span>
         <h3 class="hub-featured-title">{props.item.title}</h3>
         <p class="hub-featured-sub">{props.item.author?.replace(' - Topic', '')}</p>
+        <div class="hub-featured-play">
+          <span class="ms material-symbols-outlined">play_arrow</span>
+        </div>
       </div>
     </div>
   );
@@ -67,6 +80,9 @@ function GridCard(props: { item: CollectionItem | FeedItem; contextId: string; c
     <div class="hub-grid-card" onclick={() => playItem(props.item, props.contextId, props.contextSrc)}>
       <div class="hub-grid-art">
         <img src={img()} alt={props.item.title} loading="lazy" />
+        <div class="hub-grid-play">
+          <span class="ms material-symbols-outlined">play_arrow</span>
+        </div>
       </div>
       <p class="hub-card-title">{props.item.title}</p>
       <p class="hub-card-sub">{props.item.author?.replace(' - Topic', '')}</p>
@@ -97,7 +113,6 @@ export default function() {
   const [isLoading, setIsLoading] = createSignal(true);
 
   onMount(() => {
-    // Load trending content and subfeed in parallel
     Promise.all([
       loadTrending().then(data => { if (data.length) setTrending(data); }),
       (!drawer.subfeed?.length
@@ -127,11 +142,16 @@ export default function() {
     }, 150);
   }
 
-  // Pick the best featured item: subfeed first, then trending
   const featuredItems = () => subfeed().length ? subfeed() : trending();
 
   return (
     <div class="hub">
+
+      {/* Greeting */}
+      <div class="hub-greeting">
+        <h1>{greeting()}</h1>
+        <p>What do you want to listen to?</p>
+      </div>
 
       {/* Recently Played */}
       <Show when={recents().length > 0}>
@@ -148,7 +168,7 @@ export default function() {
         </section>
       </Show>
 
-      {/* Top Picks / Trending — always loads something */}
+      {/* Top Picks / Featured */}
       <Show when={featuredItems().length > 0}>
         <section class="hub-section">
           <div class="hub-section-header">
@@ -166,7 +186,7 @@ export default function() {
             label="Playlist of the Day"
           />
           <Show when={featuredItems().length > 1}>
-            <div class="hub-scroll" style={{ 'margin-top': '12px' }}>
+            <div class="hub-scroll" style={{ 'margin-top': '16px' }}>
               <For each={featuredItems().slice(1, 7)}>
                 {item => <SongCard item={item} contextId="top_picks" contextSrc="hub" />}
               </For>
@@ -175,7 +195,7 @@ export default function() {
         </section>
       </Show>
 
-      {/* Loading state */}
+      {/* Loading */}
       <Show when={isLoading() && !featuredItems().length}>
         <div class="hub-loading">
           <i class="ri-refresh-line loading" />
@@ -201,21 +221,21 @@ export default function() {
         </section>
       </Show>
 
-      {/* New Releases / Trending grid */}
+      {/* New Releases */}
       <Show when={trending().length >= 4}>
         <section class="hub-section">
           <div class="hub-section-header">
-            <h2>New Releases</h2>
+            <h2>Trending Now</h2>
           </div>
           <div class="hub-grid">
             <For each={trending().slice(0, 4)}>
-              {item => <GridCard item={item} contextId="new_releases" contextSrc="hub" />}
+              {item => <GridCard item={item} contextId="trending_now" contextSrc="hub" />}
             </For>
           </div>
         </section>
       </Show>
 
-      {/* Browse by Genre — always visible */}
+      {/* Browse by Genre */}
       <section class="hub-section">
         <div class="hub-section-header">
           <h2>Browse by Genre</h2>

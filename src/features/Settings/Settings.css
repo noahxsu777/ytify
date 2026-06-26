@@ -1,40 +1,144 @@
 .settingsSection {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  background: #000;
+  color: #fff;
+
   header {
     display: flex;
+    align-items: center;
     justify-content: space-between;
+    padding: 20px 16px 8px;
+
+    p {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
 
     .ri-close-large-line {
-      margin-right: calc(var(--size-7) + var(--size-1));
-      margin-top: var(--size-0);
+      font-size: 22px;
+      color: #fff;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin-right: 0;
+      margin-top: 0;
+      &:hover { background: rgba(255,255,255,0.18); }
     }
   }
 
   > div {
-    width: 100%;
-    margin-bottom: var(--size-8);
+    flex: 1;
+    padding: 8px 0 32px;
+  }
+}
 
-    >span {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      margin: 0 auto;
-      padding: var(--size-2) 0;
+/* iOS-style grouped settings */
+.settings-group {
+  margin: 20px 16px 0;
+}
 
-      &:hover {
-        background-color: var(--onBg);
-        border-radius: var(--roundness);
-      }
+.settings-group-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #8e8e93;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0 4px;
+  margin-bottom: 6px;
+}
 
-      select {
-        font-size: inherit;
-        font-weight: var(--font-weight-5);
-        padding: 0 var(--size-2);
-        max-width: 50%;
-        text-align: right;
-      }
+.settings-group-body {
+  background: #1c1c1e;
+  border-radius: 12px;
+  overflow: hidden;
+
+  > span {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 13px 16px !important;
+    margin: 0 !important;
+    border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+    width: 100% !important;
+    box-sizing: border-box;
+    cursor: pointer;
+
+    &:last-child {
+      border-bottom: none !important;
     }
 
+    &:hover {
+      background: rgba(255,255,255,0.05) !important;
+      border-radius: 0 !important;
+    }
+
+    label, > p, > span:first-child {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      color: #fff;
+    }
+
+    select {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      color: #8e8e93;
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 0 !important;
+      max-width: 55%;
+      text-align: right;
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+  }
+}
+
+/* iOS toggle override */
+.settings-group-body > span input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 51px;
+  height: 31px;
+  border-radius: 15.5px;
+  background: #3a3a3c;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: background 0.25s ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 27px;
+    height: 27px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    transition: left 0.25s ease;
   }
 
+  &:checked {
+    background: #FF5F1F;
+
+    &::after {
+      left: 22px;
+    }
+  }
 }

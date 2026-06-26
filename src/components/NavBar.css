@@ -1,8 +1,10 @@
 nav {
   display: flex;
   width: 100%;
-  align-items: center; /* vertically center items in the 68px nav */
+  align-items: flex-start; /* items align to top of nav; safe-area padding-bottom handles spacing */
   height: 68px;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-sizing: content-box; /* padding-bottom adds extra height for safe area */
 
   .nav-item {
     display: flex;
@@ -16,15 +18,16 @@ nav {
     transition: color 0.2s ease;
     font-family: 'Inter', sans-serif;
     font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.05em;
+    font-weight: 600;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
-    height: 100%;
+    height: 68px; /* always exactly nav height, safe area is below */
+    padding-top: 6px;
 
     .ms {
-      font-size: 24px;
+      font-size: 26px;
       line-height: 1;
     }
 
@@ -34,7 +37,11 @@ nav {
     }
 
     &.on {
-      color: #fff;
+      color: #FF5F1F;
+
+      .ms {
+        filter: drop-shadow(0 0 6px rgba(255, 95, 31, 0.5));
+      }
     }
   }
 }

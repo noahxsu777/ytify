@@ -14,8 +14,9 @@ export default function(props: { onClose: () => void }) {
       props.onClose();
       return;
     }
+    const artist = author.endsWith(' - Topic') ? author.slice(0, -8) : author;
     fetch(
-      `https://lrclib.net/api/get?track_name=${title}&artist_name=${author.slice(0, -8)}&duration=${playerStore.fullDuration}`,
+      `https://lrclib.net/api/get?track_name=${encodeURIComponent(title)}&artist_name=${encodeURIComponent(artist)}&duration=${playerStore.fullDuration}`,
       {
         headers: {
           'Lrclib-Client': `ytify ${Build} (https://github.com/n-ce/ytify)`
