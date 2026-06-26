@@ -90,7 +90,7 @@ export default async function(
       return data.filter(item => {
         if (item.type === 'video') {
           const videoItem = item as InvidiousVideoResult;
-          return videoItem.lengthSeconds > 180 && videoItem.viewCount > 1000;
+          return videoItem.lengthSeconds > 60 && videoItem.viewCount > 100;
         } else if (item.type === 'playlist') {
           return !item.title.startsWith('Mix - ');
         }
