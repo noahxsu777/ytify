@@ -5,15 +5,22 @@ import { navStore, setNavStore, store, setStore, t } from '@lib/stores';
 export default function() {
   type Nav = 'Hub' | 'Library' | 'Search';
 
+  // Close any feature views that render on top of home so the selected tab
+  // is always actually visible (prevents "unresponsive" taps).
+  function closeOverlays() {
+    if (navStore.player.state) setNavStore('player', 'state', false);
+    if (navStore.list.state) setNavStore('list', 'state', false);
+    if (navStore.settings.state) setNavStore('settings', 'state', false);
+    if (navStore.updater.state) setNavStore('updater', 'state', false);
+  }
+
   function saveHome(name: '' | Nav) {
-    if (store.homeView === name && navStore.home.state) {
-      setNavStore('home', 'state', false);
-    } else {
-      setStore('homeView', name);
-      setConfig('home', name);
-      setNavStore('home', 'state', true);
-      navStore.home.ref?.scrollIntoView();
-    }
+    closeOverlays();
+    setStore('homeView', name);
+    setConfig('home', name);
+    setNavStore('home', 'state', true);
+    // Defer scroll so the section is mounted before scrolling to it
+    requestAnimationFrame(() => navStore.home.ref?.scrollIntoView());
   }
 
   const navView = (item: Nav) => navStore.home.state && store.homeView === item;
@@ -66,7 +73,13 @@ export default function() {
       <div
         class="nav-item"
         classList={{ on: navStore.queue.state }}
-        onclick={() => setNavStore('queue', 'state', !navStore.queue.state)}
+        onclick={() => {
+          if (navStore.player.state) setNavStore('player', 'state', false);
+          const willOpen = !navStore.queue.state;
+          setNavStore('queue', 'state', willOpen);
+          if (willOpen)
+            requestAnimationFrame(() => navStore.queue.ref?.scrollIntoView());
+        }}
         aria-label={t('nav_queue')}
       >
         <span class="ms material-symbols-outlined"

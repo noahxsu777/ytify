@@ -373,6 +373,7 @@ input[type="search"], input[type="text"] {
   /* Brand title at top of sidebar */
   footer::before {
     content: 'SonicBoom';
+    order: -2;
     display: block;
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 22px;
