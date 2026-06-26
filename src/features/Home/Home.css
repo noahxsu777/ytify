@@ -407,6 +407,83 @@ header {
   }
 }
 
+/* ════════════════════════════════════════════════
+   Desktop / large screens — adapt the Hub layout
+   ════════════════════════════════════════════════ */
+@media (min-width: 900px) {
+  /* Cancel the global 2-column grid that breaks the section flow */
+  main section:only-child .hub,
+  main .hub {
+    display: block !important;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px 48px;
+  }
+
+  .hub .hub-greeting {
+    padding: 24px 8px 8px;
+    h1 { font-size: 34px; }
+    p { font-size: 15px; }
+  }
+
+  .hub .hub-section {
+    margin-bottom: 44px;
+
+    .hub-section-header {
+      padding: 0 8px;
+      margin-bottom: 18px;
+      h2 { font-size: 24px; }
+    }
+
+    .hub-scroll {
+      padding: 0 8px 8px;
+      gap: 20px;
+    }
+
+    /* Bigger round cards on desktop */
+    .hub-card {
+      width: 150px;
+      .hub-card-art { width: 140px; height: 140px; }
+    }
+    .hub-card-title { font-size: 14px; }
+    .hub-card-sub { font-size: 12px; }
+
+    /* Featured banner: cap height, keep cinematic */
+    .hub-featured {
+      margin: 0 8px;
+      aspect-ratio: 21/9;
+      max-height: 360px;
+    }
+
+    /* Trending / Frequently Played -> 2-column list grid */
+    .hub-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 24px;
+      row-gap: 2px;
+      padding: 0 8px;
+
+      .hub-list-art { width: 56px; height: 56px; }
+      .hub-list-row .hub-list-info p:first-child { font-size: 15px; }
+    }
+
+    /* Genre tiles -> 4 columns */
+    .hub-genre-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      padding: 0 8px;
+      .hub-genre-card { padding: 26px 18px 22px; span { font-size: 17px; } }
+    }
+  }
+}
+
+/* Extra-wide screens: 3-column lists, more genre columns */
+@media (min-width: 1300px) {
+  .hub .hub-section .hub-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.5; transform: scale(0.7); }
