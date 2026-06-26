@@ -339,3 +339,146 @@ input[type="search"], input[type="text"] {
 
 /* ── Selection ──────────────────────────────────────────── */
 ::selection { background: rgba(255,95,31,0.3); color: var(--sp-primary); }
+
+/* ════════════════════════════════════════════════════════════
+   DESKTOP — Spotify-for-iPad style: left sidebar + glass
+   ════════════════════════════════════════════════════════════ */
+@media (min-width: 900px) and (orientation: landscape) {
+
+  /* More translucency everywhere */
+  :root {
+    --gl-bg: rgba(18,18,18,0.42) !important;
+  }
+
+  /* ── Left sidebar (was bottom footer) ── */
+  footer {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: 256px !important;
+    height: 100dvh !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    border-top: none !important;
+    border-right: 1px solid rgba(255,255,255,0.1) !important;
+    background: rgba(8,8,8,0.5) !important;
+    backdrop-filter: blur(80px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(80px) saturate(180%) !important;
+    box-shadow: 1px 0 0 rgba(255,255,255,0.05), 20px 0 60px rgba(0,0,0,0.4) !important;
+    padding: 0 !important;
+    z-index: 100 !important;
+  }
+
+  /* Brand title at top of sidebar */
+  footer::before {
+    content: 'SonicBoom';
+    display: block;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #fff;
+    padding: 26px 24px 14px;
+    background: linear-gradient(90deg, #FF5F1F, #ff8f5f);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Nav becomes vertical list */
+  nav {
+    order: -1 !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    height: auto !important;
+    width: 100% !important;
+    padding: 8px 12px !important;
+    gap: 4px !important;
+  }
+
+  nav .nav-item {
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    height: 46px !important;
+    gap: 18px !important;
+    padding: 0 16px !important;
+    border-radius: 10px !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    color: rgba(255,255,255,0.6) !important;
+    transition: background 0.15s ease, color 0.15s ease !important;
+  }
+  nav .nav-item .ms { font-size: 24px !important; }
+  nav .nav-item:hover { background: rgba(255,255,255,0.07) !important; color: #fff !important; }
+  nav .nav-item.on { color: #fff !important; background: rgba(255,255,255,0.1) !important; }
+  nav .nav-item.on .ms { filter: drop-shadow(0 0 8px rgba(255,95,31,0.5)) !important; }
+
+  /* ── Mini-player -> big "now playing" card pinned to bottom ── */
+  .miniplayer {
+    order: 1 !important;
+    margin: auto 14px 18px !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: calc(100% - 28px) !important;
+    padding: 14px !important;
+    gap: 0 !important;
+    border-radius: 18px !important;
+    background: rgba(30,30,32,0.5) !important;
+    backdrop-filter: blur(40px) saturate(180%) !important;
+  }
+
+  .miniplayer img {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 !important;
+    border-radius: 14px !important;
+    margin-bottom: 12px !important;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.6) !important;
+  }
+
+  .miniplayer .mediaDetails {
+    width: 100% !important;
+    margin-bottom: 10px !important;
+    a { font-size: 16px !important; white-space: normal !important; }
+    p { font-size: 13px !important; }
+  }
+
+  .miniplayer .mp-controls {
+    width: 100% !important;
+    justify-content: center !important;
+    gap: 18px !important;
+  }
+  .miniplayer #playButton {
+    width: 48px !important;
+    height: 48px !important;
+    font-size: 26px !important;
+  }
+
+  .miniplayer progress {
+    position: static !important;
+    width: 100% !important;
+    height: 4px !important;
+    border-radius: 99px !important;
+    margin-bottom: 12px !important;
+    order: -1;
+  }
+
+  /* ── Main content shifts right of the sidebar ── */
+  main {
+    margin-left: 256px !important;
+    width: calc(100dvw - 256px) !important;
+    height: 100dvh !important;
+  }
+
+  main section {
+    min-width: 100% !important;
+    padding-bottom: 32px !important;
+  }
+
+  /* Pull section padding back (no fixed bottom bar to clear) */
+  main section { padding-bottom: 40px !important; }
+}

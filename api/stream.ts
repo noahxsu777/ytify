@@ -28,40 +28,35 @@ async function viaInnertube(id: string): Promise<string | null> {
 }
 
 // 2. Piped — audioStreams URLs are already proxied by the instance, so they
-//    play from any IP. Return one to redirect the browser to (no byte proxy).
+//    play from any IP. Race ALL instances; the FASTEST to answer wins.
 async function viaPiped(id: string, PIPED: string[]): Promise<string | null> {
-  for (const inst of PIPED) {
-    try {
-      const r = await fetch(`${inst}/streams/${id}`, { signal: AbortSignal.timeout(5000) });
-      if (!r.ok) continue;
+  const probe = (inst: string) =>
+    fetch(`${inst}/streams/${id}`, { signal: AbortSignal.timeout(5000) }).then(async r => {
+      if (!r.ok) throw new Error(`${r.status}`);
       const d = await r.json();
       const audio = (d.audioStreams || []).sort((a: any, b: any) => (b.bitrate || 0) - (a.bitrate || 0));
-      if (audio[0]?.url) return audio[0].url;
-    } catch { /* next */ }
-  }
-  return null;
+      if (audio[0]?.url) return audio[0].url as string;
+      throw new Error('no audio');
+    });
+  try { return await Promise.any(PIPED.map(probe)); } catch { return null; }
 }
 
 // 3. Invidious with local=true — proxies audio through the instance, plays
-//    cross-IP. Return URL to redirect to.
+//    cross-IP. Race ALL instances; the FASTEST to answer wins.
 async function viaInvidious(id: string, INVIDIOUS: string[]): Promise<string | null> {
-  for (const inst of INVIDIOUS) {
-    try {
-      const r = await fetch(`${inst}/api/v1/videos/${id}?local=true`, { signal: AbortSignal.timeout(5000) });
-      if (!r.ok) continue;
+  const probe = (inst: string) =>
+    fetch(`${inst}/api/v1/videos/${id}?local=true`, { signal: AbortSignal.timeout(5000) }).then(async r => {
+      if (!r.ok) throw new Error(`${r.status}`);
       const d = await r.json();
       const audio = (d.adaptiveFormats || [])
         .filter((f: any) => (f.type || '').startsWith('audio'))
         .sort((a: any, b: any) => parseInt(b.bitrate || '0') - parseInt(a.bitrate || '0'));
       let url = audio[0]?.url;
-      if (url) {
-        // Make absolute if the instance returned a relative /videoplayback path
-        if (url.startsWith('/')) url = inst + url;
-        return url;
-      }
-    } catch { /* next */ }
-  }
-  return null;
+      if (!url) throw new Error('no audio');
+      if (url.startsWith('/')) url = inst + url; // make absolute
+      return url as string;
+    });
+  try { return await Promise.any(INVIDIOUS.map(probe)); } catch { return null; }
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -74,9 +69,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const { iv: INVIDIOUS, pi: PIPED } = await getInstances();
 
-  // Try proxied sources first (Piped/Invidious) — a simple redirect plays
-  // them directly, no Vercel bandwidth, works cross-IP.
-  const proxied = (await viaPiped(id, PIPED)) || (await viaInvidious(id, INVIDIOUS));
+  // Race Invidious + Piped together — the FASTEST instance to answer wins.
+  // Both return instance-proxied URLs that play cross-IP, so we just redirect.
+  const proxied = await Promise.any([
+    viaInvidious(id, INVIDIOUS).then(u => u ?? Promise.reject(new Error('iv none'))),
+    viaPiped(id, PIPED).then(u => u ?? Promise.reject(new Error('pi none'))),
+  ]).catch(() => null);
   if (proxied) {
     res.setHeader('Cache-Control', 'no-store');
     return res.redirect(302, proxied);
