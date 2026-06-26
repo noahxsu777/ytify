@@ -29,47 +29,30 @@ const tryFetch = (url: string, opts: RequestInit = {}) =>
 
 /* ── YouTube InnerTube player (most reliable — Google directly) ── */
 async function fetchInnertube(id: string): Promise<any> {
-  // iOS client returns pre-deciphered stream URLs without signature ciphers
-  const clients = [
-    {
-      clientName: 'IOS',
-      clientVersion: '19.45.4',
-      deviceModel: 'iPhone16,2',
-      userAgent: 'com.google.ios.youtube/19.45.4 (iPhone16,2; U; CPU iOS 18_1_0 like Mac OS X)',
-      hl: 'en', gl: 'US',
-    },
-    {
-      clientName: 'ANDROID',
-      clientVersion: '19.44.38',
-      androidSdkVersion: 34,
-      userAgent: 'com.google.android.youtube/19.44.38 (Linux; U; Android 14) gzip',
-      hl: 'en', gl: 'US',
-    },
-  ];
+  // ANDROID_VR returns direct, un-ciphered URLs and (unlike IOS/ANDROID) does
+  // not require Play-Integrity attestation, so it works from servers.
+  const client = {
+    clientName: 'ANDROID_VR',
+    clientVersion: '1.60.19',
+    deviceMake: 'Oculus',
+    deviceModel: 'Quest 3',
+    androidSdkVersion: 32,
+    osName: 'Android',
+    osVersion: '12',
+    hl: 'en', gl: 'US',
+  };
 
-  for (const client of clients) {
-    try {
-      const res = await fetch('https://youtubei.googleapis.com/youtubei/v1/player?key=AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8', {
-        method: 'POST',
-        signal: AbortSignal.timeout(7000),
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': client.userAgent,
-        },
-        body: JSON.stringify({
-          context: { client },
-          videoId: id,
-          contentCheckOk: true,
-          racyCheckOk: true,
-        }),
-      });
-      if (!res.ok) continue;
-      const data = await res.json();
-      const formats = (data?.streamingData?.adaptiveFormats || []).filter((f: any) => f.url);
-      if (formats.length) return innertubeToInvidious(data, id, formats);
-    } catch { /* try next client */ }
-  }
-  throw new Error('innertube failed');
+  const res = await fetch('https://youtubei.googleapis.com/youtubei/v1/player', {
+    method: 'POST',
+    signal: AbortSignal.timeout(7000),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ context: { client }, videoId: id, contentCheckOk: true, racyCheckOk: true }),
+  });
+  if (!res.ok) throw new Error(`innertube ${res.status}`);
+  const data = await res.json();
+  const formats = (data?.streamingData?.adaptiveFormats || []).filter((f: any) => f.url);
+  if (formats.length) return innertubeToInvidious(data, id, formats);
+  throw new Error('innertube no formats');
 }
 
 function innertubeToInvidious(data: any, id: string, formats: any[]): any {
@@ -85,7 +68,10 @@ function innertubeToInvidious(data: any, id: string, formats: any[]): any {
     description: vd.shortDescription || '',
     viewCount: parseInt(vd.viewCount || '0'),
     adaptiveFormats: formats.map((f: any) => ({
-      url: f.url,
+      // googlevideo URLs are IP-locked to whoever requested them (the Vercel
+      // server). Route playback through our own /api/stream proxy so the
+      // bytes are fetched server-side (matching IP) and piped to the browser.
+      url: `/api/stream?id=${id}&itag=${f.itag}`,
       type: f.mimeType || 'audio/webm',
       bitrate: String(f.bitrate || 0),
       container: (f.mimeType || '').includes('webm') ? 'webm' : 'mp4',
