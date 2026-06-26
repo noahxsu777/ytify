@@ -131,24 +131,41 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   res.setHeader('Access-Control-Allow-Origin', '*');
 
-  // ── Video request: try YouTube InnerTube first (fast + reliable), then race the rest ──
+  // ── Video request ──
+  // Get metadata from whatever source answers, then ALWAYS route audio through
+  // /api/stream (which does its own multi-source resolution + byte proxy), so
+  // playback never depends on a single source's URLs being playable cross-IP.
   if (videoId) {
-    try {
-      const data = await fetchInnertube(videoId);
-      res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=3600');
-      return res.status(200).json(data);
-    } catch { /* fall through to Invidious/Piped race */ }
+    let meta: any = null;
 
+    // Race metadata sources (Piped first — it also gives related videos for autoplay)
     try {
-      const data = await Promise.any([
-        ...INVIDIOUS.map(inst => tryFetch(`${inst}${path}${suffix}`)),
+      meta = await Promise.any([
         ...PIPED.map(inst => tryFetch(`${inst}/streams/${videoId}`).then(d => pipedToInvidious(d, videoId))),
+        ...INVIDIOUS.map(inst => tryFetch(`${inst}${path}${suffix}`)),
+        fetchInnertube(videoId),
       ]);
-      res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=3600');
-      return res.status(200).json(data);
-    } catch {
+    } catch { /* all metadata sources failed */ }
+
+    if (!meta || !('lengthSeconds' in meta)) {
       return res.status(502).json({ error: 'All sources failed' });
     }
+
+    // Override audio formats to point at our smart streaming proxy.
+    meta.adaptiveFormats = [{
+      url: `/api/stream?id=${videoId}`,
+      type: 'audio/webm; codecs="opus"',
+      bitrate: '128000',
+      container: 'webm',
+      audioQuality: 'AUDIO_QUALITY_MEDIUM',
+      audioSampleRate: '48000',
+      audioChannels: 2,
+      encoding: 'opus',
+    }];
+    meta.formatStreams = [];
+
+    res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=3600');
+    return res.status(200).json(meta);
   }
 
   // ── Search / channels: race Invidious instances ──
