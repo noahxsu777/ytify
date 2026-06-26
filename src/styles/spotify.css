@@ -350,14 +350,14 @@ input[type="search"], input[type="text"] {
     --gl-bg: rgba(18,18,18,0.42) !important;
   }
 
-  /* ── Left sidebar (was bottom footer) ── */
+  /* ── Left sidebar (nav only). Stops above the bottom player bar ── */
   footer {
     position: fixed !important;
     left: 0 !important;
     top: 0 !important;
     bottom: 0 !important;
     width: 256px !important;
-    height: 100dvh !important;
+    height: auto !important;
     flex-direction: column !important;
     justify-content: flex-start !important;
     border-top: none !important;
@@ -369,6 +369,8 @@ input[type="search"], input[type="text"] {
     padding: 0 !important;
     z-index: 100 !important;
   }
+  /* When a track is playing, lift the sidebar above the bottom bar */
+  body:has(.miniplayer) footer { bottom: 92px !important; }
 
   /* Brand title at top of sidebar */
   footer::before {
@@ -402,70 +404,82 @@ input[type="search"], input[type="text"] {
     flex-direction: row !important;
     justify-content: flex-start !important;
     align-items: center !important;
-    height: 46px !important;
-    gap: 18px !important;
-    padding: 0 16px !important;
-    border-radius: 10px !important;
-    font-size: 15px !important;
+    height: 54px !important;
+    gap: 20px !important;
+    padding: 0 18px !important;
+    border-radius: 12px !important;
+    font-size: 17px !important;
     font-weight: 600 !important;
     letter-spacing: 0 !important;
     text-transform: none !important;
     color: rgba(255,255,255,0.6) !important;
     transition: background 0.15s ease, color 0.15s ease !important;
   }
-  nav .nav-item .ms { font-size: 24px !important; }
+  nav .nav-item .ms { font-size: 30px !important; }
   nav .nav-item:hover { background: rgba(255,255,255,0.07) !important; color: #fff !important; }
   nav .nav-item.on { color: #fff !important; background: rgba(255,255,255,0.1) !important; }
   nav .nav-item.on .ms { filter: drop-shadow(0 0 8px rgba(255,95,31,0.5)) !important; }
 
-  /* ── Mini-player -> big "now playing" card pinned to bottom ── */
+  /* ── Mini-player -> long full-width bar pinned to the very bottom ── */
   .miniplayer {
-    order: 1 !important;
-    margin: auto 14px 18px !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-    width: calc(100% - 28px) !important;
-    padding: 14px !important;
-    gap: 0 !important;
-    border-radius: 18px !important;
-    background: rgba(30,30,32,0.5) !important;
-    backdrop-filter: blur(40px) saturate(180%) !important;
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 84px !important;
+    margin: 0 !important;
+    padding: 0 24px !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 16px !important;
+    border-radius: 0 !important;
+    border: none !important;
+    border-top: 1px solid rgba(255,255,255,0.1) !important;
+    background: rgba(10,10,10,0.6) !important;
+    backdrop-filter: blur(80px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(80px) saturate(180%) !important;
+    z-index: 200 !important;
   }
 
   .miniplayer img {
-    width: 100% !important;
-    height: auto !important;
+    width: 56px !important;
+    height: 56px !important;
     aspect-ratio: 1 !important;
-    border-radius: 14px !important;
-    margin-bottom: 12px !important;
-    box-shadow: 0 12px 36px rgba(0,0,0,0.6) !important;
+    border-radius: 10px !important;
+    margin: 0 !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.6) !important;
   }
 
   .miniplayer .mediaDetails {
-    width: 100% !important;
-    margin-bottom: 10px !important;
-    a { font-size: 16px !important; white-space: normal !important; }
+    flex: 0 1 260px !important;
+    min-width: 0 !important;
+    a { font-size: 15px !important; }
     p { font-size: 13px !important; }
   }
 
+  /* Controls centered like Spotify desktop */
   .miniplayer .mp-controls {
-    width: 100% !important;
-    justify-content: center !important;
-    gap: 18px !important;
+    margin-left: auto !important;
+    gap: 14px !important;
   }
   .miniplayer #playButton {
-    width: 48px !important;
-    height: 48px !important;
-    font-size: 26px !important;
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 24px !important;
   }
+  .miniplayer button:not(#playButton), .miniplayer i { font-size: 26px !important; }
 
+  /* Progress line along the very bottom edge of the bar */
   .miniplayer progress {
-    position: static !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
     width: 100% !important;
-    height: 4px !important;
-    border-radius: 99px !important;
-    margin-bottom: 12px !important;
-    order: -1;
+    height: 3px !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
   }
 
   /* ── Main content shifts right of the sidebar ── */
@@ -477,9 +491,8 @@ input[type="search"], input[type="text"] {
 
   main section {
     min-width: 100% !important;
-    padding-bottom: 32px !important;
+    padding-bottom: 40px !important;
   }
-
-  /* Pull section padding back (no fixed bottom bar to clear) */
-  main section { padding-bottom: 40px !important; }
+  /* Clear the bottom player bar when a track is playing */
+  body:has(.miniplayer) main { height: calc(100dvh - 84px) !important; }
 }
