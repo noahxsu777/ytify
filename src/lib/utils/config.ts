@@ -19,7 +19,7 @@ export let config = {
   allowDuplicates: false,
   similarContent: true,
   contextualFill: true,
-  queuePrefetch: false,
+  queuePrefetch: true,
   authorGrouping: false,
   home: '',
   searchFilter: 'all',
