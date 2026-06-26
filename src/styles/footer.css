@@ -1,21 +1,19 @@
 footer {
   display: flex;
   flex-direction: column;
-  position: relative;
+  flex-shrink: 0;
+  width: 100%;
   z-index: 2;
-  width: 100dvmin;
 
   --safe: env(safe-area-inset-bottom, 0px);
   --nav-h: 68px;
   --height: calc(var(--nav-h) + var(--safe));
   height: var(--height);
-  bottom: var(--height);
 
   background: rgba(0, 0, 0, 0.95);
   backdrop-filter: blur(32px);
   -webkit-backdrop-filter: blur(32px);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  overflow: visible;
 
   &:has(.miniplayer) {
     --height: calc(var(--nav-h) + 76px + var(--safe));
