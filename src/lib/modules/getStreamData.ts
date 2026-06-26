@@ -1,13 +1,21 @@
 import { store, setStore } from "../stores";
 
+// In-memory cache: stream data is valid for 5 minutes (YouTube CDN URLs last ~6h)
+const cache = new Map<string, { data: Invidious; ts: number }>();
+const CACHE_TTL = 5 * 60 * 1000;
+
 export default async function(
   id: string,
   prefetch: boolean = false,
   signal?: AbortSignal
 ): Promise<Invidious | Record<'error' | 'message', string>> {
 
-  // Try the Vercel proxy first — it retries multiple Invidious instances server-side
-  // and avoids browser-side CORS / reachability issues.
+  // Return cached result if still fresh
+  const cached = cache.get(id);
+  if (cached && Date.now() - cached.ts < CACHE_TTL) {
+    return cached.data;
+  }
+
   const fetchViaProxy = () =>
     fetch(`/api/iv?path=/api/v1/videos/${id}`, { signal })
       .then(res => {
@@ -15,17 +23,20 @@ export default async function(
         return res.json() as Promise<Invidious | { error: string }>;
       })
       .then(data => {
-        if ('adaptiveFormats' in data) return data;
+        if ('adaptiveFormats' in data) {
+          cache.set(id, { data: data as Invidious, ts: Date.now() });
+          return data;
+        }
         throw new Error((data as { error: string }).error || 'Invalid response');
       });
 
-  // Direct Invidious fallback (used if proxy also fails)
   const fetchDirect = (index: number) =>
     fetch(`${store.invidious[index]}/api/v1/videos/${id}`, { signal })
       .then(res => res.json() as Promise<Invidious | { error: string }>)
       .then(data => {
         if ('adaptiveFormats' in data) {
           setStore('index', index);
+          cache.set(id, { data: data as Invidious, ts: Date.now() });
           return data;
         }
         throw new Error((data as { error: string }).error || 'Invalid response');

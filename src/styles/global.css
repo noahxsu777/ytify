@@ -44,8 +44,6 @@ html {
 
 body {
   height: 100dvh;
-  display: flex;
-  flex-direction: column;
   font-family: var(--font);
   -webkit-font-smoothing: antialiased;
 }
@@ -53,14 +51,14 @@ body {
 main {
   color: color-mix(in srgb, oklch(from var(--source) 50% calc(c * var(--chroma)) h), var(--text) 80%);
   display: flex;
-  flex: 1;
-  min-height: 0;
+  height: 100%;
   overflow-x: auto;
   flex-direction: row;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
 
   section {
+    height: 100%;
     flex: 1 0 0;
     padding: var(--gap) var(--size-fluid-3);
     padding-top: 0;
