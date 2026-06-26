@@ -36,6 +36,14 @@ export default function(_: {
           value={playerStore.currentTime}
           max={playerStore.fullDuration}
           ref={slider}
+          style={{
+            '--seek-pct': (playerStore.fullDuration
+              ? (playerStore.currentTime / playerStore.fullDuration) * 100
+              : 0) + '%'
+          }}
+          onInput={(e) => {
+            playerStore.audio.currentTime = parseInt(e.currentTarget.value);
+          }}
           onchange={(e) => {
             playerStore.audio.currentTime = parseInt(e.target.value);
           }}

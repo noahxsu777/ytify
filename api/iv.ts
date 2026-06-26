@@ -118,26 +118,54 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { iv: INVIDIOUS, pi: PIPED } = await getInstances();
 
   // ── Video request ──
-  // Get metadata from whatever source answers, then ALWAYS route audio through
-  // /api/stream (which does its own multi-source resolution + byte proxy), so
-  // playback never depends on a single source's URLs being playable cross-IP.
+  // FAST PATH: race sources that return directly-playable (instance-proxied)
+  // audio URLs, so the browser can play in ONE round trip (no /api/stream hop).
   if (videoId) {
-    let meta: any = null;
+    const hasPlayableAudio = (d: any) =>
+      Array.isArray(d?.adaptiveFormats) &&
+      d.adaptiveFormats.some((f: any) => (f.type || '').startsWith('audio') && /^https?:\/\//.test(f.url || ''));
 
-    // Race metadata sources (Piped first — it also gives related videos for autoplay)
+    const playable = await Promise.any([
+      // Piped audioStreams are already instance-proxied -> play cross-IP
+      ...PIPED.map(inst =>
+        tryFetch(`${inst}/streams/${videoId}`).then(d => {
+          const data = pipedToInvidious(d, videoId);
+          if (!hasPlayableAudio(data)) throw new Error('no audio');
+          return data;
+        })
+      ),
+      // Invidious with local=true -> instance-proxied audio
+      ...INVIDIOUS.map(inst =>
+        tryFetch(`${inst}/api/v1/videos/${videoId}?local=true`).then(d => {
+          d.adaptiveFormats = (d.adaptiveFormats || []).map((f: any) => ({
+            ...f, url: f.url?.startsWith('/') ? inst + f.url : f.url,
+          }));
+          if (!hasPlayableAudio(d)) throw new Error('no audio');
+          return d;
+        })
+      ),
+    ]).catch(() => null);
+
+    if (playable && 'lengthSeconds' in playable) {
+      res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=3600');
+      return res.status(200).json(playable);
+    }
+
+    // FALLBACK: couldn't get a proxied URL — get metadata any way we can and
+    // route audio through /api/stream (which byte-proxies InnerTube).
+    let meta: any = null;
     try {
       meta = await Promise.any([
-        ...PIPED.map(inst => tryFetch(`${inst}/streams/${videoId}`).then(d => pipedToInvidious(d, videoId))),
-        ...INVIDIOUS.map(inst => tryFetch(`${inst}${path}${suffix}`)),
         fetchInnertube(videoId),
+        ...INVIDIOUS.map(inst => tryFetch(`${inst}${path}${suffix}`)),
+        ...PIPED.map(inst => tryFetch(`${inst}/streams/${videoId}`).then(d => pipedToInvidious(d, videoId))),
       ]);
-    } catch { /* all metadata sources failed */ }
+    } catch { /* nothing answered */ }
 
     if (!meta || !('lengthSeconds' in meta)) {
       return res.status(502).json({ error: 'All sources failed' });
     }
 
-    // Override audio formats to point at our smart streaming proxy.
     meta.adaptiveFormats = [{
       url: `/api/stream?id=${videoId}`,
       type: 'audio/webm; codecs="opus"',

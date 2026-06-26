@@ -137,3 +137,63 @@ input[type="range"]:active::-moz-range-progress {
 input[type="range"]:disabled::-moz-range-thumb {
   cursor: not-allowed;
 }
+/* ════════════════════════════════════════════════
+   Spotify-style seek bar — visible round thumb (ball)
+   ════════════════════════════════════════════════ */
+.slider input[type="range"] {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  width: 100%;
+  height: 5px !important;
+  border-radius: 99px !important;
+  overflow: visible !important;
+  cursor: pointer;
+  background: linear-gradient(
+    to right,
+    var(--sp-primary, #FF5F1F) var(--seek-pct, 0%),
+    rgba(255, 255, 255, 0.22) var(--seek-pct, 0%)
+  ) !important;
+}
+
+/* WebKit thumb */
+.slider input[type="range"]::-webkit-slider-runnable-track {
+  -webkit-appearance: none !important;
+  background: transparent !important;
+  height: 5px !important;
+}
+.slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  width: 15px !important;
+  height: 15px !important;
+  margin-top: -5px !important;
+  border-radius: 50% !important;
+  background: #fff !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45) !important;
+  clip-path: none !important;
+  border: none !important;
+  filter: none !important;
+  transition: transform 0.12s ease !important;
+}
+.slider input[type="range"]:hover::-webkit-slider-thumb,
+.slider input[type="range"]:active::-webkit-slider-thumb {
+  transform: scale(1.25) !important;
+}
+
+/* Firefox thumb */
+.slider input[type="range"]::-moz-range-track {
+  background: transparent !important;
+  height: 5px !important;
+}
+.slider input[type="range"]::-moz-range-thumb {
+  width: 15px !important;
+  height: 15px !important;
+  border-radius: 50% !important;
+  background: #fff !important;
+  border: none !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45) !important;
+  filter: none !important;
+}
+.slider input[type="range"]::-moz-range-progress {
+  background: transparent !important;
+}
