@@ -80,12 +80,22 @@ export default async function(
   if (filter.startsWith('video_'))
     [type, sort] = filter.split('_');
 
-  let url = `${api}/api/v1/search?q=${encodeURIComponent(query)}&page=${page}&type=${type}`;
+  let searchPath = `/api/v1/search?q=${encodeURIComponent(query)}&page=${page}&type=${type}`;
 
   if (sort)
-    url += `&sort=${sort}`;
+    searchPath += `&sort=${sort}`;
 
-  return fetchJson<InvidiousSearchResult[]>(url)
+  // Go through the same-origin proxy first (races instances server-side,
+  // avoids browser CORS / "Failed to fetch"). Direct instance is the fallback.
+  const fetchData = (): Promise<InvidiousSearchResult[]> =>
+    fetchJson<InvidiousSearchResult[]>(`/api/iv?path=${encodeURIComponent(searchPath)}`)
+      .then(data => {
+        if (Array.isArray(data)) return data;
+        throw new Error('Proxy returned no results');
+      })
+      .catch(() => fetchJson<InvidiousSearchResult[]>(`${api}${searchPath}`));
+
+  return fetchData()
     .then(data => {
       return data.filter(item => {
         if (item.type === 'video') {
