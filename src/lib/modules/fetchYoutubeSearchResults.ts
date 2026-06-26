@@ -80,6 +80,20 @@ export default async function(
   if (filter.startsWith('video_'))
     [type, sort] = filter.split('_');
 
+  // First page: try the YouTube Music backend (InnerTube, Google-direct, very
+  // reliable). Returns already-mapped results. Only for video/all searches.
+  if (page === 1 && (type === 'video' || type === 'all' || filter === 'all')) {
+    try {
+      const ytFilter = type === 'video' ? 'videos' : 'videos';
+      const res = await fetch(`/api/search?q=${encodeURIComponent(query)}&filter=${ytFilter}`);
+      if (res.ok) {
+        const json = await res.json();
+        if (Array.isArray(json.results) && json.results.length > 0)
+          return json.results as (YTStreamItem | YTListItem)[];
+      }
+    } catch { /* fall through to Invidious */ }
+  }
+
   let searchPath = `/api/v1/search?q=${encodeURIComponent(query)}&page=${page}&type=${type}`;
 
   if (sort)
