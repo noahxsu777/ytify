@@ -1,22 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Readable } from 'node:stream';
-
-const PIPED = [
-  'https://pipedapi.kavin.rocks',
-  'https://pipedapi.adminforge.de',
-  'https://api.piped.projectsegfau.lt',
-  'https://pipedapi.reallyaweso.me',
-  'https://pipedapi.darkness.services',
-];
-
-const INVIDIOUS = [
-  'https://inv.nadeko.net',
-  'https://invidious.jing.rocks',
-  'https://iv.datura.network',
-  'https://invidious.privacyredirect.com',
-  'https://invidious.nikkosphere.com',
-  'https://yt.omada.cafe',
-];
+import { getInstances } from '../src/backend/instances.js';
 
 const VR_CLIENT = {
   clientName: 'ANDROID_VR', clientVersion: '1.60.19',
@@ -45,7 +29,7 @@ async function viaInnertube(id: string): Promise<string | null> {
 
 // 2. Piped — audioStreams URLs are already proxied by the instance, so they
 //    play from any IP. Return one to redirect the browser to (no byte proxy).
-async function viaPiped(id: string): Promise<string | null> {
+async function viaPiped(id: string, PIPED: string[]): Promise<string | null> {
   for (const inst of PIPED) {
     try {
       const r = await fetch(`${inst}/streams/${id}`, { signal: AbortSignal.timeout(5000) });
@@ -60,7 +44,7 @@ async function viaPiped(id: string): Promise<string | null> {
 
 // 3. Invidious with local=true — proxies audio through the instance, plays
 //    cross-IP. Return URL to redirect to.
-async function viaInvidious(id: string): Promise<string | null> {
+async function viaInvidious(id: string, INVIDIOUS: string[]): Promise<string | null> {
   for (const inst of INVIDIOUS) {
     try {
       const r = await fetch(`${inst}/api/v1/videos/${id}?local=true`, { signal: AbortSignal.timeout(5000) });
@@ -88,9 +72,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   res.setHeader('Access-Control-Allow-Origin', '*');
 
+  const { iv: INVIDIOUS, pi: PIPED } = await getInstances();
+
   // Try proxied sources first (Piped/Invidious) — a simple redirect plays
   // them directly, no Vercel bandwidth, works cross-IP.
-  const proxied = (await viaPiped(id)) || (await viaInvidious(id));
+  const proxied = (await viaPiped(id, PIPED)) || (await viaInvidious(id, INVIDIOUS));
   if (proxied) {
     res.setHeader('Cache-Control', 'no-store');
     return res.redirect(302, proxied);

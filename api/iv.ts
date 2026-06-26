@@ -1,21 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-
-const INVIDIOUS = [
-  'https://inv.nadeko.net',
-  'https://invidious.jing.rocks',
-  'https://iv.datura.network',
-  'https://invidious.io.lol',
-  'https://inv.tux.pizza',
-  'https://invidious.privacyredirect.com',
-  'https://yt.omada.cafe',
-  'https://invidious.nikkosphere.com',
-];
-
-const PIPED = [
-  'https://pipedapi.kavin.rocks',
-  'https://pipedapi.adminforge.de',
-  'https://api.piped.projectsegfau.lt',
-];
+import { getInstances } from '../src/backend/instances.js';
 
 const tryFetch = (url: string, opts: RequestInit = {}) =>
   fetch(url, {
@@ -130,6 +114,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const videoId = videoIdMatch?.[1];
 
   res.setHeader('Access-Control-Allow-Origin', '*');
+
+  const { iv: INVIDIOUS, pi: PIPED } = await getInstances();
 
   // ── Video request ──
   // Get metadata from whatever source answers, then ALWAYS route audio through
