@@ -5,17 +5,19 @@ import { setListStore, setNavStore, setPlayerStore, navStore, t } from "@lib/sto
 import { config } from "@lib/utils";
 
 const CATEGORIES = [
-  { label: 'Pop', query: 'top pop hits 2024', color: '#FF5F1F' },
-  { label: 'Hip-Hop', query: 'hip hop hits 2024', color: '#a855f7' },
-  { label: 'Latin', query: 'latin hits 2024', color: '#f59e0b' },
-  { label: 'Rock', query: 'rock hits 2024', color: '#ef4444' },
-  { label: 'Electronic', query: 'electronic dance music 2024', color: '#06b6d4' },
-  { label: 'R&B', query: 'rnb soul hits 2024', color: '#84cc16' },
-  { label: 'Jazz', query: 'jazz classics', color: '#f97316' },
-  { label: 'Workout', query: 'workout motivation music 2024', color: '#ec4899' },
+  { label: 'Pop', query: 'top pop hits 2025', color: '#FF5F1F' },
+  { label: 'Hip-Hop', query: 'hip hop hits 2025', color: '#a855f7' },
+  { label: 'Latin', query: 'latin hits 2025', color: '#f59e0b' },
+  { label: 'Rock', query: 'rock hits 2025', color: '#ef4444' },
+  { label: 'Electronic', query: 'electronic dance 2025', color: '#06b6d4' },
+  { label: 'R&B', query: 'rnb soul hits 2025', color: '#84cc16' },
+  { label: 'Jazz', query: 'jazz classics best', color: '#f97316' },
+  { label: 'Workout', query: 'workout motivation 2025', color: '#ec4899' },
 ];
 
-function playItem(item: CollectionItem, contextId: string, contextSrc: Context) {
+type FeedItem = { id: string; title: string; author: string; duration: string; authorId: string };
+
+function playItem(item: CollectionItem | FeedItem, contextId: string, contextSrc: Context) {
   setPlayerStore('stream', {
     id: item.id,
     title: item.title,
@@ -32,7 +34,7 @@ function playItem(item: CollectionItem, contextId: string, contextSrc: Context) 
   player(item.id);
 }
 
-function SongCard(props: { item: CollectionItem; contextId: string; contextSrc: Context }) {
+function SongCard(props: { item: CollectionItem | FeedItem; contextId: string; contextSrc: Context }) {
   const img = () => generateImageUrl(props.item.id, 'mq', props.item.author?.endsWith('- Topic'));
   return (
     <div class="hub-card" onclick={() => playItem(props.item, props.contextId, props.contextSrc)}>
@@ -45,13 +47,13 @@ function SongCard(props: { item: CollectionItem; contextId: string; contextSrc: 
   );
 }
 
-function FeaturedCard(props: { item: CollectionItem; contextId: string; contextSrc: Context }) {
+function FeaturedCard(props: { item: CollectionItem | FeedItem; contextId: string; contextSrc: Context; label?: string }) {
   const img = () => generateImageUrl(props.item.id, '480', props.item.author?.endsWith('- Topic'));
   return (
     <div class="hub-featured" onclick={() => playItem(props.item, props.contextId, props.contextSrc)}>
       <img src={img()} alt={props.item.title} loading="lazy" />
       <div class="hub-featured-overlay">
-        <span class="hub-featured-label">Top Pick</span>
+        <span class="hub-featured-label">{props.label || 'Top Pick'}</span>
         <h3 class="hub-featured-title">{props.item.title}</h3>
         <p class="hub-featured-sub">{props.item.author?.replace(' - Topic', '')}</p>
       </div>
@@ -59,7 +61,7 @@ function FeaturedCard(props: { item: CollectionItem; contextId: string; contextS
   );
 }
 
-function GridCard(props: { item: CollectionItem; contextId: string; contextSrc: Context }) {
+function GridCard(props: { item: CollectionItem | FeedItem; contextId: string; contextSrc: Context }) {
   const img = () => generateImageUrl(props.item.id, 'mq', props.item.author?.endsWith('- Topic'));
   return (
     <div class="hub-grid-card" onclick={() => playItem(props.item, props.contextId, props.contextSrc)}>
@@ -72,18 +74,37 @@ function GridCard(props: { item: CollectionItem; contextId: string; contextSrc: 
   );
 }
 
+async function loadTrending(): Promise<FeedItem[]> {
+  try {
+    const res = await fetch('/api/search?q=trending+music+2025&filter=songs');
+    if (res.ok) {
+      const json = await res.json();
+      return (json.results || []).slice(0, 8).map((r: YTStreamItem) => ({
+        id: r.id,
+        title: r.title,
+        author: r.author || '',
+        duration: r.duration || '',
+        authorId: r.authorId || '',
+      }));
+    }
+  } catch { /* ignore */ }
+  return [];
+}
+
 export default function() {
-  const [subfeed, setSubfeed] = createSignal(drawer.subfeed || []);
-  const [isSubfeedLoading, setIsSubfeedLoading] = createSignal(false);
+  const [subfeed, setSubfeed] = createSignal<FeedItem[]>(drawer.subfeed as FeedItem[] || []);
+  const [trending, setTrending] = createSignal<FeedItem[]>([]);
+  const [isLoading, setIsLoading] = createSignal(true);
 
   onMount(() => {
-    if (!drawer.subfeed?.length) {
-      setIsSubfeedLoading(true);
-      updateSubfeed().then(() => {
-        setSubfeed(drawer.subfeed || []);
-        setIsSubfeedLoading(false);
-      });
-    }
+    // Load trending content and subfeed in parallel
+    Promise.all([
+      loadTrending().then(data => { if (data.length) setTrending(data); }),
+      (!drawer.subfeed?.length
+        ? updateSubfeed().then(() => setSubfeed(drawer.subfeed as FeedItem[] || []))
+        : Promise.resolve()
+      )
+    ]).finally(() => setIsLoading(false));
   });
 
   const tracksMap = getTracksMap();
@@ -97,22 +118,17 @@ export default function() {
     .sort((a, b) => (b.plays as number) - (a.plays as number))
     .slice(0, 6) as CollectionItem[];
 
-  function searchCategory(query: string) {
-    import('@lib/stores').then(({ setStore }) => {
-      setStore('homeView', 'Search');
-      import('@lib/utils').then(({ setConfig }) => {
-        setConfig('home', 'Search');
-      });
-      // populate the search with the query
-      setTimeout(() => {
-        const input = document.querySelector<HTMLInputElement>('#searchInput, input[type="search"], .search input');
-        if (input) {
-          input.value = query;
-          input.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-      }, 100);
-    });
+  function goToSearch(query: string) {
+    import('@lib/stores').then(({ setStore }) => setStore('homeView', 'Search'));
+    import('@lib/utils').then(({ setConfig }) => setConfig('home', 'Search'));
+    setTimeout(() => {
+      const input = document.querySelector<HTMLInputElement>('input[type="search"], .search input, #searchInput');
+      if (input) { input.value = query; input.dispatchEvent(new Event('input', { bubbles: true })); }
+    }, 150);
   }
+
+  // Pick the best featured item: subfeed first, then trending
+  const featuredItems = () => subfeed().length ? subfeed() : trending();
 
   return (
     <div class="hub">
@@ -121,43 +137,49 @@ export default function() {
       <Show when={recents().length > 0}>
         <section class="hub-section">
           <div class="hub-section-header">
-            <h2>{t('hub_recently_listened')}</h2>
+            <h2>Recently Played</h2>
             <button onclick={() => fetchCollection('history')}>See All</button>
           </div>
           <div class="hub-scroll">
             <For each={recents()}>
-              {item => <SongCard item={item} contextId={t('hub_recently_listened')} contextSrc="hub" />}
+              {item => <SongCard item={item} contextId="recently_played" contextSrc="hub" />}
             </For>
           </div>
         </section>
       </Show>
 
-      {/* Top Picks — subfeed */}
-      <Show when={subfeed().length > 0}>
+      {/* Top Picks / Trending — always loads something */}
+      <Show when={featuredItems().length > 0}>
         <section class="hub-section">
           <div class="hub-section-header">
             <h2>Top Picks for You</h2>
             <button onclick={() => {
-              setListStore({ name: 'Top Picks', list: subfeed() as CollectionItem[] });
+              const items = featuredItems().map(i => ({ ...i, duration: i.duration || '' }));
+              setListStore({ name: 'Top Picks', list: items as CollectionItem[] });
               setNavStore('list', 'state', true);
             }}>See All</button>
           </div>
-          <FeaturedCard item={subfeed()[0] as CollectionItem} contextId="subfeed" contextSrc="hub" />
-          <Show when={subfeed().length > 1}>
+          <FeaturedCard
+            item={featuredItems()[0]}
+            contextId="top_picks"
+            contextSrc="hub"
+            label="Playlist of the Day"
+          />
+          <Show when={featuredItems().length > 1}>
             <div class="hub-scroll" style={{ 'margin-top': '12px' }}>
-              <For each={subfeed().slice(1, 6)}>
-                {item => <SongCard item={item as CollectionItem} contextId="subfeed" contextSrc="hub" />}
+              <For each={featuredItems().slice(1, 7)}>
+                {item => <SongCard item={item} contextId="top_picks" contextSrc="hub" />}
               </For>
             </div>
           </Show>
         </section>
       </Show>
 
-      {/* Loading subfeed indicator */}
-      <Show when={isSubfeedLoading()}>
+      {/* Loading state */}
+      <Show when={isLoading() && !featuredItems().length}>
         <div class="hub-loading">
           <i class="ri-refresh-line loading" />
-          <p>Loading top picks…</p>
+          <p>Loading picks…</p>
         </div>
       </Show>
 
@@ -165,7 +187,7 @@ export default function() {
       <Show when={frequent().length > 0}>
         <section class="hub-section">
           <div class="hub-section-header">
-            <h2>{t('hub_frequently_played')}</h2>
+            <h2>Frequently Played</h2>
             <button onclick={() => {
               setListStore({ name: t('hub_frequently_played'), list: frequent() });
               setNavStore('list', 'state', true);
@@ -179,25 +201,21 @@ export default function() {
         </section>
       </Show>
 
-      {/* Discovery */}
-      <Show when={!!drawer.discovery?.length}>
+      {/* New Releases / Trending grid */}
+      <Show when={trending().length >= 4}>
         <section class="hub-section">
           <div class="hub-section-header">
-            <h2>{t('hub_discovery')}</h2>
-            <button onclick={() => {
-              setListStore({ name: t('hub_discovery'), list: drawer.discovery as CollectionItem[] });
-              setNavStore('list', 'state', true);
-            }}>See All</button>
+            <h2>New Releases</h2>
           </div>
-          <div class="hub-scroll">
-            <For each={drawer.discovery?.slice(0, 8)}>
-              {item => <SongCard item={item as CollectionItem} contextId={t('hub_discovery')} contextSrc="hub" />}
+          <div class="hub-grid">
+            <For each={trending().slice(0, 4)}>
+              {item => <GridCard item={item} contextId="new_releases" contextSrc="hub" />}
             </For>
           </div>
         </section>
       </Show>
 
-      {/* Discover by Genre — always visible */}
+      {/* Browse by Genre — always visible */}
       <section class="hub-section">
         <div class="hub-section-header">
           <h2>Browse by Genre</h2>
@@ -208,7 +226,7 @@ export default function() {
               <div
                 class="hub-genre-card"
                 style={{ '--genre-color': cat.color }}
-                onclick={() => searchCategory(cat.query)}
+                onclick={() => goToSearch(cat.query)}
               >
                 <span>{cat.label}</span>
               </div>
