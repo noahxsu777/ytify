@@ -17,17 +17,13 @@ footer {
   -webkit-backdrop-filter: blur(32px);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 
-  &:has(.miniplayer) {
-    --height: calc(var(--nav-h) + 76px + var(--safe));
-  }
-
   @media (orientation: landscape) {
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-bottom: none;
   }
 }
 
-/* Keep section content from hiding behind the fixed footer */
+/* Keep section content from hiding behind the fixed nav + player */
 main section {
   padding-bottom: calc(68px + 76px + env(safe-area-inset-bottom, 0px)) !important;
 }

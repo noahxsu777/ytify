@@ -96,6 +96,13 @@ createRoot(() => {
   let historyID: string | undefined = '';
   let historyTimeoutId = 0;
 
+  // Prefetch: warm the next track ~6s before the current one ends so playback
+  // continues without a noticeable loading gap.
+  const prefetchAudio = new Audio();
+  prefetchAudio.preload = 'auto';
+  prefetchAudio.muted = true;
+  let prefetchedFor = '';
+
   playerStore.audio.volume = playerStore.volume;
 
   playerStore.audio.onended = () => {
@@ -169,6 +176,22 @@ createRoot(() => {
 
 
     setPlayerStore('currentTime', seconds);
+
+    // Prefetch the next queued track shortly before this one ends
+    const remaining = fullDuration - audio.currentTime;
+    if (remaining > 0 && remaining <= 6 && queueStore.list.length) {
+      const nextId = queueStore.list[0].id;
+      if (nextId && prefetchedFor !== nextId) {
+        prefetchedFor = nextId;
+        // Warm the in-memory stream-data cache (resolves the fastest instance)
+        getStreamData(nextId, true).catch(() => { });
+        // Warm the stream proxy + buffer the first bytes in the browser
+        try {
+          prefetchAudio.src = `/api/stream?id=${nextId}`;
+          prefetchAudio.load();
+        } catch { /* ignore */ }
+      }
+    }
 
 
     // Immersive Mode

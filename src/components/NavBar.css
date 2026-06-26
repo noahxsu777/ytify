@@ -5,6 +5,9 @@ nav {
   height: 68px;
   padding-bottom: env(safe-area-inset-bottom, 0px);
   box-sizing: content-box; /* padding-bottom adds extra height for safe area */
+  gap: 8px; /* breathing room between buttons */
+  padding-left: 8px;
+  padding-right: 8px;
 
   .nav-item {
     display: flex;
@@ -13,6 +16,7 @@ nav {
     justify-content: center;
     gap: 3px;
     flex: 1;
+    border-radius: 14px;
     cursor: pointer;
     color: #71717a;
     transition: color 0.2s ease;

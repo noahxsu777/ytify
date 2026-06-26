@@ -37,10 +37,10 @@ export default function() {
           }
         </For>
       </main>
+      <Show when={!navStore.player.state && playerStore.playbackState !== 'none'}>
+        <MiniPlayer />
+      </Show >
       <footer>
-        <Show when={!navStore.player.state && playerStore.playbackState !== 'none'}>
-          <MiniPlayer />
-        </Show >
         <NavBar />
       </footer>
       <Show when={store.actionsMenu?.id}>

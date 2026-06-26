@@ -1,8 +1,13 @@
 .miniplayer {
   display: flex;
   align-items: center;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(68px + env(safe-area-inset-bottom, 0px)); /* sits above the nav */
+  z-index: 99;
   width: calc(100% - 24px);
-  margin: 8px 12px;
+  margin: 0 12px 8px;
   padding: 10px 12px;
   padding-bottom: 14px; /* room for progress bar */
   border-radius: 16px;
