@@ -66,18 +66,18 @@ header {
 
       button {
         font-family: 'Inter', sans-serif;
-        font-size: 12px;
-        font-weight: 600;
+        font-size: 11px;
+        font-weight: 700;
         color: #FF5F1F;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.1em;
         background: none;
         border: none;
         cursor: pointer;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        gap: 4px;
+        padding: 4px 8px;
+        border-radius: 6px;
+        transition: background 0.15s ease;
+        &:hover { background: rgba(255,95,31,0.1); }
 
         i { font-size: 16px; }
         &.loading i { animation: spinner 1s cubic-bezier(0.645,0.045,0.355,1) infinite; }
@@ -95,15 +95,15 @@ header {
 
     .hub-card {
       flex-shrink: 0;
-      width: 148px;
+      width: 130px;
       cursor: pointer;
       transition: transform 0.18s ease;
       &:active { transform: scale(0.94); }
 
       .hub-card-art {
         position: relative;
-        width: 148px;
-        height: 148px;
+        width: 130px;
+        height: 130px;
         border-radius: 14px;
         overflow: hidden;
         border: 1px solid rgba(255,255,255,0.08);

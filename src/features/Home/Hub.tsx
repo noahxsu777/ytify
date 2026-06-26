@@ -158,7 +158,7 @@ export default function() {
         <section class="hub-section">
           <div class="hub-section-header">
             <h2>Recently Played</h2>
-            <button onclick={() => fetchCollection('history')}>See All</button>
+            <button onclick={() => fetchCollection('history')}>SEE ALL</button>
           </div>
           <div class="hub-scroll">
             <For each={recents()}>
@@ -177,7 +177,7 @@ export default function() {
               const items = featuredItems().map(i => ({ ...i, duration: i.duration || '' }));
               setListStore({ name: 'Top Picks', list: items as CollectionItem[] });
               setNavStore('list', 'state', true);
-            }}>See All</button>
+            }}>SEE ALL</button>
           </div>
           <FeaturedCard
             item={featuredItems()[0]}
@@ -211,7 +211,7 @@ export default function() {
             <button onclick={() => {
               setListStore({ name: t('hub_frequently_played'), list: frequent() });
               setNavStore('list', 'state', true);
-            }}>See All</button>
+            }}>SEE ALL</button>
           </div>
           <div class="hub-grid">
             <For each={frequent().slice(0, 4)}>

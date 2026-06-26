@@ -4,141 +4,178 @@
   min-height: 100%;
   background: #000;
   color: #fff;
+  overflow-y: auto;
 
   header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 16px 8px;
+    padding: 20px 20px 12px;
+    position: sticky;
+    top: 0;
+    background: #000;
+    z-index: 10;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
 
     p {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 28px;
-      font-weight: 700;
+      font-size: 26px;
+      font-weight: 800;
       color: #fff;
       letter-spacing: -0.02em;
     }
 
     .ri-close-large-line {
-      font-size: 22px;
-      color: #fff;
+      font-size: 18px;
+      color: rgba(255,255,255,0.7);
       background: rgba(255,255,255,0.1);
       border-radius: 50%;
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      margin-right: 0;
-      margin-top: 0;
+      margin: 0;
       &:hover { background: rgba(255,255,255,0.18); }
     }
   }
 
   > div {
     flex: 1;
-    padding: 8px 0 32px;
+    padding: 8px 0 120px;
   }
 }
 
-/* iOS-style grouped settings */
+/* ── iOS-style groups ── */
 .settings-group {
-  margin: 20px 16px 0;
+  margin: 24px 16px 0;
 }
 
 .settings-group-label {
   font-family: 'Inter', sans-serif;
   font-size: 11px;
-  font-weight: 600;
-  color: #8e8e93;
+  font-weight: 700;
+  color: #636366;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   padding: 0 4px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .settings-group-body {
   background: #1c1c1e;
   border-radius: 12px;
   overflow: hidden;
+}
 
-  > span {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    padding: 13px 16px !important;
-    margin: 0 !important;
-    border-bottom: 1px solid rgba(255,255,255,0.07) !important;
-    width: 100% !important;
-    box-sizing: border-box;
-    cursor: pointer;
+/* ── Selector rows (span wrapper) ── */
+.settings-group-body > span {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 14px 16px !important;
+  margin: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  border-bottom: 1px solid rgba(255,255,255,0.07) !important;
 
-    &:last-child {
-      border-bottom: none !important;
-    }
+  &:last-child { border-bottom: none !important; }
+  &:hover { background: rgba(255,255,255,0.04) !important; }
 
-    &:hover {
-      background: rgba(255,255,255,0.05) !important;
-      border-radius: 0 !important;
-    }
+  label {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 400 !important;
+    color: #fff !important;
+    flex: 1;
+  }
 
-    label, > p, > span:first-child {
-      font-family: 'Inter', sans-serif;
-      font-size: 15px;
-      font-weight: 400;
-      color: #fff;
-    }
+  select {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 400 !important;
+    color: #636366 !important;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    padding: 0 !important;
+    max-width: 55% !important;
+    text-align: right !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    cursor: pointer !important;
 
-    select {
-      font-family: 'Inter', sans-serif;
-      font-size: 15px;
-      font-weight: 400;
-      color: #8e8e93;
-      background: transparent;
-      border: none;
-      outline: none;
-      padding: 0 !important;
-      max-width: 55%;
-      text-align: right;
-      appearance: none;
-      -webkit-appearance: none;
-      cursor: pointer;
+    option {
+      background: #1c1c1e !important;
+      color: #fff !important;
     }
   }
 }
 
-/* iOS toggle override */
-.settings-group-body > span input[type="checkbox"] {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 51px;
-  height: 31px;
-  border-radius: 15.5px;
-  background: #3a3a3c;
-  cursor: pointer;
-  position: relative;
-  flex-shrink: 0;
-  transition: background 0.25s ease;
+/* ── Toggle rows (div.toggleSwitch wrapper) ── */
+.settings-group-body .toggleSwitch {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 13px 16px !important;
+  margin: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+  background: transparent !important;
+  border-radius: 0 !important;
 
-  &::after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 27px;
-    height: 27px;
-    background: #fff;
-    border-radius: 50%;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-    transition: left 0.25s ease;
+  &:last-child { border-bottom: none !important; }
+  &:hover { background: rgba(255,255,255,0.04) !important; }
+
+  label {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 400 !important;
+    color: #fff !important;
+    width: auto !important;
+    flex: 1 !important;
+    cursor: pointer;
   }
 
-  &:checked {
-    background: #FF5F1F;
+  /* Hide the original span toggle, use input styled as iOS toggle */
+  span {
+    display: none !important;
+  }
+
+  input[type="checkbox"] {
+    display: block !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    width: 51px !important;
+    height: 31px !important;
+    border-radius: 16px !important;
+    background: #3a3a3c !important;
+    cursor: pointer !important;
+    position: relative !important;
+    flex-shrink: 0 !important;
+    border: none !important;
+    transition: background 0.25s ease !important;
+    margin: 0 !important;
+    padding: 0 !important;
 
     &::after {
-      left: 22px;
+      content: '' !important;
+      position: absolute !important;
+      top: 2px !important;
+      left: 2px !important;
+      width: 27px !important;
+      height: 27px !important;
+      background: #fff !important;
+      border-radius: 50% !important;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4) !important;
+      transition: left 0.25s ease !important;
+    }
+
+    &:checked {
+      background: #FF5F1F !important;
+      &::after { left: 22px !important; }
     }
   }
 }
