@@ -85,7 +85,7 @@ footer {
     0 -20px 60px rgba(0,0,0,0.6) !important;
 }
 
-/* ── Mini-player — liquid glass card ───────────────────── */
+/* ── Mini-player — liquid glass card (floats above the bottom nav) ── */
 .miniplayer {
   background: rgba(30,30,32,0.6) !important;
   backdrop-filter: var(--gl-blur-heavy) !important;
@@ -93,10 +93,15 @@ footer {
   border: 1px solid var(--gl-border) !important;
   border-top-color: var(--gl-border-top) !important;
   border-radius: 20px !important;
-  margin: 8px 10px !important;
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: calc(68px + env(safe-area-inset-bottom, 0px)) !important;
+  z-index: 99 !important;
+  width: calc(100% - 20px) !important;
+  margin: 0 10px 8px !important;
   padding: 10px 14px !important;
   box-shadow: var(--gl-shadow-sm) !important;
-  position: relative !important;
   overflow: hidden !important;
 
   /* Specular sheen */
