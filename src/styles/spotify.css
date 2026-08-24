@@ -195,49 +195,57 @@ nav {
 
 /* ── Full-screen Player ─────────────────────────────────── */
 #playerSection {
-  background: linear-gradient(180deg, rgba(30,20,10,0.9) 0%, rgba(5,5,5,0.98) 50%) !important;
+  background: linear-gradient(180deg, rgba(255,247,240,0.95) 0%, rgba(247,245,242,0.98) 50%) !important;
   backdrop-filter: blur(40px) !important;
   -webkit-backdrop-filter: blur(40px) !important;
+  color: var(--sp-text) !important;
 
   article img {
     border-radius: 20px !important;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.06) !important;
+    box-shadow: 0 20px 50px rgba(30,20,10,0.22), 0 0 0 1px rgba(0,0,0,0.05) !important;
   }
+
+  .mediaDetails a, .mediaDetails p { color: var(--sp-text) !important; }
+  .mediaDetails p { opacity: 0.6 !important; }
 
   .topShelf p {
     text-transform: uppercase !important; font-size: 11px !important;
-    letter-spacing: 0.1em !important; font-weight: 600 !important;
+    letter-spacing: 0.1em !important; font-weight: 700 !important;
     color: #8e8e93 !important; opacity: 1 !important;
   }
+  .topShelf i, .topShelf .ri-more-2-fill { color: var(--sp-text) !important; opacity: 0.7 !important; }
 
   .slider input[type=range] { accent-color: var(--sp-primary) !important; }
+  .slider div p { color: #6b6b72 !important; }
 
   .mainShelf #playButton {
-    background: rgba(255,255,255,0.95) !important;
-    color: #000 !important; border-radius: 50% !important;
+    background: #FF5F1F !important;
+    color: #fff !important; border-radius: 50% !important;
     padding: 16px !important;
-    box-shadow: 0 4px 20px rgba(255,255,255,0.25) !important;
+    box-shadow: 0 8px 24px rgba(255,95,31,0.35) !important;
     transition: transform 0.15s ease !important;
     &:hover { transform: scale(1.04) !important; }
   }
 
-  .mainShelf button:not(#playButton) { color: #fff !important; font-size: 26px !important; }
+  .mainShelf button:not(#playButton) { color: var(--sp-text) !important; font-size: 26px !important; opacity: 0.75 !important; }
 
   .bottomShelf i {
     color: #8e8e93 !important;
     &.on { color: var(--sp-primary) !important; background: transparent !important; }
-    &:hover { color: #fff !important; }
+    &:hover { color: var(--sp-text) !important; }
   }
+  .bottomShelf select, .bottomShelf #volumeChanger { color: var(--sp-text) !important; opacity: 0.8 !important; }
 
   .lyrics {
-    background: rgba(255,255,255,0.04) !important;
-    backdrop-filter: blur(20px) !important;
-    border: 1px solid rgba(255,255,255,0.07) !important;
+    background: rgba(255,255,255,0.6) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    border: 1px solid rgba(0,0,0,0.06) !important;
     border-radius: 20px !important;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset !important;
     p {
-      color: rgba(255,255,255,0.22) !important;
-      &.active { color: #fff !important; text-shadow: 0 0 20px rgba(255,255,255,0.3) !important; }
-      &.plain { color: rgba(255,255,255,0.55) !important; }
+      color: rgba(20,15,10,0.25) !important;
+      &.active { color: var(--sp-text) !important; text-shadow: none !important; }
+      &.plain { color: #6b6b72 !important; }
     }
   }
 }

@@ -171,7 +171,7 @@ export default function() {
           </div>
           <div class="hub-scroll">
             <For each={recents()}>
-              {item => <SongCard item={item} contextId="recently_played" contextSrc="hub" />}
+              {item => <SongCard item={item} contextId="Recently Played" contextSrc="hub" />}
             </For>
           </div>
         </section>
@@ -191,11 +191,11 @@ export default function() {
               setNavStore('list', 'state', true);
             }}>SEE ALL</button>
           </div>
-          <FeaturedCard item={featuredItems()[0]} contextId="top_picks" contextSrc="hub" label="Playlist of the Day" />
+          <FeaturedCard item={featuredItems()[0]} contextId="Top Picks" contextSrc="hub" label="Playlist of the Day" />
           <Show when={featuredItems().length > 1}>
             <div class="hub-scroll" style={{ 'margin-top': '14px' }}>
               <For each={featuredItems().slice(1, 8)}>
-                {item => <SongCard item={item} contextId="top_picks" contextSrc="hub" />}
+                {item => <SongCard item={item} contextId="Top Picks" contextSrc="hub" />}
               </For>
             </div>
           </Show>
@@ -236,7 +236,7 @@ export default function() {
           </div>
           <div class="hub-list">
             <For each={trending().slice(0, 5)}>
-              {(item, i) => <ListRow item={item} contextId="trending_now" contextSrc="hub" rank={i()} />}
+              {(item, i) => <ListRow item={item} contextId="Trending Now" contextSrc="hub" rank={i()} />}
             </For>
           </div>
         </section>

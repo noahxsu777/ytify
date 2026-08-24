@@ -3,7 +3,7 @@ import { getInstances } from '../src/backend/instances.js';
 
 const tryFetch = (url: string, opts: RequestInit = {}) =>
   fetch(url, {
-    signal: AbortSignal.timeout(3500),
+    signal: AbortSignal.timeout(3000),
     headers: { 'User-Agent': 'Mozilla/5.0' },
     ...opts,
   }).then(r => {
@@ -28,7 +28,7 @@ async function fetchInnertube(id: string): Promise<any> {
 
   const res = await fetch('https://youtubei.googleapis.com/youtubei/v1/player', {
     method: 'POST',
-    signal: AbortSignal.timeout(3500),
+    signal: AbortSignal.timeout(3000),
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ context: { client }, videoId: id, contentCheckOk: true, racyCheckOk: true }),
   });
