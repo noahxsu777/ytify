@@ -25,7 +25,9 @@
     margin-bottom: var(--size-4);
     position: sticky;
     top: calc(var(--size-9) - var(--border-size-2));
-    z-index: 5;
+    /* Must sit above the category tiles so the suggestions dropdown that
+       hangs out of this container isn't overlapped by them. */
+    z-index: 25;
     padding: calc(var(--gap) / 2) var(--gap);
     border: var(--border);
     border-radius: var(--inputround);
@@ -45,7 +47,7 @@
       width: 100%;
       outline: none;
       background: none;
-      color: none;
+      color: inherit;
       font-size: var(--font-size-1);
 
       &::-webkit-search-cancel-button {
@@ -110,6 +112,59 @@
       appearance: none;
       opacity: 0.5;
     }
+  }
+
+  /* ── Browse categories (shown when no query) ── */
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 8px;
+    padding-bottom: var(--size-4);
+  }
+
+  .category-card {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-end;
+    padding: 14px;
+    transition: transform 0.18s ease, filter 0.18s ease;
+    -webkit-tap-highlight-color: transparent;
+
+    &:active { transform: scale(0.96); filter: brightness(0.9); }
+
+    /* Glossy highlight */
+    &::before {
+      content: '';
+      position: absolute;
+      right: -18px;
+      top: -18px;
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.18);
+      pointer-events: none;
+    }
+
+    .cat-label {
+      position: relative;
+      z-index: 1;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: #fff;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .category-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .category-card .cat-label { font-size: 17px; }
   }
 
   .listItem {
