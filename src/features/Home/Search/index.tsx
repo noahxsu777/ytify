@@ -35,8 +35,8 @@ export default function() {
         <Filters />
       </form>
 
-      {/* Category grid — only shown when no query entered */}
-      <Show when={!searchStore.query}>
+      {/* Keep categories visible while typing; only hide once a search is in flight or has results. */}
+      <Show when={!searchStore.isLoading && searchStore.results.length === 0}>
         <div class="category-grid">
           {categories.map(cat => (
             <div

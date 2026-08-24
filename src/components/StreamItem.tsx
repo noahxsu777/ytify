@@ -64,8 +64,8 @@ export default function(data: {
 
 
 
-  const isAlbum = data.context?.id.startsWith('Album');
-  const isFromArtist = data.context?.id?.startsWith('Artist - ');
+  const isAlbum = Boolean(data.context?.id?.startsWith('Album'));
+  const isFromArtist = Boolean(data.context?.id?.startsWith('Artist - '));
   const isMusic = data.author?.endsWith('- Topic');
 
   if (config.loadImage && !isAlbum)

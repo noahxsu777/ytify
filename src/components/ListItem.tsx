@@ -31,14 +31,15 @@ export default function(data: {
         setListStore('thumbnail', data.thumbnail);
 
 
-        if (data.url.startsWith('/channel'))
-          getList(data.url.slice(9), 'channel');
-        else if (data.url.includes('MPREb'))
-          getList(data.url.split('/').pop()!, 'album')
-        else if (data.url.startsWith('/playlist')) {
-          getList(data.url.slice(10), 'playlist')
+        const href = data.url || '';
+        if (href.startsWith('/channel'))
+          getList(href.slice(9), 'channel');
+        else if (href.includes('MPREb'))
+          getList(href.split('/').pop()!, 'album')
+        else if (href.startsWith('/playlist')) {
+          getList(href.slice(10), 'playlist')
         }
-        else getList(data.url.slice(8), 'artist');
+        else if (href) getList(href.split('/').pop() || href, 'artist');
       }}
     >
       <Show when={config.loadImage}>

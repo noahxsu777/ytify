@@ -13,14 +13,18 @@ export default async function fetchSearchSuggestions(
     return fetchJson<{ suggestions: string[] }>(url, signal)
       .then(data => data.suggestions);
   } else {
-    const api = getApi(index);
-    const url = `${api}/api/v1/search/suggestions?q=${encodeURIComponent(text)}`;
-    
-    return fetchJson<{ suggestions: string[] }>(url, signal)
-      .then(data => data.suggestions)
+    const path = `/api/v1/search/suggestions?q=${encodeURIComponent(text)}`;
+    return fetchJson<{ suggestions: string[] }>(`/api/iv?path=${encodeURIComponent(path)}`, signal)
+      .then(data => Array.isArray(data?.suggestions) ? data.suggestions : [])
       .catch(e => {
-        if (index <= 0) throw e;
-        return fetchSearchSuggestions(text, signal, index - 1);
+        const api = getApi(index);
+        const url = `${api}/api/v1/search/suggestions?q=${encodeURIComponent(text)}`;
+        return fetchJson<{ suggestions: string[] }>(url, signal)
+          .then(data => data.suggestions || [])
+          .catch(() => {
+            if (index <= 0) throw e;
+            return fetchSearchSuggestions(text, signal, index - 1);
+          });
       });
   }
 };

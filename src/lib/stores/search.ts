@@ -106,18 +106,20 @@ export async function getSearchResults() {
       if (!isMusic) {
         setSearchStore('page', page + 1);
         const callback = async () => {
-          const moreData = await fetchYoutubeSearchResults(
-            store.invidious[store.invidious.length - 1],
-            query,
-            searchFilter,
-            searchStore.page
-          );
-          if (moreData) {
-            const existingIds = new Set(searchStore.results.map(item => 'id' in item ? item.id : item.url));
-            const uniqueMoreData = moreData.filter(item => !existingIds.has('id' in item ? item.id : item.url));
-            setSearchStore('results', [...searchStore.results, ...uniqueMoreData]);
-            setSearchStore('page', searchStore.page + 1);
-          }
+          try {
+            const moreData = await fetchYoutubeSearchResults(
+              store.invidious[store.invidious.length - 1],
+              query,
+              searchFilter,
+              searchStore.page
+            );
+            if (moreData) {
+              const existingIds = new Set(searchStore.results.map(item => 'id' in item ? item.id : (item as YTListItem).url));
+              const uniqueMoreData = moreData.filter(item => item && !existingIds.has('id' in item ? item.id : (item as YTListItem).url));
+              setSearchStore('results', [...searchStore.results, ...uniqueMoreData]);
+              setSearchStore('page', searchStore.page + 1);
+            }
+          } catch { /* keep whatever is already on screen */ }
         };
         setSearchStore('observer', setObserver(callback));
         if (data.length < 5) {

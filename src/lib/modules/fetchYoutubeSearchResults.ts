@@ -138,7 +138,7 @@ export default async function(
           return {
             title: channelItem.author,
             stats: `${numFormatter(channelItem.subCount)} subscribers`,
-            thumbnail: generateImageUrl(getThumbIdFromLink('https://' + channelItem.authorThumbnails[0].url), ''),
+            thumbnail: generateImageUrl(getThumbIdFromLink('https://' + (channelItem.authorThumbnails?.[0]?.url || '')), ''),
             uploaderData: channelItem.description,
             url: channelItem.authorUrl,
             type: 'channel',

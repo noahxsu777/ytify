@@ -59,7 +59,28 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
     } catch (e) {
       console.error('iv resolve failed', e);
-      return res.status(502).json({ error: 'All sources failed' });
+      // Don't 502 — the player still has /api/stream as a source.
+      res.setHeader('Cache-Control', 'no-store');
+      return res.status(200).json({
+        type: 'video',
+        title: '',
+        videoId,
+        author: '',
+        authorId: '',
+        authorUrl: '',
+        lengthSeconds: 0,
+        description: '',
+        viewCount: 0,
+        adaptiveFormats: [{
+          url: `/api/stream?id=${videoId}`,
+          type: 'audio/mp4; codecs="mp4a.40.2"',
+          bitrate: '128000',
+          container: 'mp4',
+          encoding: 'aac',
+        }],
+        formatStreams: [],
+        recommendedVideos: [],
+      });
     }
   }
 

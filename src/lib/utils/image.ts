@@ -10,6 +10,7 @@ export function generateImageUrl(
   res: string,
   music?: boolean
 ) {
+  if (!id) return '/logo192.png';
   const proxy = 'https://wsrv.nl?url=https://';
   let suffix = '';
   let prefix = '';

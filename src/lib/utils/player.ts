@@ -21,14 +21,6 @@ export async function player(id?: string, isRetry = false) {
       status: 'Loading Audio...'
     });
 
-  // Start the same-origin stream immediately — metadata can arrive later.
-  if (!enforceVideo) {
-    const audio = playerStore.audio;
-    audio.src = `/api/stream?id=${id}`;
-    audio.load();
-    audio.play().catch(() => { /* autoplay policy; user gesture retries via play button */ });
-  }
-
   if (!store.invidious.length)
     setStore('snackbar', 'No Instances are Available');
 
@@ -43,13 +35,13 @@ export async function player(id?: string, isRetry = false) {
       fullDuration: data.lengthSeconds
     });
   else {
-    // Metadata failed — keep the stream proxy playing instead of aborting.
-    if (playerStore.audio.src.includes('/api/stream'))
-      return;
-    setPlayerStore({
-      playbackState: 'loading',
-      status: 'Trying another source...'
-    });
+    // Still try the same-origin stream — don't show Playback failed.
+    if (!enforceVideo) {
+      const audio = playerStore.audio;
+      audio.src = `/api/stream?id=${id}&t=${Date.now()}`;
+      audio.load();
+      audio.play().catch(() => {});
+    }
     return;
   }
 
@@ -71,15 +63,9 @@ export async function player(id?: string, isRetry = false) {
         .sort((a, b) => (parseInt(a.bitrate) - parseInt(b.bitrate)))
     ));
 
-
-    // Always enqueue related videos so autoplay keeps going
     if (!enforceVideo)
       import('../modules/enqueueRelatedStreams')
         .then(mod => mod.default(invidiousData.recommendedVideos));
-
-
-
-  // related streams imported into discovery after 1min 40seconds, short streams are naturally filtered out
 
   if (config.discover)
     import('../modules/setDiscoveries')
@@ -90,5 +76,3 @@ export async function player(id?: string, isRetry = false) {
       });
 
 }
-
-
