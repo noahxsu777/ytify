@@ -4,7 +4,51 @@ import { getPlayableAudio } from '../src/backend/yt_player.js';
 
 export const config = { maxDuration: 60 };
 
+const IOS_UA = 'com.google.ios.youtube/20.11.6 (iPhone10,4; U; CPU iOS 16_7_7 like Mac OS X)';
+
+function parseRange(raw?: string): { start: number; end?: number } | null {
+  if (!raw) return null;
+  const m = raw.match(/bytes=(\d+)-(\d+)?/);
+  if (!m) return null;
+  return { start: parseInt(m[1], 10), end: m[2] !== undefined ? parseInt(m[2], 10) : undefined };
+}
+
+async function fetchUpstream(url: string, range?: string) {
+  const headers: Record<string, string> = {
+    'User-Agent': IOS_UA,
+    Accept: '*/*',
+  };
+  if (range) headers.Range = range;
+  let upstream = await fetch(url, { headers });
+  if (!upstream.ok && upstream.status !== 206) {
+    await new Promise((r) => setTimeout(r, 250));
+    upstream = await fetch(url, { headers });
+  }
+  return upstream;
+}
+
+async function pipeBody(upstream: Response, res: VercelResponse) {
+  if (!upstream.body) {
+    res.end();
+    return;
+  }
+  const nodeStream = Readable.fromWeb(upstream.body as any);
+  await new Promise<void>((resolve, reject) => {
+    nodeStream.on('error', reject);
+    res.on('close', () => { nodeStream.destroy(); resolve(); });
+    res.on('finish', () => resolve());
+    nodeStream.pipe(res);
+  });
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'Range');
+    res.setHeader('Access-Control-Expose-Headers', 'Content-Length, Content-Range, Accept-Ranges');
+    return res.status(204).end();
+  }
+
   const id = req.query.id as string;
   if (!id || !/^[a-zA-Z0-9_-]{11}$/.test(id)) {
     return res.status(400).json({ error: 'Invalid video id' });
@@ -22,45 +66,45 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(502).json({ error: 'No playable source found' });
   }
 
-  try {
-    // googlevideo 403s full-file and open-ended `bytes=0-` requests.
-    // Always send a bounded Range, even if the browser didn't.
-    const CHUNK = 512 * 1024;
-    const rawRange = Array.isArray(req.headers.range) ? req.headers.range[0] : req.headers.range;
-    const m = rawRange?.match(/bytes=(\d+)-(\d+)?/);
-    const start = m ? parseInt(m[1], 10) : 0;
-    const end = m?.[2] ? parseInt(m[2], 10) : start + CHUNK - 1;
-    const boundedRange = `bytes=${start}-${end}`;
+  const rawRange = Array.isArray(req.headers.range) ? req.headers.range[0] : req.headers.range;
+  const clientRange = parseRange(rawRange);
 
-    const headers = {
-      Range: boundedRange,
-      'User-Agent': 'com.google.ios.youtube/20.11.6 (iPhone10,4; U; CPU iOS 16_7_7 like Mac OS X)',
-      'Accept': '*/*' as const,
-    };
-    let upstream = await fetch(playable.url, { headers });
-    if (!upstream.ok && upstream.status !== 206) {
-      await new Promise((r) => setTimeout(r, 250));
-      upstream = await fetch(playable.url, { headers });
-    }
+  try {
+    // googlevideo throttles (or 403s) a bare GET, but serves `bytes=0-` quickly.
+    // If the browser did not send Range, still fetch the whole object that way
+    // and rewrite the response to 200 — <audio> treats an unsolicited 206 as
+    // a decode error ("Playback failed").
+    const rangeHeader = clientRange
+      ? (clientRange.end !== undefined
+        ? `bytes=${clientRange.start}-${clientRange.end}`
+        : `bytes=${clientRange.start}-`)
+      : 'bytes=0-';
+
+    const upstream = await fetchUpstream(playable.url, rangeHeader);
+
     if (!upstream.ok && upstream.status !== 206) {
       return res.status(502).json({ error: `Upstream ${upstream.status}` });
     }
-    res.status(upstream.status);
+
     res.setHeader('Content-Type', upstream.headers.get('content-type') || playable.mime);
     res.setHeader('Accept-Ranges', 'bytes');
     res.setHeader('Cache-Control', 'private, max-age=0');
+
     const len = upstream.headers.get('content-length');
-    if (len) res.setHeader('Content-Length', len);
     const cr = upstream.headers.get('content-range');
-    if (cr) res.setHeader('Content-Range', cr);
-    if (!upstream.body) return res.end();
-    const nodeStream = Readable.fromWeb(upstream.body as any);
-    await new Promise<void>((resolve, reject) => {
-      nodeStream.on('error', reject);
-      res.on('close', () => { nodeStream.destroy(); resolve(); });
-      res.on('finish', () => resolve());
-      nodeStream.pipe(res);
-    });
+
+    if (!clientRange) {
+      // Browser asked for the whole resource. Rewrite 206→200 and drop
+      // Content-Range so HTMLAudioElement can decode it.
+      res.status(200);
+      if (len) res.setHeader('Content-Length', len);
+    } else {
+      res.status(upstream.status);
+      if (len) res.setHeader('Content-Length', len);
+      if (cr) res.setHeader('Content-Range', cr);
+    }
+
+    await pipeBody(upstream, res);
   } catch (e) {
     console.error('pipe failed', e);
     if (!res.headersSent) {
