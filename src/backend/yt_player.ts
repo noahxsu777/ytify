@@ -137,3 +137,7 @@ export async function getPlayableAudio(id: string): Promise<Playable> {
 
   throw new Error(lastErr);
 }
+
+export function forgetPlayable(id: string) {
+  cache.delete(id);
+}

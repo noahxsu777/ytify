@@ -43,12 +43,13 @@ export async function player(id?: string, isRetry = false) {
       fullDuration: data.lengthSeconds
     });
   else {
-    const errorData = data as Record<'error' | 'message', string>;
+    // Metadata failed — keep the stream proxy playing instead of aborting.
+    if (playerStore.audio.src.includes('/api/stream'))
+      return;
     setPlayerStore({
-      playbackState: 'none',
-      status: errorData.message || errorData.error || 'Loading Audio Failed'
+      playbackState: 'loading',
+      status: 'Trying another source...'
     });
-    setStore('snackbar', playerStore.status);
     return;
   }
 

@@ -9,8 +9,18 @@ export default async function(
   const noOfBitrates = audioStreams.length;
 
   if (!noOfBitrates) {
-    setPlayerStore('status', t('player_audiostreams_null'));
-    setPlayerStore('playbackState', 'none');
+    const id = playerStore.stream.id;
+    if (id && !prefetchNode) {
+      const audio = playerStore.audio;
+      if (!audio.src.includes('/api/stream')) {
+        audio.src = `/api/stream?id=${id}`;
+        audio.load();
+        audio.play().catch(() => {});
+      }
+      setPlayerStore('status', t('player_audiostreams_setup'));
+      return;
+    }
+    setPlayerStore('status', t('player_audiostreams_setup'));
     return;
   }
 
@@ -27,8 +37,7 @@ export default async function(
   const stream = await preferredStream(handleXtags(audioStreams));
   const url = sameOrigin || stream?.url;
   if (!url) {
-    setPlayerStore('status', t('player_audiostreams_null'));
-    setPlayerStore('playbackState', 'none');
+    if (id) audio.src = `/api/stream?id=${id}`;
     return;
   }
   audio.src = proxyHandler(url, Boolean(prefetchNode));
