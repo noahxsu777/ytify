@@ -83,5 +83,57 @@ export async function getPlayableAudio(id: string): Promise<Playable> {
     }
   }
 
+  // Second option: raw ANDROID_VR InnerTube (the path that worked before youtubei.js)
+  try {
+    const r = await fetch('https://youtubei.googleapis.com/youtubei/v1/player', {
+      method: 'POST',
+      signal: AbortSignal.timeout(5000),
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': 'com.google.android.apps.youtube.vr/1.60.19 (Linux; U; Android 12; Quest 3) gzip',
+      },
+      body: JSON.stringify({
+        context: {
+          client: {
+            clientName: 'ANDROID_VR',
+            clientVersion: '1.60.19',
+            deviceMake: 'Oculus',
+            deviceModel: 'Quest 3',
+            androidSdkVersion: 32,
+            osName: 'Android',
+            osVersion: '12',
+            hl: 'en',
+            gl: 'US',
+          },
+        },
+        videoId: id,
+        contentCheckOk: true,
+        racyCheckOk: true,
+      }),
+    });
+    if (r.ok) {
+      const d = await r.json();
+      const fmt = pickAudio(
+        (d?.streamingData?.adaptiveFormats || []).map((f: any) => ({
+          ...f,
+          mime_type: f.mimeType || f.mime_type,
+        }))
+      );
+      if (fmt?.url) {
+        const data: Playable = {
+          url: fmt.url,
+          mime: fmt.mime_type || 'audio/mp4',
+          title: d?.videoDetails?.title || '',
+          author: d?.videoDetails?.author || '',
+          authorId: d?.videoDetails?.channelId || '',
+          lengthSeconds: parseInt(d?.videoDetails?.lengthSeconds || '0', 10),
+          itag: fmt.itag || 140,
+        };
+        cache.set(id, { data, ts: Date.now() });
+        return data;
+      }
+    }
+  } catch { /* fall through */ }
+
   throw new Error(lastErr);
 }
