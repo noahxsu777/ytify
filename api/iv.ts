@@ -28,8 +28,11 @@ async function fetchInnertube(id: string): Promise<any> {
 
   const res = await fetch('https://youtubei.googleapis.com/youtubei/v1/player', {
     method: 'POST',
-    signal: AbortSignal.timeout(3000),
-    headers: { 'Content-Type': 'application/json' },
+    signal: AbortSignal.timeout(5000),
+    headers: {
+      'Content-Type': 'application/json',
+      'User-Agent': 'com.google.android.apps.youtube.vr/1.60.19 (Linux; U; Android 12; Quest 3) gzip',
+    },
     body: JSON.stringify({ context: { client }, videoId: id, contentCheckOk: true, racyCheckOk: true }),
   });
   if (!res.ok) throw new Error(`innertube ${res.status}`);
@@ -69,31 +72,6 @@ function innertubeToInvidious(data: any, id: string, formats: any[]): any {
   };
 }
 
-/* ── Piped → Invidious shape ── */
-function pipedToInvidious(piped: any, id: string): any {
-  const audioFormats = (piped.audioStreams || []).map((s: any) => ({
-    url: s.url, type: s.mimeType || 'audio/webm;codecs=opus',
-    bitrate: String(s.bitrate || 0), container: s.format || 'webm',
-    audioQuality: s.quality, audioSampleRate: String(s.audioSampleRate || 44100), audioChannels: 2,
-  }));
-  const videoFormats = (piped.videoStreams || []).map((s: any) => ({
-    url: s.url, type: s.mimeType || 'video/mp4',
-    bitrate: String(s.bitrate || 0), quality: s.quality || '360p', container: s.format || 'mp4',
-  }));
-  return {
-    type: 'video', title: piped.title || '', videoId: id,
-    author: piped.uploader || '', authorId: piped.uploaderUrl?.split('/').pop() || '',
-    authorUrl: piped.uploaderUrl || '', lengthSeconds: piped.duration || 0,
-    description: piped.description || '', viewCount: piped.views || 0,
-    adaptiveFormats: [...audioFormats, ...videoFormats], formatStreams: [],
-    recommendedVideos: (piped.relatedStreams || []).slice(0, 20).map((r: any) => ({
-      videoId: r.url?.split('=').pop() || '', title: r.title || '',
-      author: r.uploaderName || '', authorId: r.uploaderUrl?.split('/').pop() || '',
-      viewCountText: String(r.views || 0), lengthSeconds: r.duration || 0,
-    })),
-  };
-}
-
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const path = req.query.path as string;
   if (!path || !path.startsWith('/api/v1/')) {
@@ -115,65 +93,43 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   res.setHeader('Access-Control-Allow-Origin', '*');
 
-  const { iv: INVIDIOUS, pi: PIPED } = getInstances();
+  const { iv: INVIDIOUS } = getInstances();
 
   // ── Video request ──
-  // Race Piped + Invidious first (directly playable, one hop). InnerTube is
-  // a fallback because its URLs are IP-locked and need /api/stream.
+  // Metadata from InnerTube; the browser always plays via same-origin /api/stream.
   if (videoId) {
-    const hasPlayableAudio = (d: any) =>
-      Array.isArray(d?.adaptiveFormats) &&
-      d.adaptiveFormats.some((f: any) => (f.type || '').startsWith('audio') && /^https?:\/\//.test(f.url || ''));
+    const streamOnly = (extra: Record<string, unknown> = {}) => ({
+      type: 'video',
+      title: '',
+      videoId,
+      author: '',
+      authorId: '',
+      authorUrl: '',
+      lengthSeconds: 0,
+      description: '',
+      viewCount: 0,
+      adaptiveFormats: [{
+        url: `/api/stream?id=${videoId}`,
+        type: 'audio/mp4; codecs="mp4a.40.2"',
+        bitrate: '128000',
+        container: 'mp4',
+        encoding: 'aac',
+      }],
+      formatStreams: [],
+      recommendedVideos: [],
+      ...extra,
+    });
 
-    // Race ONLY sources that return a URL the browser can play in one hop.
-    // InnerTube is usually the first to *respond*, but its googlevideo URLs
-    // are IP-locked to this server — using it as a winner forces a second
-    // serverless round-trip through /api/stream and is the slower path.
-    const attempts: Promise<any>[] = [
-      ...PIPED.map(inst =>
-        tryFetch(`${inst}/streams/${videoId}`).then(d => {
-          const data = pipedToInvidious(d, videoId);
-          if (!hasPlayableAudio(data)) throw new Error('no audio');
-          return data;
-        })
-      ),
-      ...INVIDIOUS.slice(0, 4).map(inst =>
-        tryFetch(`${inst}/api/v1/videos/${videoId}?local=true`).then(d => {
-          d.adaptiveFormats = (d.adaptiveFormats || []).map((f: any) => ({
-            ...f, url: f.url?.startsWith('/') ? inst + f.url : f.url,
-          }));
-          if (!hasPlayableAudio(d)) throw new Error('no audio');
-          return d;
-        })
-      ),
-    ];
-
-    let winner = await Promise.any(attempts).catch(() => null);
-
-    if (!winner) {
-      try {
-        const d = await fetchInnertube(videoId);
-        d.adaptiveFormats = [{
-          url: `/api/stream?id=${videoId}`,
-          type: 'audio/webm; codecs="opus"',
-          bitrate: '128000',
-          container: 'webm',
-          audioQuality: 'AUDIO_QUALITY_MEDIUM',
-          audioSampleRate: '48000',
-          audioChannels: 2,
-          encoding: 'opus',
-        }];
-        d.formatStreams = [];
-        winner = d;
-      } catch { /* all sources failed */ }
+    try {
+      const d = await fetchInnertube(videoId);
+      d.adaptiveFormats = streamOnly().adaptiveFormats;
+      d.formatStreams = [];
+      res.setHeader('Cache-Control', 's-maxage=120, stale-while-revalidate=600');
+      return res.status(200).json(d);
+    } catch {
+      res.setHeader('Cache-Control', 'no-store');
+      return res.status(200).json(streamOnly());
     }
-
-    if (!winner || !('lengthSeconds' in winner)) {
-      return res.status(502).json({ error: 'All sources failed' });
-    }
-
-    res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=3600');
-    return res.status(200).json(winner);
   }
 
   // ── Search / channels: race Invidious instances ──

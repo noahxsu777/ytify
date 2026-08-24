@@ -3,7 +3,7 @@ import { createStore } from "solid-js/store";
 import { addToCollection, config, cssVar, player, themer } from "@lib/utils";
 import { navStore, params, updateParam } from "./navigation";
 import { addToQueue, queueStore, setQueueStore } from "./queue";
-import audioErrorHandler from "@lib/modules/audioErrorHandler";
+import audioErrorHandler, { clearStreamRetry } from "@lib/modules/audioErrorHandler";
 import { store } from "./app";
 import getStreamData from "../modules/getStreamData";
 
@@ -122,6 +122,7 @@ createRoot(() => {
   }
 
   playerStore.audio.onplaying = () => {
+    clearStreamRetry(playerStore.stream.id);
     setPlayerStore('playbackState', 'playing');
     const { stream } = playerStore;
     const { id } = stream;
@@ -155,9 +156,11 @@ createRoot(() => {
   }, 500);
 
   playerStore.audio.onloadstart = () => {
-    setPlayerStore('playbackState', 'paused');
+    setPlayerStore('playbackState', 'loading');
     setPlayerStore('status', '');
-    if (isPlayable) playerStore.audio.play();
+    playerStore.audio.play().catch(() => {
+      if (isPlayable) playerStore.audio.play().catch(() => {});
+    });
 
     historyID = playerStore.stream.id;
     clearTimeout(historyTimeoutId);

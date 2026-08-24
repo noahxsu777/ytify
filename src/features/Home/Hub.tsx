@@ -4,6 +4,19 @@ import { fetchCollection, getCollection, getTracksMap, drawer, generateImageUrl,
 import { setListStore, setNavStore, setPlayerStore, navStore, t } from "@lib/stores";
 import { config } from "@lib/utils";
 
+type FeedItem = { id: string; title: string; author: string; duration: string; authorId: string };
+
+const EDITORIAL: FeedItem[] = [
+  { id: 'JGwWNGJdvx8', title: 'Shape of You', author: 'Ed Sheeran', duration: '4:23', authorId: '' },
+  { id: 'kJQP7kiw5Fk', title: 'Despacito', author: 'Luis Fonsi', duration: '4:41', authorId: '' },
+  { id: 'OPf0YbXqDm0', title: 'Uptown Funk', author: 'Mark Ronson', duration: '4:30', authorId: '' },
+  { id: 'YQHsXMglC9A', title: 'Hello', author: 'Adele', duration: '6:07', authorId: '' },
+  { id: '2Vv-BfVoq4g', title: 'Perfect', author: 'Ed Sheeran', duration: '4:39', authorId: '' },
+  { id: 'hT_nvWreIhg', title: 'Counting Stars', author: 'OneRepublic', duration: '4:17', authorId: '' },
+  { id: 'fJ9rUzIMcZQ', title: 'Bohemian Rhapsody', author: 'Queen', duration: '5:55', authorId: '' },
+  { id: '09R8_2nJtjg', title: 'Sugar', author: 'Maroon 5', duration: '3:55', authorId: '' },
+];
+
 const CATEGORIES = [
   { label: 'Pop', query: 'top pop hits 2025', color: '#FF5F1F' },
   { label: 'Hip-Hop', query: 'hip hop hits 2025', color: '#a855f7' },
@@ -14,8 +27,6 @@ const CATEGORIES = [
   { label: 'Jazz', query: 'jazz classics best', color: '#f97316' },
   { label: 'Workout', query: 'workout motivation 2025', color: '#ec4899' },
 ];
-
-type FeedItem = { id: string; title: string; author: string; duration: string; authorId: string };
 
 function greeting() {
   const h = new Date().getHours();
@@ -97,31 +108,13 @@ function ListRow(props: { item: CollectionItem | FeedItem; contextId: string; co
   );
 }
 
-async function loadTrending(): Promise<FeedItem[]> {
-  try {
-    const res = await fetch('/api/search?q=trending+music+2025&filter=songs');
-    if (res.ok) {
-      const json = await res.json();
-      return (json.results || []).slice(0, 8).map((r: YTStreamItem) => ({
-        id: r.id,
-        title: r.title,
-        author: r.author || '',
-        duration: r.duration || '',
-        authorId: r.authorId || '',
-      }));
-    }
-  } catch { /* ignore */ }
-  return [];
-}
-
 export default function() {
   const [subfeed, setSubfeed] = createSignal<FeedItem[]>(drawer.subfeed as FeedItem[] || []);
-  const [trending, setTrending] = createSignal<FeedItem[]>([]);
+  const trending = () => EDITORIAL;
   const [isLoading, setIsLoading] = createSignal(true);
 
   onMount(() => {
     Promise.all([
-      loadTrending().then(data => { if (data.length) setTrending(data); }),
       (!drawer.subfeed?.length
         ? updateSubfeed().then(() => setSubfeed(drawer.subfeed as FeedItem[] || []))
         : Promise.resolve()
@@ -182,8 +175,8 @@ export default function() {
         <section class="hub-section">
           <div class="hub-section-header">
             <div class="hub-section-titles">
-              <h2>Mixes Inspired By You</h2>
-              <p class="hub-section-subtitle">Discover new tracks similar to your favorites</p>
+              <h2>Made for you</h2>
+              <p class="hub-section-subtitle">Mixes and tracks to start with</p>
             </div>
             <button onclick={() => {
               const items = featuredItems().map(i => ({ ...i, duration: i.duration || '' }));

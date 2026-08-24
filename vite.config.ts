@@ -7,6 +7,7 @@ import OpenProps from 'open-props';
 import { resolve } from 'path';
 import { readdirSync } from 'fs';
 import path from 'path';
+import type { IncomingMessage, ServerResponse } from 'node:http';
 
 
 export default defineConfig(({ command }) => ({
@@ -26,6 +27,7 @@ export default defineConfig(({ command }) => ({
   },
   plugins: [
     solidPlugin(),
+    localVercelApi(),
     injectEruda(command === 'serve'),
     VitePWA({
       registerType: 'autoUpdate',
@@ -96,8 +98,8 @@ export default defineConfig(({ command }) => ({
         ],
         "start_url": "/",
         "display": "standalone",
-        "theme_color": "#000000",
-        "background_color": "#000000",
+        "theme_color": "#F2F2F7",
+        "background_color": "#F2F2F7",
         "share_target": {
           "action": "/",
           "method": "GET",
@@ -122,6 +124,61 @@ export default defineConfig(({ command }) => ({
   }
 }));
 
+
+const API_ROUTES = ['iv', 'stream', 'search', 'album', 'artists', 'suggestions', 'tracks', 'subfeed'];
+
+function decorateVercel(req: IncomingMessage, res: ServerResponse) {
+  const host = req.headers.host || 'localhost';
+  const url = new URL(req.url || '/', `http://${host}`);
+  (req as any).query = Object.fromEntries(url.searchParams.entries());
+  (res as any).status = (code: number) => {
+    res.statusCode = code;
+    return res;
+  };
+  (res as any).json = (body: unknown) => {
+    if (!res.getHeader('Content-Type'))
+      res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(body));
+    return res;
+  };
+  (res as any).redirect = (status: number | string, location?: string) => {
+    if (typeof status === 'string') {
+      location = status;
+      status = 302;
+    }
+    res.statusCode = status as number;
+    res.setHeader('Location', location || '/');
+    res.end();
+    return res;
+  };
+}
+
+function localVercelApi(): PluginOption {
+  return {
+    name: 'local-vercel-api',
+    configureServer(server) {
+      server.middlewares.use(async (req, res, next) => {
+        const pathname = (req.url || '').split('?')[0].replace(/\/$/, '');
+        if (!pathname.startsWith('/api/')) return next();
+        const name = pathname.slice(5);
+        if (!API_ROUTES.includes(name)) return next();
+        try {
+          decorateVercel(req, res);
+          const mod = await server.ssrLoadModule(`/api/${name}.ts`);
+          await mod.default(req, res);
+        } catch (e) {
+          const err = e instanceof Error ? (e.stack || e.message) : String(e);
+          console.error('[api]', name, err);
+          if (!res.headersSent) {
+            res.statusCode = 500;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({ error: 'API handler failed' }));
+          }
+        }
+      });
+    },
+  };
+}
 
 const injectEruda = (serve: boolean) => serve ? (<PluginOption>{
   name: 'erudaInjector',

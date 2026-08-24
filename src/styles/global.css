@@ -9,18 +9,18 @@
 :root {
   --source: oklch(72% 0.18 12);
   --schemeMultiplier: 0.9;
-  --bg: #000000;
-  --text: #f5f5f7;
+  --bg: #F2F2F7;
+  --text: #1C1C1E;
   --accent: #FF2D55;
   --accentHover: #ff4d6d;
-  --sidebar: #000;
-  --card: #1c1c1e;
-  --cardHover: #2c2c2e;
+  --sidebar: #fff;
+  --card: #ffffff;
+  --cardHover: #f7f7f8;
   --chroma: 0;
-  --scheme: #1c1c1e;
-  --onBg: rgba(255,255,255,0.08);
-  --onBg2: rgba(255,255,255,0.14);
-  --blurMix: rgba(28,28,30,0.72);
+  --scheme: #ffffff;
+  --onBg: rgba(0,0,0,0.04);
+  --onBg2: rgba(0,0,0,0.08);
+  --blurMix: rgba(255,255,255,0.72);
   --text2: #FF2D55;
   --gap: var(--size-fluid-2);
   --borderColor: rgba(255,255,255,0.16);
@@ -30,7 +30,7 @@
   --player-bg: none;
   --player-bp: 0 0;
   --landscapeSections: 2;
-  --trueBg: #000000;
+  --trueBg: #F2F2F7;
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", system-ui, sans-serif;
 }
 
@@ -41,7 +41,7 @@
 html {
   height: 100dvh;
   background: var(--trueBg);
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {

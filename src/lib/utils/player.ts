@@ -21,6 +21,13 @@ export async function player(id?: string, isRetry = false) {
       status: 'Loading Audio...'
     });
 
+  // Start the same-origin stream immediately — metadata can arrive later.
+  if (!enforceVideo) {
+    const audio = playerStore.audio;
+    audio.src = `/api/stream?id=${id}`;
+    audio.load();
+    audio.play().catch(() => { /* autoplay policy; user gesture retries via play button */ });
+  }
 
   if (!store.invidious.length)
     setStore('snackbar', 'No Instances are Available');

@@ -19,6 +19,6 @@ footer > * {
 
 /* Keep section content from hiding behind the floating tab + mini-player */
 main section {
-  padding-bottom: calc(150px + env(safe-area-inset-bottom, 0px)) !important;
+  padding-bottom: calc(210px + env(safe-area-inset-bottom, 0px)) !important;
   -webkit-overflow-scrolling: touch;
 }

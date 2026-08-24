@@ -1,38 +1,34 @@
 /* ============================================================
-   SonicBoom — Deezer iOS + iOS 27 Liquid Glass
+   SonicBoom — iOS 27 Liquid Glass (light) + Deezer layout
    ============================================================ */
 
 :root {
   --gl-blur:        blur(40px) saturate(180%);
   --gl-blur-heavy:  blur(50px) saturate(190%);
-  --gl-bg:          rgba(44, 44, 46, 0.72);
-  --gl-bg-light:    rgba(255, 255, 255, 0.08);
-  --gl-border:      rgba(255, 255, 255, 0.18);
-  --gl-border-top:  rgba(255, 255, 255, 0.32);
-  --gl-shadow:      0 1px 0 rgba(255,255,255,0.22) inset,
-                    0 12px 32px rgba(0,0,0,0.4);
-  --gl-shadow-sm:   0 1px 0 rgba(255,255,255,0.18) inset,
-                    0 6px 16px rgba(0,0,0,0.28);
+  --gl-bg:          rgba(255, 255, 255, 0.78);
+  --gl-border:      rgba(0, 0, 0, 0.08);
+  --gl-border-top:  rgba(255, 255, 255, 0.9);
+  --gl-shadow:      0 1px 0 rgba(255,255,255,0.8) inset,
+                    0 10px 28px rgba(15, 12, 20, 0.10);
   --gl-radius:      22px;
-  --gl-radius-sm:   14px;
 
   --sp-primary:     #FF2D55;
-  --sp-bg:          #000000;
-  --sp-text:        #f5f5f7;
-  --sp-text-dim:    rgba(235, 235, 245, 0.6);
-  --sp-surface:     rgba(255, 255, 255, 0.08);
-  --sp-elevated:    #1c1c1e;
+  --sp-bg:          #F2F2F7;
+  --sp-text:        #1C1C1E;
+  --sp-text-dim:    #6C6C70;
+  --sp-surface:     #ffffff;
+  --sp-elevated:    #ffffff;
 
-  --bg:          var(--sp-bg)         !important;
-  --trueBg:      var(--sp-bg)         !important;
-  --text:        var(--sp-text)       !important;
-  --text2:       var(--sp-primary)    !important;
-  --onBg:        rgba(255,255,255,0.08) !important;
-  --onBg2:       rgba(255,255,255,0.14) !important;
-  --scheme:      #1c1c1e              !important;
-  --borderColor: rgba(255,255,255,0.16) !important;
-  --roundness:   1.25rem              !important;
-  --chroma:      0                    !important;
+  --bg:          var(--sp-bg)      !important;
+  --trueBg:      var(--sp-bg)      !important;
+  --text:        var(--sp-text)    !important;
+  --text2:       var(--sp-primary) !important;
+  --onBg:        rgba(0,0,0,0.04)  !important;
+  --onBg2:       rgba(0,0,0,0.08)  !important;
+  --scheme:      #ffffff           !important;
+  --borderColor: rgba(0,0,0,0.08)  !important;
+  --roundness:   1.25rem           !important;
+  --chroma:      0                 !important;
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
           "Helvetica Neue", system-ui, sans-serif !important;
 }
@@ -48,8 +44,8 @@ body::before {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(255,45,85,0.16) 0%, transparent 58%),
-    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(162,56,255,0.10) 0%, transparent 60%);
+    radial-gradient(ellipse 90% 50% at 10% -10%, rgba(255,45,85,0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 40% at 100% 100%, rgba(162,56,255,0.08) 0%, transparent 50%);
   pointer-events: none;
   z-index: 0;
 }
@@ -70,7 +66,6 @@ main {
   }
 }
 
-/* ── Footer: floating Liquid Glass tab bar ── */
 footer {
   background: transparent !important;
   border: none !important;
@@ -81,28 +76,29 @@ nav {
   background: var(--gl-bg) !important;
   backdrop-filter: var(--gl-blur) !important;
   -webkit-backdrop-filter: var(--gl-blur) !important;
+  border: 0.5px solid var(--gl-border) !important;
+  box-shadow: var(--gl-shadow) !important;
 }
 
 nav .nav-item {
-  color: rgba(235, 235, 245, 0.55) !important;
+  color: #8E8E93 !important;
   font-family: var(--font) !important;
   text-transform: none !important;
   letter-spacing: 0 !important;
   font-size: 10px !important;
   font-weight: 510 !important;
 
-  .ms { color: inherit !important; }
+  .ms { color: inherit !important; background: none !important; }
 
   &.on {
-    color: #fff !important;
+    color: var(--sp-primary) !important;
     .ms {
       color: #fff !important;
-      background: rgba(0, 0, 0, 0.45) !important;
+      background: var(--sp-primary) !important;
     }
   }
 }
 
-/* ── Mini-player: iOS Music accessory ── */
 .miniplayer {
   background: var(--gl-bg) !important;
   backdrop-filter: var(--gl-blur) !important;
@@ -123,25 +119,25 @@ nav .nav-item {
   }
 
   #playButton {
-    background: #fff !important;
-    color: #000 !important;
-    box-shadow: none !important;
+    background: var(--sp-primary) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(255,45,85,0.35) !important;
   }
 
   button:not(#playButton), i { color: var(--sp-text) !important; }
 
   progress::-webkit-progress-value { background: var(--sp-primary) !important; }
   progress::-moz-progress-bar { background: var(--sp-primary) !important; }
+  progress, progress::-webkit-progress-bar { background: rgba(0,0,0,0.08) !important; }
 }
 
-/* ── Full-screen now playing ── */
 #playerSection {
-  background: linear-gradient(180deg, #1c1c1e 0%, #000 55%) !important;
+  background: linear-gradient(180deg, #fff 0%, #F2F2F7 55%) !important;
   color: var(--sp-text) !important;
 
   article img {
-    border-radius: 16px !important;
-    box-shadow: 0 24px 60px rgba(0,0,0,0.55) !important;
+    border-radius: 18px !important;
+    box-shadow: 0 20px 50px rgba(20,15,30,0.18) !important;
   }
 
   .mediaDetails a, .mediaDetails p { color: var(--sp-text) !important; }
@@ -153,17 +149,16 @@ nav .nav-item {
     letter-spacing: 0.12em !important;
     font-weight: 600 !important;
     color: var(--sp-text-dim) !important;
-    opacity: 1 !important;
   }
-  .topShelf i, .topShelf .ri-more-2-fill { color: var(--sp-text) !important; opacity: 0.85 !important; }
+  .topShelf i, .topShelf .ri-more-2-fill { color: var(--sp-text) !important; }
 
   .slider input[type=range] { accent-color: var(--sp-primary) !important; }
   .slider div p { color: var(--sp-text-dim) !important; }
 
   .mainShelf #playButton {
-    background: #fff !important;
-    color: #000 !important;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.35) !important;
+    background: var(--sp-primary) !important;
+    color: #fff !important;
+    box-shadow: 0 8px 24px rgba(255,45,85,0.35) !important;
   }
   .mainShelf button:not(#playButton) { color: var(--sp-text) !important; opacity: 0.9 !important; }
 
@@ -173,53 +168,50 @@ nav .nav-item {
   }
 
   .lyrics {
-    background: rgba(44,44,46,0.55) !important;
+    background: rgba(255,255,255,0.72) !important;
     backdrop-filter: blur(24px) saturate(180%) !important;
     border: 0.5px solid var(--gl-border) !important;
     border-radius: 20px !important;
     p {
-      color: rgba(235,235,245,0.35) !important;
-      &.active { color: #fff !important; }
+      color: rgba(28,28,30,0.28) !important;
+      &.active { color: var(--sp-text) !important; }
       &.plain { color: var(--sp-text-dim) !important; }
     }
   }
 }
 
-/* ── Hub ── */
 .hub-featured {
-  border: 0.5px solid var(--gl-border) !important;
-  box-shadow: var(--gl-shadow) !important;
+  border: none !important;
+  box-shadow: 0 16px 40px rgba(20,15,30,0.16) !important;
   border-radius: 22px !important;
 }
 
 .hub-list-row {
-  border-radius: 12px !important;
-  &:hover { background: rgba(255,255,255,0.06) !important; }
-  &:active { background: rgba(255,255,255,0.1) !important; }
+  border-radius: 14px !important;
+  background: #fff !important;
+  &:hover { background: #fff !important; }
+  &:active { background: #f4f4f6 !important; }
 }
 
 .streamItem {
-  border-radius: 12px !important;
-  padding: 8px 6px !important;
+  border-radius: 14px !important;
+  background: #fff !important;
   border: none !important;
-  &:hover { background: rgba(255,255,255,0.06) !important; }
-  span img { border-radius: 8px !important; }
+  padding: 10px 8px !important;
   div .title { font-weight: 600 !important; color: var(--sp-text) !important; }
   div .avu p { color: var(--sp-text-dim) !important; }
   > i, div > i { color: var(--sp-text-dim) !important; }
 }
 
 .listItem {
-  background: var(--sp-elevated) !important;
+  background: #fff !important;
   border: 0.5px solid var(--gl-border) !important;
   border-radius: 14px !important;
   box-shadow: none !important;
   backdrop-filter: none !important;
   p, span:not(.list-thumbnail) { color: var(--sp-text) !important; }
-  img, .list-thumbnail { border-radius: 10px !important; }
 }
 
-/* ── Section headers ── */
 section > header {
   background: transparent !important;
   backdrop-filter: none !important;
@@ -233,21 +225,20 @@ section > header {
 
   details {
     summary {
-      background: rgba(255,255,255,0.1) !important;
+      background: rgba(0,0,0,0.06) !important;
       border-radius: 50% !important;
       i { color: var(--sp-text) !important; }
     }
     ul {
-      background: rgba(44,44,46,0.92) !important;
+      background: rgba(255,255,255,0.94) !important;
       backdrop-filter: blur(40px) saturate(180%) !important;
-      -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
       border: 0.5px solid var(--gl-border) !important;
       box-shadow: var(--gl-shadow) !important;
       border-radius: 14px !important;
       li {
         color: var(--sp-text) !important;
-        border-bottom: 0.5px solid rgba(255,255,255,0.08) !important;
-        &:hover { background: rgba(255,45,85,0.16) !important; color: #fff !important; }
+        border-bottom: 0.5px solid rgba(0,0,0,0.06) !important;
+        &:hover { background: rgba(255,45,85,0.08) !important; color: var(--sp-primary) !important; }
       }
     }
   }
@@ -263,45 +254,43 @@ section > header {
   .home-title { display: none; }
 }
 
-/* ── Search ── */
 .search .superInputContainer {
-  background: rgba(118, 118, 128, 0.24) !important;
+  background: rgba(118, 118, 128, 0.12) !important;
   backdrop-filter: blur(20px) !important;
   border: none !important;
   border-radius: 12px !important;
   box-shadow: none !important;
   &:focus-within {
-    background: rgba(118, 118, 128, 0.36) !important;
-    box-shadow: none !important;
+    background: #fff !important;
+    box-shadow: 0 0 0 3px rgba(255,45,85,0.18) !important;
   }
   .superInput {
     color: var(--sp-text) !important;
     font-size: 17px !important;
     background: transparent !important;
     border: none !important;
-    &::placeholder { color: rgba(235,235,245,0.45) !important; }
+    &::placeholder { color: #8E8E93 !important; }
   }
   .searchFilters { color: var(--sp-text-dim) !important; }
 }
 
 .search .superInputContainer .suggestions {
-  background: rgba(28,28,30,0.96) !important;
-  backdrop-filter: blur(40px) saturate(180%) !important;
+  background: #fff !important;
   border: 0.5px solid var(--gl-border) !important;
   border-radius: 0 0 14px 14px !important;
   box-shadow: var(--gl-shadow) !important;
   li {
     color: var(--sp-text) !important;
-    border-bottom: 0.5px solid rgba(255,255,255,0.08) !important;
+    border-bottom: 0.5px solid rgba(0,0,0,0.06) !important;
     &:hover, &:focus, &.hover {
-      background: rgba(255,45,85,0.16) !important;
-      color: #fff !important;
+      background: rgba(255,45,85,0.08) !important;
+      color: var(--sp-primary) !important;
     }
   }
 }
 
 input[type="search"], input[type="text"] {
-  background: rgba(118, 118, 128, 0.24) !important;
+  background: rgba(118, 118, 128, 0.12) !important;
   border-radius: 12px !important;
   border: none !important;
   color: var(--sp-text) !important;
@@ -309,14 +298,9 @@ input[type="search"], input[type="text"] {
 }
 
 ::-webkit-scrollbar { width: 3px; height: 3px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.18); border-radius: 2px; }
+::selection { background: rgba(255,45,85,0.28); color: var(--sp-text); }
 
-::selection { background: rgba(255,45,85,0.35); color: #fff; }
-
-/* ════════════════════════════════════════════════════════════
-   DESKTOP — iPadOS 27 sidebar
-   ════════════════════════════════════════════════════════════ */
 @media (min-width: 900px) and (orientation: landscape) {
   footer {
     position: fixed !important;
@@ -326,15 +310,12 @@ input[type="search"], input[type="text"] {
     width: 240px !important;
     height: auto !important;
     flex-direction: column !important;
-    justify-content: flex-start !important;
     border-radius: 28px !important;
     background: var(--gl-bg) !important;
     backdrop-filter: var(--gl-blur-heavy) !important;
-    -webkit-backdrop-filter: var(--gl-blur-heavy) !important;
     border: 0.5px solid var(--gl-border) !important;
     box-shadow: var(--gl-shadow) !important;
     padding: 8px !important;
-    z-index: 100 !important;
     pointer-events: auto !important;
   }
   body:has(.miniplayer) footer { bottom: 104px !important; }
@@ -347,18 +328,16 @@ input[type="search"], input[type="text"] {
     font-size: 22px;
     font-weight: 700;
     letter-spacing: -0.03em;
-    color: #fff;
+    color: var(--sp-primary);
     padding: 22px 18px 10px;
   }
 
   nav {
     order: -1 !important;
     flex-direction: column !important;
-    align-items: stretch !important;
     height: auto !important;
     width: 100% !important;
     padding: 6px !important;
-    gap: 4px !important;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
@@ -368,57 +347,28 @@ input[type="search"], input[type="text"] {
 
   nav .nav-item {
     flex-direction: row !important;
-    justify-content: flex-start !important;
     height: 48px !important;
     gap: 14px !important;
     padding: 0 14px !important;
     border-radius: 14px !important;
     font-size: 17px !important;
     font-weight: 600 !important;
-    color: var(--sp-text-dim) !important;
   }
-  nav .nav-item .ms {
-    font-size: 26px !important;
-    padding: 0 !important;
-    background: none !important;
-  }
-  nav .nav-item:hover { background: rgba(255,255,255,0.08) !important; color: #fff !important; }
+  nav .nav-item .ms { font-size: 26px !important; padding: 0 !important; background: none !important; }
   nav .nav-item.on {
-    color: #fff !important;
-    background: rgba(255,45,85,0.22) !important;
+    background: rgba(255,45,85,0.12) !important;
     .ms { background: none !important; color: var(--sp-primary) !important; }
   }
 
   .miniplayer {
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    width: 100% !important;
-    height: 84px !important;
-    margin: 0 !important;
-    padding: 0 24px !important;
+    left: 0 !important; right: 0 !important; bottom: 0 !important;
+    width: 100% !important; height: 84px !important;
     border-radius: 0 !important;
     border: none !important;
     border-top: 0.5px solid var(--gl-border) !important;
-    background: rgba(28,28,30,0.86) !important;
     z-index: 200 !important;
   }
-  .miniplayer img {
-    width: 56px !important;
-    height: 56px !important;
-    border-radius: 10px !important;
-  }
-  .miniplayer .mediaDetails { flex: 0 1 280px !important; }
-  .miniplayer .mp-controls { margin-left: auto !important; gap: 14px !important; }
-  .miniplayer #playButton { width: 44px !important; height: 44px !important; }
-  .miniplayer progress {
-    left: 0 !important; right: 0 !important; width: 100% !important;
-    height: 3px !important; border-radius: 0 !important;
-  }
 
-  main {
-    margin-left: 264px !important;
-    width: calc(100dvw - 264px) !important;
-  }
+  main { margin-left: 264px !important; width: calc(100dvw - 264px) !important; }
   body:has(.miniplayer) main { height: calc(100dvh - 84px) !important; }
 }
