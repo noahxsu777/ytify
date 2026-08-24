@@ -265,30 +265,34 @@ nav {
   &:active { background: rgba(255,255,255,0.09) !important; }
 }
 
-/* ── Stream rows — glass surface ───────────────────────── */
+/* ── Stream rows — light card surface ──────────────────── */
 .streamItem {
-  border-radius: 12px !important;
+  border-radius: 14px !important;
   padding: 10px 8px !important;
-  margin-bottom: 4px !important;
-  transition: background-color 0.15s ease !important;
+  margin-bottom: 6px !important;
+  transition: background-color 0.15s ease, transform 0.15s ease !important;
   border: none !important;
-  &:hover { background: rgba(255,255,255,0.05) !important; }
-  span img { border-radius: 10px !important; box-shadow: 0 4px 14px rgba(0,0,0,0.6) !important; }
-  div .title { font-weight: 600 !important; color: #fff !important; font-size: 14px !important; }
-  div .avu p { color: #8e8e93 !important; opacity: 1 !important; font-size: 12px !important; }
+  &:hover { background: rgba(0,0,0,0.04) !important; }
+  &:active { transform: scale(0.99) !important; }
+  span img { border-radius: 10px !important; box-shadow: 0 4px 14px rgba(30,20,10,0.18) !important; }
+  div .title { font-weight: 700 !important; color: var(--sp-text) !important; font-size: 14px !important; }
+  div .avu p { color: #6b6b72 !important; opacity: 1 !important; font-size: 12px !important; }
+  > i, div > i { color: #8e8e93 !important; }
 }
 
 .listItem {
-  background: rgba(28,28,30,0.7) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  border: 1px solid rgba(255,255,255,0.08) !important;
-  border-top-color: rgba(255,255,255,0.14) !important;
+  background: rgba(255,255,255,0.75) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(0,0,0,0.06) !important;
+  border-top-color: rgba(255,255,255,0.9) !important;
   border-radius: 14px !important;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.3) !important;
-  transition: background-color 0.2s ease !important;
-  &:hover { background: rgba(44,44,46,0.8) !important; }
-  img, .list-thumbnail { border-radius: 10px !important; box-shadow: 0 8px 24px rgba(0,0,0,0.7) !important; }
+  box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 4px 16px rgba(30,20,10,0.07) !important;
+  transition: background-color 0.2s ease, transform 0.15s ease !important;
+  &:hover { background: rgba(255,255,255,0.95) !important; }
+  &:active { transform: scale(0.98) !important; }
+  img, .list-thumbnail { border-radius: 10px !important; box-shadow: 0 8px 20px rgba(30,20,10,0.16) !important; }
+  p, span:not(.list-thumbnail) { color: var(--sp-text) !important; }
 }
 
 /* ── Section headers ────────────────────────────────────── */
@@ -298,6 +302,32 @@ section > header {
   -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
   border-bottom: 1px solid rgba(0,0,0,0.06) !important;
   > p { font-family: 'Plus Jakarta Sans', sans-serif !important; font-size: 22px !important; font-weight: 800 !important; color: var(--sp-text) !important; opacity: 1 !important; }
+
+  /* "⋮" more-options popover (header.css uses rgb(from var(--onBg) r g b / .8),
+     which resolves to near-black here since --onBg is black at low alpha —
+     extracting its channels ignores that and yields an opaque dark panel). */
+  details {
+    summary {
+      background: rgba(0,0,0,0.06) !important;
+      i { color: var(--sp-text) !important; opacity: 1 !important; }
+      &:hover { background: rgba(0,0,0,0.1) !important; }
+    }
+
+    ul {
+      background: rgba(252,251,249,0.97) !important;
+      backdrop-filter: blur(30px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
+      border: 1px solid rgba(0,0,0,0.08) !important;
+      box-shadow: 0 12px 32px rgba(30,20,10,0.16) !important;
+
+      li {
+        color: var(--sp-text) !important;
+        border-bottom: 1px solid rgba(0,0,0,0.06) !important;
+        &:last-child { border-bottom: none !important; }
+        &:hover { background: rgba(255,95,31,0.1) !important; color: #FF5F1F !important; }
+      }
+    }
+  }
 }
 
 /* ── Search ─────────────────────────────────────────────── */
@@ -364,17 +394,8 @@ input[type="search"], input[type="text"] {
 }
 
 /* ── Settings ───────────────────────────────────────────── */
-.settingsSection {
-  background: var(--sp-bg) !important;
-}
-.settings-group-body {
-  background: rgba(28,28,30,0.8) !important;
-  backdrop-filter: blur(40px) !important;
-  -webkit-backdrop-filter: blur(40px) !important;
-  border: 1px solid rgba(255,255,255,0.08) !important;
-  border-top-color: rgba(255,255,255,0.14) !important;
-  box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 4px 16px rgba(0,0,0,0.2) !important;
-}
+/* Layout/colors fully owned by Settings.css (light glass groups, dark text,
+   orange toggles) — nothing to override here for the light theme. */
 
 /* ── Scrollbars ─────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
