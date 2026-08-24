@@ -67,7 +67,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   res.setHeader('Access-Control-Allow-Origin', '*');
 
-  const { iv: INVIDIOUS, pi: PIPED } = await getInstances();
+  const { iv: INVIDIOUS, pi: PIPED } = getInstances();
 
   // Race Invidious + Piped together — the FASTEST instance to answer wins.
   // Both return instance-proxied URLs that play cross-IP, so we just redirect.

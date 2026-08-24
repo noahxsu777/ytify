@@ -53,15 +53,25 @@ header {
     .hub-section-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       padding: 0 16px;
       margin-bottom: 12px;
+
+      .hub-section-titles { display: flex; flex-direction: column; }
 
       h2 {
         font-family: 'Plus Jakarta Sans', sans-serif;
         font-size: 20px;
-        font-weight: 700;
+        font-weight: 800;
         color: #fff;
+        letter-spacing: -0.01em;
+      }
+
+      .hub-section-subtitle {
+        font-family: 'Inter', sans-serif;
+        font-size: 13px;
+        color: #8e8e93;
+        margin-top: 2px;
       }
 
       button {
@@ -93,25 +103,25 @@ header {
       &::-webkit-scrollbar { display: none; }
     }
 
-    /* ── Round cards (Recently Played / Top Picks) ── */
+    /* ── Square rounded cards (Recently Played / Top Picks) ── */
     .hub-card {
       flex-shrink: 0;
-      width: 96px;
+      width: 136px;
       cursor: pointer;
       transition: transform 0.18s ease;
-      text-align: center;
-      &:active { transform: scale(0.93); }
+      text-align: left;
+      &:active { transform: scale(0.95); }
 
       .hub-card-art {
         position: relative;
-        width: 88px;
-        height: 88px;
-        border-radius: 50%;
+        width: 136px;
+        height: 136px;
+        border-radius: 20px;
         overflow: hidden;
-        margin: 0 auto 8px;
+        margin: 0 0 10px;
         background: #1a1a1a;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.5);
-        border: 2px solid rgba(255,255,255,0.06);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+        border: 1px solid rgba(255,255,255,0.07);
 
         img {
           width: 100%;
@@ -304,24 +314,26 @@ header {
 
   .hub-card-title {
     font-family: 'Inter', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 700;
     color: #fff;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     margin-bottom: 2px;
-    text-align: center;
+    text-align: left;
+    max-width: 136px;
   }
 
   .hub-card-sub {
     font-family: 'Inter', sans-serif;
-    font-size: 11px;
-    color: #71717a;
+    font-size: 12px;
+    color: #a1a1aa;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    text-align: center;
+    text-align: left;
+    max-width: 136px;
   }
 
   .hub-loading {
@@ -388,15 +400,15 @@ header {
   }
 
   .hub-greeting {
-    padding: 16px 16px 4px;
+    padding: 20px 16px 6px;
 
     h1 {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 28px;
+      font-size: 38px;
       font-weight: 800;
       color: #fff;
-      letter-spacing: -0.02em;
-      margin-bottom: 2px;
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
     }
 
     p {

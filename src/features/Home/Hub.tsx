@@ -158,11 +158,13 @@ export default function() {
         <p>What do you want to listen to?</p>
       </div>
 
-      {/* Recently Played — circular cards */}
+      {/* Recently Played — square rounded cards */}
       <Show when={recents().length > 0}>
         <section class="hub-section">
           <div class="hub-section-header">
-            <h2>Recently Played</h2>
+            <div class="hub-section-titles">
+              <h2>Recently Played</h2>
+            </div>
             <button onclick={() => fetchCollection('history')}>SEE ALL</button>
           </div>
           <div class="hub-scroll">
@@ -173,11 +175,14 @@ export default function() {
         </section>
       </Show>
 
-      {/* Top Picks — featured banner + circular scroll */}
+      {/* Top Picks — featured banner + square scroll */}
       <Show when={featuredItems().length > 0}>
         <section class="hub-section">
           <div class="hub-section-header">
-            <h2>Top Picks for You</h2>
+            <div class="hub-section-titles">
+              <h2>Mixes Inspired By You</h2>
+              <p class="hub-section-subtitle">Discover new tracks similar to your favorites</p>
+            </div>
             <button onclick={() => {
               const items = featuredItems().map(i => ({ ...i, duration: i.duration || '' }));
               setListStore({ name: 'Top Picks', list: items as CollectionItem[] });

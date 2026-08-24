@@ -115,7 +115,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   res.setHeader('Access-Control-Allow-Origin', '*');
 
-  const { iv: INVIDIOUS, pi: PIPED } = await getInstances();
+  const { iv: INVIDIOUS, pi: PIPED } = getInstances();
 
   // ── Video request ──
   // FAST PATH: race sources that return directly-playable (instance-proxied)
