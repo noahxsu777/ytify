@@ -13,7 +13,7 @@ const VR_CLIENT = {
 async function viaInnertube(id: string): Promise<string | null> {
   try {
     const r = await fetch('https://youtubei.googleapis.com/youtubei/v1/player', {
-      method: 'POST', signal: AbortSignal.timeout(6000),
+      method: 'POST', signal: AbortSignal.timeout(3500),
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ context: { client: VR_CLIENT }, videoId: id, contentCheckOk: true, racyCheckOk: true }),
     });
@@ -31,7 +31,7 @@ async function viaInnertube(id: string): Promise<string | null> {
 //    play from any IP. Race ALL instances; the FASTEST to answer wins.
 async function viaPiped(id: string, PIPED: string[]): Promise<string | null> {
   const probe = (inst: string) =>
-    fetch(`${inst}/streams/${id}`, { signal: AbortSignal.timeout(5000) }).then(async r => {
+    fetch(`${inst}/streams/${id}`, { signal: AbortSignal.timeout(3500) }).then(async r => {
       if (!r.ok) throw new Error(`${r.status}`);
       const d = await r.json();
       const audio = (d.audioStreams || []).sort((a: any, b: any) => (b.bitrate || 0) - (a.bitrate || 0));
@@ -45,7 +45,7 @@ async function viaPiped(id: string, PIPED: string[]): Promise<string | null> {
 //    cross-IP. Race ALL instances; the FASTEST to answer wins.
 async function viaInvidious(id: string, INVIDIOUS: string[]): Promise<string | null> {
   const probe = (inst: string) =>
-    fetch(`${inst}/api/v1/videos/${id}?local=true`, { signal: AbortSignal.timeout(5000) }).then(async r => {
+    fetch(`${inst}/api/v1/videos/${id}?local=true`, { signal: AbortSignal.timeout(3500) }).then(async r => {
       if (!r.ok) throw new Error(`${r.status}`);
       const d = await r.json();
       const audio = (d.adaptiveFormats || [])
@@ -76,7 +76,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     viaPiped(id, PIPED).then(u => u ?? Promise.reject(new Error('pi none'))),
   ]).catch(() => null);
   if (proxied) {
-    res.setHeader('Cache-Control', 'no-store');
+    // Cache the resolved redirect at the edge so replays / other listeners
+    // skip the whole instance race and start instantly.
+    res.setHeader('Cache-Control', 's-maxage=600, stale-while-revalidate=1800');
     return res.redirect(302, proxied);
   }
 

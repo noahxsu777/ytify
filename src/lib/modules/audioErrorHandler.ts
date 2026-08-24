@@ -1,43 +1,41 @@
-import { setStore, store } from '@lib/stores/app.ts';
+import { setStore } from '@lib/stores/app.ts';
 import { playerStore, setPlayerStore } from '@lib/stores/player.ts';
-import { player } from '@lib/utils';
-
 
 export default function(
   audio: HTMLAudioElement,
   prefetch = ''
 ) {
   audio.pause();
-  const message = 'Error 403 : Unauthenticated Stream';
+
   const { stream } = playerStore;
   const id = prefetch || stream.id;
-  const { index, invidious } = store;
-  const origin = new URL(audio.src).origin;
+  if (!id) return;
 
-  if (audio.src.endsWith('&fallback')) {
-    if (!playerStore.isWatching) {
-      setStore('snackbar', message);
-      setPlayerStore('playbackState', 'none');
+  const fallbackSrc = `/api/stream?id=${id}`;
+
+  // The old handler swapped the URL's origin between Invidious instances one
+  // at a time, which no longer matches how streams are resolved (the server
+  // hands back a fully-formed, instance-proxied URL) and just produced a long
+  // chain of broken URLs — the "stuck on Loading Audio..." stall.
+  //
+  // Now: on failure go straight to our own /api/stream endpoint, which does
+  // the full multi-source resolution server-side in one shot. If that also
+  // fails, stop instead of looping.
+  if (audio.src.includes('/api/stream')) {
+    if (!prefetch) {
+      setPlayerStore({
+        playbackState: 'none',
+        status: 'Playback failed',
+      });
+      setStore('snackbar', 'Could not play this track');
     }
     return;
   }
-  console.log('ErrorHandler: ' + audio.src);
 
-  if (index < invidious.length) {
-    const proxy = invidious[index];
-    if (!prefetch)
-      setPlayerStore('status', `Switching proxy to ${proxy.slice(8)}`);
-    if (audio.src.includes(proxy))
-      audio.src = audio.src.replace(proxy, origin);
-    else
-      audio.src = audio.src.replace(origin, proxy);
-    setStore('index', index + 1)
-  }
-  else {
-    setStore('index', 0);
-    if (!prefetch) {
-      setPlayerStore('status', 'Finding new source...');
-    }
-    player(id, true);
-  }
+  if (!prefetch)
+    setPlayerStore('status', 'Finding a faster source...');
+
+  setStore('index', 0);
+  audio.src = fallbackSrc;
+  audio.load();
 }

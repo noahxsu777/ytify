@@ -60,7 +60,9 @@ function SongCard(props: { item: CollectionItem | FeedItem; contextId: string; c
 
 /* Large featured banner card */
 function FeaturedCard(props: { item: CollectionItem | FeedItem; contextId: string; contextSrc: Context; label?: string }) {
-  const img = () => generateImageUrl(props.item.id, '480', props.item.author?.endsWith('- Topic'));
+  // 'hq' — YouTube only serves default/mq/hq/sd/maxres thumbnails. A bogus
+  // size (e.g. '480') 404s and renders as a broken image.
+  const img = () => generateImageUrl(props.item.id, 'hq', props.item.author?.endsWith('- Topic'));
   return (
     <div class="hub-featured" onclick={() => playItem(props.item, props.contextId, props.contextSrc)}>
       <img src={img()} alt={props.item.title} loading="lazy" />

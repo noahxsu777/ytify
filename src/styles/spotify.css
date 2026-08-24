@@ -169,7 +169,7 @@ nav {
     display: flex !important; flex-direction: column !important;
     align-items: center !important; justify-content: center !important;
     gap: 3px !important; flex: 1 !important; cursor: pointer !important;
-    color: rgba(255,255,255,0.35) !important;
+    color: #6b6b72 !important;
     transition: color 0.2s ease !important;
     font-size: 10px !important;
     font-family: 'Inter', sans-serif !important;
@@ -183,9 +183,10 @@ nav {
 
     &:active { transform: scale(0.9); }
 
+    /* Active: orange label, white icon inside the orange pill (NavBar.css) */
     &.on {
-      color: #fff !important;
-      .ms { filter: drop-shadow(0 0 8px rgba(255,255,255,0.4)) !important; }
+      color: #FF5F1F !important;
+      .ms { color: #fff !important; filter: none !important; }
     }
   }
 
@@ -350,7 +351,7 @@ input[type="search"], input[type="text"] {
 
   /* More translucency everywhere */
   :root {
-    --gl-bg: rgba(18,18,18,0.42) !important;
+    --gl-bg: rgba(255,255,255,0.6) !important;
   }
 
   /* ── Left sidebar (nav only). Stops above the bottom player bar ── */
@@ -364,11 +365,11 @@ input[type="search"], input[type="text"] {
     flex-direction: column !important;
     justify-content: flex-start !important;
     border-top: none !important;
-    border-right: 1px solid rgba(255,255,255,0.1) !important;
-    background: rgba(8,8,8,0.5) !important;
+    border-right: 1px solid rgba(0,0,0,0.07) !important;
+    background: rgba(255,255,255,0.6) !important;
     backdrop-filter: blur(80px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(80px) saturate(180%) !important;
-    box-shadow: 1px 0 0 rgba(255,255,255,0.05), 20px 0 60px rgba(0,0,0,0.4) !important;
+    box-shadow: 1px 0 0 rgba(255,255,255,0.6), 20px 0 60px rgba(30,20,10,0.06) !important;
     padding: 0 !important;
     z-index: 100 !important;
   }
@@ -415,13 +416,13 @@ input[type="search"], input[type="text"] {
     font-weight: 600 !important;
     letter-spacing: 0 !important;
     text-transform: none !important;
-    color: rgba(255,255,255,0.6) !important;
+    color: #4a4a52 !important;
     transition: background 0.15s ease, color 0.15s ease !important;
   }
   nav .nav-item .ms { font-size: 30px !important; }
-  nav .nav-item:hover { background: rgba(255,255,255,0.07) !important; color: #fff !important; }
-  nav .nav-item.on { color: #fff !important; background: rgba(255,255,255,0.1) !important; }
-  nav .nav-item.on .ms { filter: drop-shadow(0 0 8px rgba(255,95,31,0.5)) !important; }
+  nav .nav-item:hover { background: rgba(0,0,0,0.05) !important; color: var(--sp-text) !important; }
+  nav .nav-item.on { color: #FF5F1F !important; background: rgba(255,95,31,0.1) !important; }
+  nav .nav-item.on .ms { color: #fff !important; filter: none !important; }
 
   /* ── Mini-player -> long full-width bar pinned to the very bottom ── */
   .miniplayer {
@@ -438,12 +439,25 @@ input[type="search"], input[type="text"] {
     gap: 16px !important;
     border-radius: 0 !important;
     border: none !important;
-    border-top: 1px solid rgba(255,255,255,0.1) !important;
-    background: rgba(10,10,10,0.6) !important;
+    border-top: 1px solid rgba(0,0,0,0.07) !important;
+    background: rgba(255,255,255,0.75) !important;
     backdrop-filter: blur(80px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(80px) saturate(180%) !important;
+    box-shadow: 0 -10px 40px rgba(30,20,10,0.06) !important;
     z-index: 200 !important;
   }
+  /* Desktop bar sits on light glass -> dark text, orange play button */
+  .miniplayer .mediaDetails a { color: var(--sp-text) !important; }
+  .miniplayer .mediaDetails p { color: #6b6b72 !important; }
+  .miniplayer #playButton {
+    background: #FF5F1F !important;
+    color: #fff !important;
+    box-shadow: 0 2px 12px rgba(255,95,31,0.35) !important;
+  }
+  .miniplayer button:not(#playButton), .miniplayer i { color: #4a4a52 !important; }
+  .miniplayer progress { background: rgba(0,0,0,0.1) !important; }
+  .miniplayer progress::-webkit-progress-bar { background: rgba(0,0,0,0.1) !important; }
+  .miniplayer progress::-webkit-progress-value { background: #FF5F1F !important; }
 
   .miniplayer img {
     width: 56px !important;
