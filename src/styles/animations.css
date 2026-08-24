@@ -1,0 +1,218 @@
+/* ============================================================
+   SonicBoom — App-wide animation system (Deezer-style motion)
+   Snappy, springy micro-interactions + staggered entrances.
+   ============================================================ */
+
+:root {
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes popIn {
+  0%   { opacity: 0; transform: scale(0.85); }
+  70%  { opacity: 1; transform: scale(1.03); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(18px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pillPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.14); }
+  100% { transform: scale(1); }
+}
+
+@keyframes wobbleIn {
+  0%   { opacity: 0; transform: scale(0.9) rotate(-2deg); }
+  60%  { opacity: 1; transform: scale(1.02) rotate(0.5deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+/* Reduced-motion: keep entrances instant, skip decorative motion. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ── Section switch (Home / Search / Library / Queue / Player) ── */
+main section {
+  animation: fadeIn 0.28s var(--ease-out) both;
+}
+
+/* ── Hub: greeting, section headers ── */
+.hub-greeting {
+  animation: fadeSlideUp 0.4s var(--ease-out) both;
+}
+.hub-section-header {
+  animation: fadeSlideUp 0.4s var(--ease-out) both;
+}
+
+/* ── Hub round cards (Recently Played / Top Picks) — staggered pop-in ── */
+.hub-scroll .hub-card {
+  animation: popIn 0.42s var(--spring) both;
+}
+.hub-scroll .hub-card:nth-child(1) { animation-delay: 0.02s; }
+.hub-scroll .hub-card:nth-child(2) { animation-delay: 0.06s; }
+.hub-scroll .hub-card:nth-child(3) { animation-delay: 0.10s; }
+.hub-scroll .hub-card:nth-child(4) { animation-delay: 0.14s; }
+.hub-scroll .hub-card:nth-child(5) { animation-delay: 0.18s; }
+.hub-scroll .hub-card:nth-child(6) { animation-delay: 0.22s; }
+.hub-scroll .hub-card:nth-child(7) { animation-delay: 0.26s; }
+.hub-scroll .hub-card:nth-child(8) { animation-delay: 0.30s; }
+
+.hub-featured {
+  animation: wobbleIn 0.5s var(--spring) both;
+}
+
+/* ── Hub list rows (Frequently Played / Trending) — slide in from right ── */
+.hub-list-row {
+  animation: slideInLeft 0.36s var(--ease-out) both;
+}
+.hub-list-row:nth-child(1) { animation-delay: 0.02s; }
+.hub-list-row:nth-child(2) { animation-delay: 0.06s; }
+.hub-list-row:nth-child(3) { animation-delay: 0.10s; }
+.hub-list-row:nth-child(4) { animation-delay: 0.14s; }
+.hub-list-row:nth-child(5) { animation-delay: 0.18s; }
+
+/* Springy press feedback everywhere it wasn't already covered */
+.hub-list-row:active { transform: scale(0.97); }
+.hub-list-row { transition: transform 0.15s var(--spring), background 0.15s ease; }
+
+/* ── Genre tiles — playful pop-in with rotation, staggered ── */
+.hub-genre-card {
+  animation: wobbleIn 0.4s var(--spring) both;
+}
+.hub-genre-grid .hub-genre-card:nth-child(1) { animation-delay: 0.03s; }
+.hub-genre-grid .hub-genre-card:nth-child(2) { animation-delay: 0.07s; }
+.hub-genre-grid .hub-genre-card:nth-child(3) { animation-delay: 0.11s; }
+.hub-genre-grid .hub-genre-card:nth-child(4) { animation-delay: 0.15s; }
+.hub-genre-grid .hub-genre-card:nth-child(5) { animation-delay: 0.19s; }
+.hub-genre-grid .hub-genre-card:nth-child(6) { animation-delay: 0.23s; }
+.hub-genre-grid .hub-genre-card:nth-child(7) { animation-delay: 0.27s; }
+.hub-genre-grid .hub-genre-card:nth-child(8) { animation-delay: 0.31s; }
+.hub-genre-card { transition: transform 0.18s var(--spring), filter 0.15s ease !important; }
+
+/* ── Search: category tiles + input ── */
+.superInputContainer {
+  animation: fadeSlideUp 0.32s var(--ease-out) both;
+}
+.category-card {
+  animation: popIn 0.4s var(--spring) both;
+}
+.category-grid .category-card:nth-child(1) { animation-delay: 0.02s; }
+.category-grid .category-card:nth-child(2) { animation-delay: 0.06s; }
+.category-grid .category-card:nth-child(3) { animation-delay: 0.10s; }
+.category-grid .category-card:nth-child(4) { animation-delay: 0.14s; }
+.category-grid .category-card:nth-child(5) { animation-delay: 0.18s; }
+.category-grid .category-card:nth-child(6) { animation-delay: 0.22s; }
+.category-grid .category-card:nth-child(7) { animation-delay: 0.26s; }
+.category-grid .category-card:nth-child(8) { animation-delay: 0.30s; }
+
+/* Search / stream result rows */
+.streamItem, .listItem {
+  animation: fadeSlideUp 0.3s var(--ease-out) both;
+}
+.streamItem:active, .listItem:active { transform: scale(0.97) !important; }
+
+/* Suggestions dropdown */
+.suggestions {
+  animation: fadeSlideUp 0.2s var(--ease-out) both;
+}
+.suggestions li {
+  transition: background 0.12s ease, color 0.12s ease, padding-left 0.15s ease;
+}
+.suggestions li:hover { padding-left: 6px; }
+
+/* ── Settings — groups fade/slide in, staggered ── */
+.settings-group {
+  animation: fadeSlideUp 0.36s var(--ease-out) both;
+}
+.settings-group:nth-of-type(1) { animation-delay: 0.02s; }
+.settings-group:nth-of-type(2) { animation-delay: 0.07s; }
+.settings-group:nth-of-type(3) { animation-delay: 0.12s; }
+.settings-group:nth-of-type(4) { animation-delay: 0.17s; }
+.settings-group:nth-of-type(5) { animation-delay: 0.22s; }
+.settings-group:nth-of-type(6) { animation-delay: 0.27s; }
+
+.settings-group-body > span,
+.settings-group-body .toggleSwitch {
+  transition: background 0.15s ease;
+}
+.settings-group-body > span:active,
+.settings-group-body .toggleSwitch:active { background: rgba(0,0,0,0.05) !important; }
+
+/* Toggle thumb gets a little spring instead of a flat slide */
+.settings-group-body .toggleSwitch input[type="checkbox"] {
+  transition: background 0.25s var(--ease-out) !important;
+}
+.settings-group-body .toggleSwitch input[type="checkbox"]::after {
+  transition: left 0.3s var(--spring) !important;
+}
+
+/* ── Nav — bouncy pill pop on activation, icon/label ── */
+.nav-item .ms {
+  transition: background 0.22s var(--spring), color 0.2s ease, transform 0.2s var(--spring);
+}
+.nav-item.on .ms {
+  animation: pillPop 0.35s var(--spring);
+}
+.nav-item:active { transform: scale(0.9); }
+.nav-item { transition: transform 0.15s var(--spring), color 0.2s ease; }
+
+/* ── Mini-player — entrance + press feedback ── */
+.miniplayer {
+  animation: fadeSlideUp 0.32s var(--spring) both;
+}
+.miniplayer #playButton { transition: transform 0.18s var(--spring); }
+.miniplayer #playButton:active { transform: scale(0.85); }
+.miniplayer button:not(#playButton):active,
+.miniplayer i:active { transform: scale(0.85); }
+
+/* ── Full player — artwork pop, control press ── */
+#playerSection article img {
+  animation: popIn 0.45s var(--spring) both;
+}
+#playerSection .mainShelf #playButton {
+  transition: transform 0.18s var(--spring) !important;
+}
+#playerSection .mainShelf #playButton:active { transform: scale(0.88) !important; }
+#playerSection .mainShelf button:not(#playButton) { transition: transform 0.15s var(--spring), color 0.15s ease; }
+#playerSection .mainShelf button:not(#playButton):active { transform: scale(0.82); }
+#playerSection .bottomShelf i { transition: transform 0.15s var(--spring), color 0.15s ease; }
+#playerSection .bottomShelf i:active { transform: scale(0.85); }
+
+/* Lyrics lines glide as the active line changes */
+.lyrics p {
+  transition: color 0.3s ease, transform 0.3s var(--spring), text-shadow 0.3s ease;
+}
+
+/* ── "..." dropdown menu — quick pop from the corner ── */
+details[open] > ul,
+header details[open] ul {
+  animation: popIn 0.18s var(--ease-out) both;
+  transform-origin: top right;
+}
+
+/* ── Genre-card / hub-card art image reveal (Deezer-style fade+scale in) ── */
+.hub-card-art img,
+.hub-list-art img,
+.streamItem span img,
+.listItem img {
+  animation: fadeIn 0.3s ease both;
+}

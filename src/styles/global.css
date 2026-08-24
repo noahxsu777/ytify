@@ -4,6 +4,7 @@
 @import 'footer.css';
 @import 'tooltips.css';
 @import 'spotify.css';
+@import 'animations.css';
 
 :root {
   --source: oklch(72% 0.18 145);
