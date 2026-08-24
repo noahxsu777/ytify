@@ -1,12 +1,10 @@
-import { store, setStore } from "../stores";
-
 // In-memory cache: stream data is valid for 5 minutes (YouTube CDN URLs last ~6h)
 const cache = new Map<string, { data: Invidious; ts: number }>();
 const CACHE_TTL = 5 * 60 * 1000;
 
 export default async function(
   id: string,
-  prefetch: boolean = false,
+  _prefetch: boolean = false,
   signal?: AbortSignal
 ): Promise<Invidious | Record<'error' | 'message', string>> {
 
@@ -30,23 +28,26 @@ export default async function(
         throw new Error((data as { error: string }).error || 'Invalid response');
       });
 
-  const fetchDirect = (index: number) =>
-    fetch(`${store.invidious[index]}/api/v1/videos/${id}`, { signal })
-      .then(res => res.json() as Promise<Invidious | { error: string }>)
-      .then(data => {
-        if ('adaptiveFormats' in data) {
-          setStore('index', index);
-          cache.set(id, { data: data as Invidious, ts: Date.now() });
-          return data;
-        }
-        throw new Error((data as { error: string }).error || 'Invalid response');
-      });
+  const streamFallback = (): Invidious => ({
+    type: 'video',
+    title: '',
+    videoId: id,
+    author: '',
+    authorId: '',
+    authorUrl: '',
+    lengthSeconds: 0,
+    description: '',
+    viewCount: 0,
+    adaptiveFormats: [{
+      url: `/api/stream?id=${id}`,
+      type: 'audio/webm; codecs="opus"',
+      bitrate: '128000',
+      container: 'webm',
+      encoding: 'opus',
+    }],
+    formatStreams: [],
+    recommendedVideos: [],
+  } as unknown as Invidious);
 
-  const useDirect = (index = store.index): Promise<Invidious> =>
-    fetchDirect(index).catch(e => {
-      if (index + 1 >= store.invidious.length) return prefetch ? e : Promise.reject(e);
-      return useDirect(index + 1);
-    });
-
-  return fetchViaProxy().catch(() => useDirect());
+  return fetchViaProxy().catch(() => streamFallback());
 }

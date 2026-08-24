@@ -1,53 +1,60 @@
 nav {
   display: flex;
   width: 100%;
-  align-items: flex-start; /* items align to top of nav; safe-area padding-bottom handles spacing */
-  height: 68px;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  box-sizing: content-box; /* padding-bottom adds extra height for safe area */
-  gap: 8px; /* breathing room between buttons */
-  padding-left: 8px;
-  padding-right: 8px;
+  align-items: center;
+  justify-content: space-around;
+  height: 56px;
+  padding: 4px 6px;
+  box-sizing: border-box;
+  gap: 2px;
+  border-radius: 28px;
+  background: rgba(44, 44, 46, 0.72);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 0.5px solid rgba(255, 255, 255, 0.22);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.28) inset,
+    0 12px 32px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
 
   .nav-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3px;
+    gap: 1px;
     flex: 1;
-    border-radius: 14px;
+    border-radius: 22px;
     cursor: pointer;
-    color: #71717a;
-    transition: color 0.2s ease;
-    font-family: 'Inter', sans-serif;
+    color: rgba(235, 235, 245, 0.55);
+    transition: color 0.2s ease, background 0.2s ease;
+    font-family: var(--font);
     font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    font-weight: 510;
+    letter-spacing: 0.01em;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
-    height: 68px; /* always exactly nav height, safe area is below */
-    padding-top: 6px;
+    height: 48px;
+    padding: 0;
 
     .ms {
       font-size: 24px;
       line-height: 1;
-      padding: 5px 18px;
+      padding: 3px 16px;
       border-radius: 999px;
-      transition: background 0.2s ease;
+      transition: background 0.2s ease, color 0.2s ease;
     }
 
     &:active {
-      transform: scale(0.92);
-      transition: transform 0.1s ease;
+      transform: scale(0.94);
     }
 
     &.on {
       color: #fff;
 
       .ms {
-        background: #FF5F1F;
+        background: rgba(0, 0, 0, 0.45);
+        color: #fff;
         font-variation-settings: 'FILL' 1 !important;
       }
     }

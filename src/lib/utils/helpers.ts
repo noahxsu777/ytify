@@ -70,14 +70,20 @@ export async function preferredStream(audioStreams: AudioStream[]) {
       aac: [140]
     }
   })[config.quality || 'medium'][preferedCodec];
-  let stream!: AudioStream;
+  let stream: AudioStream | undefined;
   for (const itag of itags) {
-    if (stream?.url) continue;
-    const v = audioStreams.find(v => v.url.includes(`itag=${itag}`));
-    if (v) stream = v;
+    const v = audioStreams.find(s => s.url.includes(`itag=${itag}`));
+    if (v) {
+      stream = v;
+      break;
+    }
   }
+  if (stream?.url) return stream;
 
-  return stream;
+  // /api/stream (InnerTube fallback) has no itag — pick highest bitrate.
+  return [...audioStreams].sort(
+    (a, b) => parseInt(b.bitrate || '0') - parseInt(a.bitrate || '0')
+  )[0];
 }
 
 export function handleXtags(audioStreams: AudioStream[]) {

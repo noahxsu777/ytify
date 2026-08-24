@@ -3,7 +3,7 @@ import { getInstances } from '../src/backend/instances.js';
 
 const tryFetch = (url: string, opts: RequestInit = {}) =>
   fetch(url, {
-    signal: AbortSignal.timeout(3000),
+    signal: AbortSignal.timeout(2500),
     headers: { 'User-Agent': 'Mozilla/5.0' },
     ...opts,
   }).then(r => {
@@ -118,20 +118,41 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { iv: INVIDIOUS, pi: PIPED } = getInstances();
 
   // ── Video request ──
-  // ONE unified race across every source, starting all of them at once —
-  // whichever answers with playable audio FIRST wins. Google's own InnerTube
-  // endpoint is usually the fastest (direct, not a loaded public instance),
-  // so it must compete from the start, not be tried only after everything
-  // else has already failed.
+  // Race Piped + Invidious first (directly playable, one hop). InnerTube is
+  // a fallback because its URLs are IP-locked and need /api/stream.
   if (videoId) {
     const hasPlayableAudio = (d: any) =>
       Array.isArray(d?.adaptiveFormats) &&
       d.adaptiveFormats.some((f: any) => (f.type || '').startsWith('audio') && /^https?:\/\//.test(f.url || ''));
 
+    // Race ONLY sources that return a URL the browser can play in one hop.
+    // InnerTube is usually the first to *respond*, but its googlevideo URLs
+    // are IP-locked to this server — using it as a winner forces a second
+    // serverless round-trip through /api/stream and is the slower path.
     const attempts: Promise<any>[] = [
-      // Google-direct — fastest, but the URL is IP-locked, so route it
-      // through /api/stream (byte proxy) instead of using it raw.
-      fetchInnertube(videoId).then(d => {
+      ...PIPED.map(inst =>
+        tryFetch(`${inst}/streams/${videoId}`).then(d => {
+          const data = pipedToInvidious(d, videoId);
+          if (!hasPlayableAudio(data)) throw new Error('no audio');
+          return data;
+        })
+      ),
+      ...INVIDIOUS.slice(0, 4).map(inst =>
+        tryFetch(`${inst}/api/v1/videos/${videoId}?local=true`).then(d => {
+          d.adaptiveFormats = (d.adaptiveFormats || []).map((f: any) => ({
+            ...f, url: f.url?.startsWith('/') ? inst + f.url : f.url,
+          }));
+          if (!hasPlayableAudio(d)) throw new Error('no audio');
+          return d;
+        })
+      ),
+    ];
+
+    let winner = await Promise.any(attempts).catch(() => null);
+
+    if (!winner) {
+      try {
+        const d = await fetchInnertube(videoId);
         d.adaptiveFormats = [{
           url: `/api/stream?id=${videoId}`,
           type: 'audio/webm; codecs="opus"',
@@ -143,29 +164,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           encoding: 'opus',
         }];
         d.formatStreams = [];
-        return d;
-      }),
-      // Piped audioStreams are already instance-proxied -> play cross-IP directly
-      ...PIPED.map(inst =>
-        tryFetch(`${inst}/streams/${videoId}`).then(d => {
-          const data = pipedToInvidious(d, videoId);
-          if (!hasPlayableAudio(data)) throw new Error('no audio');
-          return data;
-        })
-      ),
-      // Invidious with local=true -> instance-proxied audio, also direct
-      ...INVIDIOUS.slice(0, 6).map(inst =>
-        tryFetch(`${inst}/api/v1/videos/${videoId}?local=true`).then(d => {
-          d.adaptiveFormats = (d.adaptiveFormats || []).map((f: any) => ({
-            ...f, url: f.url?.startsWith('/') ? inst + f.url : f.url,
-          }));
-          if (!hasPlayableAudio(d)) throw new Error('no audio');
-          return d;
-        })
-      ),
-    ];
-
-    const winner = await Promise.any(attempts).catch(() => null);
+        winner = d;
+      } catch { /* all sources failed */ }
+    }
 
     if (!winner || !('lengthSeconds' in winner)) {
       return res.status(502).json({ error: 'All sources failed' });

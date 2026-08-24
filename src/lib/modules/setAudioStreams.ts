@@ -19,7 +19,11 @@ export default async function(
 
 
   const stream = await preferredStream(handleXtags(audioStreams));
-  //qualityView.textContent = stream.quality + ' ' + stream.codec;
+  if (!stream?.url) {
+    setPlayerStore('status', t('player_audiostreams_null'));
+    setPlayerStore('playbackState', 'none');
+    return;
+  }
   (prefetchNode || playerStore.audio).src = proxyHandler(stream.url, Boolean(prefetchNode));
 
 }

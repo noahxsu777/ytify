@@ -36,7 +36,13 @@ type PlayerStore = {
 };
 
 const createInitialState = (): PlayerStore => ({
-  audio: new Audio(),
+  audio: (() => {
+    const el = new Audio();
+    el.preload = 'auto';
+    el.setAttribute('playsinline', '');
+    el.setAttribute('webkit-playsinline', '');
+    return el;
+  })(),
   playbackState: 'none',
   context: { id: 'query', src: 'link' },
   status: '',

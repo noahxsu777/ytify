@@ -153,7 +153,7 @@
     .cat-label {
       position: relative;
       z-index: 1;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: var(--font);
       font-size: 16px;
       font-weight: 800;
       letter-spacing: -0.01em;

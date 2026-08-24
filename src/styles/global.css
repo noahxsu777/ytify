@@ -7,31 +7,31 @@
 @import 'animations.css';
 
 :root {
-  --source: oklch(72% 0.18 145);
+  --source: oklch(72% 0.18 12);
   --schemeMultiplier: 0.9;
-  --bg: #121212;
-  --text: #fff;
-  --accent: #1DB954;
-  --accentHover: #1ED760;
+  --bg: #000000;
+  --text: #f5f5f7;
+  --accent: #FF2D55;
+  --accentHover: #ff4d6d;
   --sidebar: #000;
-  --card: #181818;
-  --cardHover: #282828;
+  --card: #1c1c1e;
+  --cardHover: #2c2c2e;
   --chroma: 0;
-  --scheme: color-mix(in srgb, oklch(from var(--source) 70% calc(c * var(--chroma)) h), var(--bg) 85%);
-  --onBg: color-mix(in srgb, oklch(from var(--source) 85% calc(c * var(--chroma)) h), var(--bg) 85%);
-  --onBg2: color-mix(in srgb, oklch(from var(--source) 80% calc(35% * var(--chroma)) h), var(--bg) 70%);
-  --blurMix: color-mix(in srgb, oklch(from var(--onBg) l calc(c * var(--chroma)) / 0.1), var(--bg) 40%);
-  --text2: color-mix(in srgb, oklch(from var(--source) 50% calc(80% * var(--chroma)) h), var(--text) 75%);
+  --scheme: #1c1c1e;
+  --onBg: rgba(255,255,255,0.08);
+  --onBg2: rgba(255,255,255,0.14);
+  --blurMix: rgba(28,28,30,0.72);
+  --text2: #FF2D55;
   --gap: var(--size-fluid-2);
-  --borderColor: oklch(from var(--text) l c h / 0.2);
-  --border: var(--border-size-1) solid var(--borderColor);
-  --roundness: 0.4rem;
-  --blur: blur(var(--size-px-3));
+  --borderColor: rgba(255,255,255,0.16);
+  --border: 0.5px solid var(--borderColor);
+  --roundness: 1.25rem;
+  --blur: blur(40px);
   --player-bg: none;
   --player-bp: 0 0;
   --landscapeSections: 2;
-  --trueBg: var(--bg);
-  --font: ui-rounded, Segoe UI, source-sans-pro, Inter, Noto Sans, Oxygen, Calibri, Cantarell, Ubuntu, Roboto, system-ui, Open Sans, Helvetica Neue, sans-serif;
+  --trueBg: #000000;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", system-ui, sans-serif;
 }
 
 
@@ -41,12 +41,18 @@
 html {
   height: 100dvh;
   background: var(--trueBg);
+  color-scheme: dark;
 }
 
 body {
   height: 100dvh;
   font-family: var(--font);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  overscroll-behavior: none;
+  padding-top: env(safe-area-inset-top, 0px);
 }
 
 main {

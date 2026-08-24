@@ -31,7 +31,7 @@ async function viaInnertube(id: string): Promise<string | null> {
 //    play from any IP. Race ALL instances; the FASTEST to answer wins.
 async function viaPiped(id: string, PIPED: string[]): Promise<string | null> {
   const probe = (inst: string) =>
-    fetch(`${inst}/streams/${id}`, { signal: AbortSignal.timeout(3000) }).then(async r => {
+    fetch(`${inst}/streams/${id}`, { signal: AbortSignal.timeout(2500) }).then(async r => {
       if (!r.ok) throw new Error(`${r.status}`);
       const d = await r.json();
       const audio = (d.audioStreams || []).sort((a: any, b: any) => (b.bitrate || 0) - (a.bitrate || 0));
@@ -45,7 +45,7 @@ async function viaPiped(id: string, PIPED: string[]): Promise<string | null> {
 //    cross-IP. Race ALL instances; the FASTEST to answer wins.
 async function viaInvidious(id: string, INVIDIOUS: string[]): Promise<string | null> {
   const probe = (inst: string) =>
-    fetch(`${inst}/api/v1/videos/${id}?local=true`, { signal: AbortSignal.timeout(3000) }).then(async r => {
+    fetch(`${inst}/api/v1/videos/${id}?local=true`, { signal: AbortSignal.timeout(2500) }).then(async r => {
       if (!r.ok) throw new Error(`${r.status}`);
       const d = await r.json();
       const audio = (d.adaptiveFormats || [])
@@ -78,7 +78,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (proxied) {
     // Cache the resolved redirect at the edge so replays / other listeners
     // skip the whole instance race and start instantly.
-    res.setHeader('Cache-Control', 's-maxage=600, stale-while-revalidate=1800');
+    // Piped/Invidious URLs expire; a long edge cache serves 403s on replay.
+    res.setHeader('Cache-Control', 's-maxage=30, stale-while-revalidate=60');
     return res.redirect(302, proxied);
   }
 

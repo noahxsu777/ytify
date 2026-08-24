@@ -96,8 +96,8 @@ export default defineConfig(({ command }) => ({
         ],
         "start_url": "/",
         "display": "standalone",
-        "theme_color": "black",
-        "background_color": "black",
+        "theme_color": "#000000",
+        "background_color": "#000000",
         "share_target": {
           "action": "/",
           "method": "GET",

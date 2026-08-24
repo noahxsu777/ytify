@@ -30,9 +30,9 @@ export default function() {
   return (
     <section class="home" ref={homeRef}>
 
-      <header>
+      <header classList={{ 'hub-chrome': store.homeView === 'Hub' }}>
         <p class="home-title">
-          {store.homeView === 'Hub' ? 'Listen Now' : store.homeView ? t(map[store.homeView]) : 'Sonic Boom'}</p>
+          {store.homeView === 'Hub' ? '' : store.homeView ? t(map[store.homeView]) : 'Sonic Boom'}</p>
 
         <Show when={config.dbsync}>
           <i

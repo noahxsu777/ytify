@@ -1,58 +1,55 @@
 /* ============================================================
-   SonicBoom — Light "Home" design system
+   SonicBoom — Deezer iOS + iOS 27 Liquid Glass
    ============================================================ */
 
-/* ── Glass primitives ────────────────────────────────────── */
 :root {
-  --gl-blur:        blur(40px) saturate(160%);
-  --gl-blur-heavy:  blur(50px) saturate(160%);
-  --gl-bg:          rgba(255, 255, 255, 0.7);
-  --gl-bg-light:    rgba(0, 0, 0, 0.03);
-  --gl-border:      rgba(0, 0, 0, 0.07);
-  --gl-border-top:  rgba(255, 255, 255, 0.9);
-  --gl-shadow:      0 1px 0 rgba(255,255,255,0.7) inset,
-                    0 10px 30px rgba(20,15,10,0.08);
-  --gl-shadow-sm:   0 1px 0 rgba(255,255,255,0.7) inset,
-                    0 4px 16px rgba(20,15,10,0.06);
+  --gl-blur:        blur(40px) saturate(180%);
+  --gl-blur-heavy:  blur(50px) saturate(190%);
+  --gl-bg:          rgba(44, 44, 46, 0.72);
+  --gl-bg-light:    rgba(255, 255, 255, 0.08);
+  --gl-border:      rgba(255, 255, 255, 0.18);
+  --gl-border-top:  rgba(255, 255, 255, 0.32);
+  --gl-shadow:      0 1px 0 rgba(255,255,255,0.22) inset,
+                    0 12px 32px rgba(0,0,0,0.4);
+  --gl-shadow-sm:   0 1px 0 rgba(255,255,255,0.18) inset,
+                    0 6px 16px rgba(0,0,0,0.28);
   --gl-radius:      22px;
   --gl-radius-sm:   14px;
 
-  /* Brand tokens */
-  --sp-primary:     #FF5F1F;
-  --sp-bg:          #F7F5F2;
-  --sp-text:        #17161A;
-  --sp-text-dim:    #6b6b72;
-  --sp-surface:     rgba(0, 0, 0, 0.035);
+  --sp-primary:     #FF2D55;
+  --sp-bg:          #000000;
+  --sp-text:        #f5f5f7;
+  --sp-text-dim:    rgba(235, 235, 245, 0.6);
+  --sp-surface:     rgba(255, 255, 255, 0.08);
+  --sp-elevated:    #1c1c1e;
 
-  /* Override ytify vars */
   --bg:          var(--sp-bg)         !important;
   --trueBg:      var(--sp-bg)         !important;
   --text:        var(--sp-text)       !important;
   --text2:       var(--sp-primary)    !important;
-  --onBg:        rgba(0,0,0,0.04)     !important;
-  --onBg2:       rgba(0,0,0,0.07)     !important;
-  --scheme:      rgba(0,0,0,0.03)     !important;
-  --borderColor: rgba(0,0,0,0.08)     !important;
-  --roundness:   0.6rem               !important;
+  --onBg:        rgba(255,255,255,0.08) !important;
+  --onBg2:       rgba(255,255,255,0.14) !important;
+  --scheme:      #1c1c1e              !important;
+  --borderColor: rgba(255,255,255,0.16) !important;
+  --roundness:   1.25rem              !important;
   --chroma:      0                    !important;
-  --font: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+          "Helvetica Neue", system-ui, sans-serif !important;
 }
 
-/* ── Base ──────────────────────────────────────────────── */
 html, body {
   background: var(--sp-bg) !important;
   color: var(--sp-text) !important;
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Ambient warm gradient behind everything */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(255,95,31,0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(168,85,247,0.04) 0%, transparent 60%);
+    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(255,45,85,0.16) 0%, transparent 58%),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(162,56,255,0.10) 0%, transparent 60%);
   pointer-events: none;
   z-index: 0;
 }
@@ -64,439 +61,335 @@ main {
   section { background: transparent !important; }
 
   section > header > p {
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
-    font-size: 30px !important;
-    font-weight: 800 !important;
+    font-family: var(--font) !important;
+    font-size: 34px !important;
+    font-weight: 700 !important;
     color: var(--sp-text) !important;
-    letter-spacing: -0.02em !important;
+    letter-spacing: -0.03em !important;
     opacity: 1 !important;
   }
 }
 
-/* ── Footer glass bar ───────────────────────────────────── */
+/* ── Footer: floating Liquid Glass tab bar ── */
 footer {
-  background: rgba(255,255,255,0.75) !important;
-  backdrop-filter: var(--gl-blur-heavy) !important;
-  -webkit-backdrop-filter: var(--gl-blur-heavy) !important;
-  border-top: 1px solid rgba(0,0,0,0.06) !important;
-  box-shadow:
-    0 1px 0 rgba(255,255,255,0.8) inset,
-    0 -20px 40px rgba(20,15,10,0.05) !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
-/* ── Mini-player — solid orange "now playing" pill ── */
+nav {
+  background: var(--gl-bg) !important;
+  backdrop-filter: var(--gl-blur) !important;
+  -webkit-backdrop-filter: var(--gl-blur) !important;
+}
+
+nav .nav-item {
+  color: rgba(235, 235, 245, 0.55) !important;
+  font-family: var(--font) !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-size: 10px !important;
+  font-weight: 510 !important;
+
+  .ms { color: inherit !important; }
+
+  &.on {
+    color: #fff !important;
+    .ms {
+      color: #fff !important;
+      background: rgba(0, 0, 0, 0.45) !important;
+    }
+  }
+}
+
+/* ── Mini-player: iOS Music accessory ── */
 .miniplayer {
-  background: linear-gradient(100deg, #FF5F1F 0%, #ff7a3d 100%) !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  border: none !important;
-  border-radius: 999px !important;
+  background: var(--gl-bg) !important;
+  backdrop-filter: var(--gl-blur) !important;
+  -webkit-backdrop-filter: var(--gl-blur) !important;
+  border: 0.5px solid var(--gl-border) !important;
+  border-radius: 18px !important;
+  box-shadow: var(--gl-shadow) !important;
   position: fixed !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: calc(68px + env(safe-area-inset-bottom, 0px)) !important;
-  z-index: 99 !important;
-  width: calc(100% - 20px) !important;
-  margin: 0 10px 8px !important;
-  padding: 8px 10px 8px 8px !important;
-  box-shadow: 0 10px 28px rgba(255,95,31,0.35), 0 2px 0 rgba(255,255,255,0.25) inset !important;
-  overflow: hidden !important;
-
-  /* Specular sheen */
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
-    pointer-events: none;
-  }
-
-  img {
-    border-radius: 50% !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
-    height: 40px !important;
-    width: 40px !important;
-    object-fit: cover !important;
-  }
+  left: 14px !important;
+  right: 14px !important;
+  bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+  width: auto !important;
+  margin: 0 !important;
 
   .mediaDetails {
-    a { font-family: 'Inter', sans-serif !important; font-weight: 700 !important; font-size: 14px !important; color: #fff !important; }
-    p { color: rgba(255,255,255,0.8) !important; opacity: 1 !important; font-size: 12px !important; }
+    a { color: var(--sp-text) !important; font-weight: 600 !important; }
+    p { color: var(--sp-text-dim) !important; }
   }
 
   #playButton {
     background: #fff !important;
-    color: #FF5F1F !important;
-    border-radius: 50% !important;
-    width: 38px !important; height: 38px !important;
-    font-size: 20px !important;
-    display: flex !important; align-items: center !important; justify-content: center !important;
-    margin: 0 2px !important;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2) !important;
-    transition: transform 0.15s ease !important;
-    &:hover { transform: scale(1.06) !important; }
+    color: #000 !important;
+    box-shadow: none !important;
   }
 
-  button:not(#playButton), i {
-    color: rgba(255,255,255,0.85) !important;
-    font-size: 22px !important;
-    transition: color 0.15s ease !important;
-    &:hover { color: #fff !important; }
-  }
+  button:not(#playButton), i { color: var(--sp-text) !important; }
 
-  progress {
-    position: absolute !important; bottom: 0 !important;
-    left: 20px !important; right: 20px !important;
-    width: calc(100% - 40px) !important; height: 2px !important;
-    border-radius: 99px !important; top: auto !important;
-    background: rgba(255,255,255,0.25) !important;
-    &::-webkit-progress-bar   { background: rgba(255,255,255,0.25); }
-    &::-webkit-progress-value { background: #fff !important; border: none !important; transition: none !important; }
-    &::-moz-progress-bar      { background: var(--sp-primary) !important; }
-  }
+  progress::-webkit-progress-value { background: var(--sp-primary) !important; }
+  progress::-moz-progress-bar { background: var(--sp-primary) !important; }
 }
 
-/* ── Bottom nav ─────────────────────────────────────────── */
-nav {
-  background: transparent !important;
-  height: 68px !important;
-  display: flex !important;
-  align-items: flex-start !important;
-  padding-top: 6px !important;
-
-  .nav-item {
-    display: flex !important; flex-direction: column !important;
-    align-items: center !important; justify-content: center !important;
-    gap: 3px !important; flex: 1 !important; cursor: pointer !important;
-    color: #6b6b72 !important;
-    transition: color 0.2s ease !important;
-    font-size: 10px !important;
-    font-family: 'Inter', sans-serif !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.04em !important;
-    -webkit-tap-highlight-color: transparent !important;
-    height: 62px !important;
-    padding-top: 4px !important;
-
-    .ms { font-size: 25px !important; }
-
-    &:active { transform: scale(0.9); }
-
-    /* Active: orange label, white icon inside the orange pill (NavBar.css) */
-    &.on {
-      color: #FF5F1F !important;
-      .ms { color: #fff !important; filter: none !important; }
-    }
-  }
-
-  > i { display: none !important; }
-}
-
-/* ── Full-screen Player ─────────────────────────────────── */
+/* ── Full-screen now playing ── */
 #playerSection {
-  background: linear-gradient(180deg, rgba(255,247,240,0.95) 0%, rgba(247,245,242,0.98) 50%) !important;
-  backdrop-filter: blur(40px) !important;
-  -webkit-backdrop-filter: blur(40px) !important;
+  background: linear-gradient(180deg, #1c1c1e 0%, #000 55%) !important;
   color: var(--sp-text) !important;
 
   article img {
-    border-radius: 20px !important;
-    box-shadow: 0 20px 50px rgba(30,20,10,0.22), 0 0 0 1px rgba(0,0,0,0.05) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.55) !important;
   }
 
   .mediaDetails a, .mediaDetails p { color: var(--sp-text) !important; }
-  .mediaDetails p { opacity: 0.6 !important; }
+  .mediaDetails p { color: var(--sp-text-dim) !important; opacity: 1 !important; }
 
   .topShelf p {
-    text-transform: uppercase !important; font-size: 11px !important;
-    letter-spacing: 0.1em !important; font-weight: 700 !important;
-    color: #8e8e93 !important; opacity: 1 !important;
+    text-transform: uppercase !important;
+    font-size: 11px !important;
+    letter-spacing: 0.12em !important;
+    font-weight: 600 !important;
+    color: var(--sp-text-dim) !important;
+    opacity: 1 !important;
   }
-  .topShelf i, .topShelf .ri-more-2-fill { color: var(--sp-text) !important; opacity: 0.7 !important; }
+  .topShelf i, .topShelf .ri-more-2-fill { color: var(--sp-text) !important; opacity: 0.85 !important; }
 
   .slider input[type=range] { accent-color: var(--sp-primary) !important; }
-  .slider div p { color: #6b6b72 !important; }
+  .slider div p { color: var(--sp-text-dim) !important; }
 
   .mainShelf #playButton {
-    background: #FF5F1F !important;
-    color: #fff !important; border-radius: 50% !important;
-    padding: 16px !important;
-    box-shadow: 0 8px 24px rgba(255,95,31,0.35) !important;
-    transition: transform 0.15s ease !important;
-    &:hover { transform: scale(1.04) !important; }
+    background: #fff !important;
+    color: #000 !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35) !important;
   }
-
-  .mainShelf button:not(#playButton) { color: var(--sp-text) !important; font-size: 26px !important; opacity: 0.75 !important; }
+  .mainShelf button:not(#playButton) { color: var(--sp-text) !important; opacity: 0.9 !important; }
 
   .bottomShelf i {
-    color: #8e8e93 !important;
+    color: var(--sp-text-dim) !important;
     &.on { color: var(--sp-primary) !important; background: transparent !important; }
-    &:hover { color: var(--sp-text) !important; }
   }
-  .bottomShelf select, .bottomShelf #volumeChanger { color: var(--sp-text) !important; opacity: 0.8 !important; }
 
   .lyrics {
-    background: rgba(255,255,255,0.6) !important;
-    backdrop-filter: blur(20px) saturate(180%) !important;
-    border: 1px solid rgba(0,0,0,0.06) !important;
+    background: rgba(44,44,46,0.55) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    border: 0.5px solid var(--gl-border) !important;
     border-radius: 20px !important;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset !important;
     p {
-      color: rgba(20,15,10,0.25) !important;
-      &.active { color: var(--sp-text) !important; text-shadow: none !important; }
-      &.plain { color: #6b6b72 !important; }
+      color: rgba(235,235,245,0.35) !important;
+      &.active { color: #fff !important; }
+      &.plain { color: var(--sp-text-dim) !important; }
     }
   }
 }
 
-/* ── Hub glass cards ────────────────────────────────────── */
+/* ── Hub ── */
 .hub-featured {
-  border: 1px solid var(--gl-border) !important;
-  border-top-color: var(--gl-border-top) !important;
+  border: 0.5px solid var(--gl-border) !important;
   box-shadow: var(--gl-shadow) !important;
-  border-radius: 24px !important;
-}
-
-.hub-genre-card {
-  border: 1px solid rgba(255,255,255,0.12) !important;
-  border-top-color: rgba(255,255,255,0.22) !important;
-  box-shadow:
-    0 1px 0 rgba(255,255,255,0.15) inset,
-    0 8px 24px rgba(0,0,0,0.3) !important;
+  border-radius: 22px !important;
 }
 
 .hub-list-row {
-  border-radius: 14px !important;
-  transition: background 0.15s ease !important;
+  border-radius: 12px !important;
   &:hover { background: rgba(255,255,255,0.06) !important; }
-  &:active { background: rgba(255,255,255,0.09) !important; }
+  &:active { background: rgba(255,255,255,0.1) !important; }
 }
 
-/* ── Stream rows — light card surface ──────────────────── */
 .streamItem {
-  border-radius: 14px !important;
-  padding: 10px 8px !important;
-  margin-bottom: 6px !important;
-  transition: background-color 0.15s ease, transform 0.15s ease !important;
+  border-radius: 12px !important;
+  padding: 8px 6px !important;
   border: none !important;
-  &:hover { background: rgba(0,0,0,0.04) !important; }
-  &:active { transform: scale(0.99) !important; }
-  span img { border-radius: 10px !important; box-shadow: 0 4px 14px rgba(30,20,10,0.18) !important; }
-  div .title { font-weight: 700 !important; color: var(--sp-text) !important; font-size: 14px !important; }
-  div .avu p { color: #6b6b72 !important; opacity: 1 !important; font-size: 12px !important; }
-  > i, div > i { color: #8e8e93 !important; }
+  &:hover { background: rgba(255,255,255,0.06) !important; }
+  span img { border-radius: 8px !important; }
+  div .title { font-weight: 600 !important; color: var(--sp-text) !important; }
+  div .avu p { color: var(--sp-text-dim) !important; }
+  > i, div > i { color: var(--sp-text-dim) !important; }
 }
 
 .listItem {
-  background: rgba(255,255,255,0.75) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-  border: 1px solid rgba(0,0,0,0.06) !important;
-  border-top-color: rgba(255,255,255,0.9) !important;
+  background: var(--sp-elevated) !important;
+  border: 0.5px solid var(--gl-border) !important;
   border-radius: 14px !important;
-  box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 4px 16px rgba(30,20,10,0.07) !important;
-  transition: background-color 0.2s ease, transform 0.15s ease !important;
-  &:hover { background: rgba(255,255,255,0.95) !important; }
-  &:active { transform: scale(0.98) !important; }
-  img, .list-thumbnail { border-radius: 10px !important; box-shadow: 0 8px 20px rgba(30,20,10,0.16) !important; }
+  box-shadow: none !important;
+  backdrop-filter: none !important;
   p, span:not(.list-thumbnail) { color: var(--sp-text) !important; }
+  img, .list-thumbnail { border-radius: 10px !important; }
 }
 
-/* ── Section headers ────────────────────────────────────── */
+/* ── Section headers ── */
 section > header {
-  background: rgba(247,245,242,0.85) !important;
-  backdrop-filter: blur(40px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
-  border-bottom: 1px solid rgba(0,0,0,0.06) !important;
-  > p { font-family: 'Plus Jakarta Sans', sans-serif !important; font-size: 22px !important; font-weight: 800 !important; color: var(--sp-text) !important; opacity: 1 !important; }
+  background: transparent !important;
+  backdrop-filter: none !important;
+  border-bottom: none !important;
+  > p {
+    font-family: var(--font) !important;
+    font-size: 34px !important;
+    font-weight: 700 !important;
+    color: var(--sp-text) !important;
+  }
 
-  /* "⋮" more-options popover (header.css uses rgb(from var(--onBg) r g b / .8),
-     which resolves to near-black here since --onBg is black at low alpha —
-     extracting its channels ignores that and yields an opaque dark panel). */
   details {
     summary {
-      background: rgba(0,0,0,0.06) !important;
-      i { color: var(--sp-text) !important; opacity: 1 !important; }
-      &:hover { background: rgba(0,0,0,0.1) !important; }
+      background: rgba(255,255,255,0.1) !important;
+      border-radius: 50% !important;
+      i { color: var(--sp-text) !important; }
     }
-
     ul {
-      background: rgba(252,251,249,0.97) !important;
-      backdrop-filter: blur(30px) saturate(180%) !important;
-      -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
-      border: 1px solid rgba(0,0,0,0.08) !important;
-      box-shadow: 0 12px 32px rgba(30,20,10,0.16) !important;
-
+      background: rgba(44,44,46,0.92) !important;
+      backdrop-filter: blur(40px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
+      border: 0.5px solid var(--gl-border) !important;
+      box-shadow: var(--gl-shadow) !important;
+      border-radius: 14px !important;
       li {
         color: var(--sp-text) !important;
-        border-bottom: 1px solid rgba(0,0,0,0.06) !important;
-        &:last-child { border-bottom: none !important; }
-        &:hover { background: rgba(255,95,31,0.1) !important; color: #FF5F1F !important; }
+        border-bottom: 0.5px solid rgba(255,255,255,0.08) !important;
+        &:hover { background: rgba(255,45,85,0.16) !important; color: #fff !important; }
       }
     }
   }
 }
 
-/* ── Search ─────────────────────────────────────────────── */
-.search .superInputContainer {
-  background: rgba(255,255,255,0.72) !important;
-  backdrop-filter: blur(30px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
-  border: 1px solid rgba(0,0,0,0.08) !important;
-  border-top-color: rgba(255,255,255,0.9) !important;
-  border-radius: 16px !important;
-  box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 6px 20px rgba(30,20,10,0.07) !important;
-  &:focus-within {
-    background: rgba(255,255,255,0.9) !important;
-    box-shadow: 0 0 0 2px rgba(255,95,31,0.3), 0 8px 24px rgba(30,20,10,0.1) !important;
-    border-color: rgba(255,95,31,0.35) !important;
-  }
-  /* The container already provides the glass pill — keep the inner field
-     transparent so it doesn't render as a second nested pill. */
-  .superInput {
-    color: var(--sp-text) !important;
-    font-size: 16px !important;
-    background: transparent !important;
-    border: none !important;
-    border-radius: 0 !important;
-    &::placeholder { color: #8e8e93 !important; opacity: 1 !important; }
-    &:focus { border: none !important; box-shadow: none !important; }
-  }
-  .searchFilters { color: #6b6b72 !important; opacity: 1 !important; }
+.home header.hub-chrome {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 5;
+  background: transparent !important;
+  .home-title { display: none; }
 }
 
-/* Suggestions dropdown — must be opaque, or the colorful category tiles
-   behind it show through and the text becomes unreadable. */
-.search .superInputContainer .suggestions {
-  background: rgba(252,251,249,0.97) !important;
-  backdrop-filter: blur(30px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
-  border: 1px solid rgba(0,0,0,0.08) !important;
-  border-top: none !important;
-  border-radius: 0 0 16px 16px !important;
-  box-shadow: 0 12px 32px rgba(30,20,10,0.14) !important;
-  z-index: 30 !important;
-
-  li {
-    background: transparent !important;
-    border-bottom: 1px solid rgba(0,0,0,0.06) !important;
+/* ── Search ── */
+.search .superInputContainer {
+  background: rgba(118, 118, 128, 0.24) !important;
+  backdrop-filter: blur(20px) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  &:focus-within {
+    background: rgba(118, 118, 128, 0.36) !important;
+    box-shadow: none !important;
+  }
+  .superInput {
     color: var(--sp-text) !important;
-    opacity: 1 !important;
-    &:last-child { border-bottom: none !important; }
+    font-size: 17px !important;
+    background: transparent !important;
+    border: none !important;
+    &::placeholder { color: rgba(235,235,245,0.45) !important; }
+  }
+  .searchFilters { color: var(--sp-text-dim) !important; }
+}
+
+.search .superInputContainer .suggestions {
+  background: rgba(28,28,30,0.96) !important;
+  backdrop-filter: blur(40px) saturate(180%) !important;
+  border: 0.5px solid var(--gl-border) !important;
+  border-radius: 0 0 14px 14px !important;
+  box-shadow: var(--gl-shadow) !important;
+  li {
+    color: var(--sp-text) !important;
+    border-bottom: 0.5px solid rgba(255,255,255,0.08) !important;
     &:hover, &:focus, &.hover {
-      background: rgba(255,95,31,0.1) !important;
-      color: #FF5F1F !important;
+      background: rgba(255,45,85,0.16) !important;
+      color: #fff !important;
     }
   }
 }
 
-/* ── Inputs ─────────────────────────────────────────────── */
 input[type="search"], input[type="text"] {
-  background: rgba(255,255,255,0.7) !important;
+  background: rgba(118, 118, 128, 0.24) !important;
   border-radius: 12px !important;
-  border: 1px solid rgba(0,0,0,0.08) !important;
+  border: none !important;
   color: var(--sp-text) !important;
-  transition: border-color 0.2s ease !important;
-  &:focus { border-color: rgba(255,95,31,0.35) !important; outline: none !important; }
+  &:focus { box-shadow: none !important; outline: none !important; }
 }
 
-/* ── Settings ───────────────────────────────────────────── */
-/* Layout/colors fully owned by Settings.css (light glass groups, dark text,
-   orange toggles) — nothing to override here for the light theme. */
-
-/* ── Scrollbars ─────────────────────────────────────────── */
-::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar { width: 3px; height: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 2px; }
 
-/* ── Selection ──────────────────────────────────────────── */
-::selection { background: rgba(255,95,31,0.3); color: var(--sp-primary); }
+::selection { background: rgba(255,45,85,0.35); color: #fff; }
 
 /* ════════════════════════════════════════════════════════════
-   DESKTOP — Spotify-for-iPad style: left sidebar + glass
+   DESKTOP — iPadOS 27 sidebar
    ════════════════════════════════════════════════════════════ */
 @media (min-width: 900px) and (orientation: landscape) {
-
-  /* More translucency everywhere */
-  :root {
-    --gl-bg: rgba(255,255,255,0.6) !important;
-  }
-
-  /* ── Left sidebar (nav only). Stops above the bottom player bar ── */
   footer {
     position: fixed !important;
-    left: 0 !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    width: 256px !important;
+    left: 12px !important;
+    top: 12px !important;
+    bottom: 12px !important;
+    width: 240px !important;
     height: auto !important;
     flex-direction: column !important;
     justify-content: flex-start !important;
-    border-top: none !important;
-    border-right: 1px solid rgba(0,0,0,0.07) !important;
-    background: rgba(255,255,255,0.6) !important;
-    backdrop-filter: blur(80px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(80px) saturate(180%) !important;
-    box-shadow: 1px 0 0 rgba(255,255,255,0.6), 20px 0 60px rgba(30,20,10,0.06) !important;
-    padding: 0 !important;
+    border-radius: 28px !important;
+    background: var(--gl-bg) !important;
+    backdrop-filter: var(--gl-blur-heavy) !important;
+    -webkit-backdrop-filter: var(--gl-blur-heavy) !important;
+    border: 0.5px solid var(--gl-border) !important;
+    box-shadow: var(--gl-shadow) !important;
+    padding: 8px !important;
     z-index: 100 !important;
+    pointer-events: auto !important;
   }
-  /* When a track is playing, lift the sidebar above the bottom bar */
-  body:has(.miniplayer) footer { bottom: 92px !important; }
+  body:has(.miniplayer) footer { bottom: 104px !important; }
 
-  /* Brand title at top of sidebar */
   footer::before {
     content: 'SonicBoom';
     order: -2;
     display: block;
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: var(--font);
     font-size: 22px;
-    font-weight: 800;
-    letter-spacing: -0.02em;
+    font-weight: 700;
+    letter-spacing: -0.03em;
     color: #fff;
-    padding: 26px 24px 14px;
-    background: linear-gradient(90deg, #FF5F1F, #ff8f5f);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    padding: 22px 18px 10px;
   }
 
-  /* Nav becomes vertical list */
   nav {
     order: -1 !important;
     flex-direction: column !important;
     align-items: stretch !important;
     height: auto !important;
     width: 100% !important;
-    padding: 8px 12px !important;
+    padding: 6px !important;
     gap: 4px !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    backdrop-filter: none !important;
   }
 
   nav .nav-item {
     flex-direction: row !important;
     justify-content: flex-start !important;
-    align-items: center !important;
-    height: 54px !important;
-    gap: 20px !important;
-    padding: 0 18px !important;
-    border-radius: 12px !important;
+    height: 48px !important;
+    gap: 14px !important;
+    padding: 0 14px !important;
+    border-radius: 14px !important;
     font-size: 17px !important;
     font-weight: 600 !important;
-    letter-spacing: 0 !important;
-    text-transform: none !important;
-    color: #4a4a52 !important;
-    transition: background 0.15s ease, color 0.15s ease !important;
+    color: var(--sp-text-dim) !important;
   }
-  nav .nav-item .ms { font-size: 30px !important; }
-  nav .nav-item:hover { background: rgba(0,0,0,0.05) !important; color: var(--sp-text) !important; }
-  nav .nav-item.on { color: #FF5F1F !important; background: rgba(255,95,31,0.1) !important; }
-  nav .nav-item.on .ms { color: #fff !important; filter: none !important; }
+  nav .nav-item .ms {
+    font-size: 26px !important;
+    padding: 0 !important;
+    background: none !important;
+  }
+  nav .nav-item:hover { background: rgba(255,255,255,0.08) !important; color: #fff !important; }
+  nav .nav-item.on {
+    color: #fff !important;
+    background: rgba(255,45,85,0.22) !important;
+    .ms { background: none !important; color: var(--sp-primary) !important; }
+  }
 
-  /* ── Mini-player -> long full-width bar pinned to the very bottom ── */
   .miniplayer {
-    position: fixed !important;
     left: 0 !important;
     right: 0 !important;
     bottom: 0 !important;
@@ -504,82 +397,28 @@ input[type="search"], input[type="text"] {
     height: 84px !important;
     margin: 0 !important;
     padding: 0 24px !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    gap: 16px !important;
     border-radius: 0 !important;
     border: none !important;
-    border-top: 1px solid rgba(0,0,0,0.07) !important;
-    background: rgba(255,255,255,0.75) !important;
-    backdrop-filter: blur(80px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(80px) saturate(180%) !important;
-    box-shadow: 0 -10px 40px rgba(30,20,10,0.06) !important;
+    border-top: 0.5px solid var(--gl-border) !important;
+    background: rgba(28,28,30,0.86) !important;
     z-index: 200 !important;
   }
-  /* Desktop bar sits on light glass -> dark text, orange play button */
-  .miniplayer .mediaDetails a { color: var(--sp-text) !important; }
-  .miniplayer .mediaDetails p { color: #6b6b72 !important; }
-  .miniplayer #playButton {
-    background: #FF5F1F !important;
-    color: #fff !important;
-    box-shadow: 0 2px 12px rgba(255,95,31,0.35) !important;
-  }
-  .miniplayer button:not(#playButton), .miniplayer i { color: #4a4a52 !important; }
-  .miniplayer progress { background: rgba(0,0,0,0.1) !important; }
-  .miniplayer progress::-webkit-progress-bar { background: rgba(0,0,0,0.1) !important; }
-  .miniplayer progress::-webkit-progress-value { background: #FF5F1F !important; }
-
   .miniplayer img {
     width: 56px !important;
     height: 56px !important;
-    aspect-ratio: 1 !important;
     border-radius: 10px !important;
-    margin: 0 !important;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.6) !important;
   }
-
-  .miniplayer .mediaDetails {
-    flex: 0 1 260px !important;
-    min-width: 0 !important;
-    a { font-size: 15px !important; }
-    p { font-size: 13px !important; }
-  }
-
-  /* Controls centered like Spotify desktop */
-  .miniplayer .mp-controls {
-    margin-left: auto !important;
-    gap: 14px !important;
-  }
-  .miniplayer #playButton {
-    width: 44px !important;
-    height: 44px !important;
-    font-size: 24px !important;
-  }
-  .miniplayer button:not(#playButton), .miniplayer i { font-size: 26px !important; }
-
-  /* Progress line along the very bottom edge of the bar */
+  .miniplayer .mediaDetails { flex: 0 1 280px !important; }
+  .miniplayer .mp-controls { margin-left: auto !important; gap: 14px !important; }
+  .miniplayer #playButton { width: 44px !important; height: 44px !important; }
   .miniplayer progress {
-    position: absolute !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    width: 100% !important;
-    height: 3px !important;
-    border-radius: 0 !important;
-    margin: 0 !important;
+    left: 0 !important; right: 0 !important; width: 100% !important;
+    height: 3px !important; border-radius: 0 !important;
   }
 
-  /* ── Main content shifts right of the sidebar ── */
   main {
-    margin-left: 256px !important;
-    width: calc(100dvw - 256px) !important;
-    height: 100dvh !important;
+    margin-left: 264px !important;
+    width: calc(100dvw - 264px) !important;
   }
-
-  main section {
-    min-width: 100% !important;
-    padding-bottom: 40px !important;
-  }
-  /* Clear the bottom player bar when a track is playing */
   body:has(.miniplayer) main { height: calc(100dvh - 84px) !important; }
 }

@@ -250,11 +250,11 @@
     font-size: 22px;
     font-weight: 700;
     line-height: 1.3;
-    color: #3f3f46;
+    color: rgba(235,235,245,0.35);
     transition: color 0.3s ease, transform 0.3s ease;
     cursor: pointer;
 
-    &:hover { color: #71717a; }
+    &:hover { color: rgba(235,235,245,0.7); }
 
     &.active {
       color: #ffffff;
