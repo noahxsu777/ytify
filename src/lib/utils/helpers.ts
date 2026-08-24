@@ -24,18 +24,16 @@ export function proxyHandler(
   url: string,
   prefetch?: boolean
 ) {
-  const isVideo = Boolean(document.querySelector('video'));
-  const useProxy = playerStore.stream.author?.endsWith('- Topic') && !isVideo;
-
   if (!prefetch)
     setPlayerStore('status', t('player_audiostreams_insert'));
 
-  const link = new URL(url);
-  const origin = link.origin;
-  const proxy = getApi();
-
-  return useProxy && !url.includes('&fallback') ?
-    url.replace(origin, proxy) : url;
+  // /api/iv already resolves a fully playable, absolute audio URL (an
+  // instance-proxied Piped/Invidious URL, or our own /api/stream for
+  // InnerTube) — no client-side origin rewriting is needed or safe here.
+  // Rewriting the origin to a random Invidious instance used to silently
+  // break playback for "- Topic" (i.e. most official music) tracks, since
+  // the URL path scheme differs between sources.
+  return url;
 }
 
 

@@ -118,15 +118,34 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { iv: INVIDIOUS, pi: PIPED } = getInstances();
 
   // ── Video request ──
-  // FAST PATH: race sources that return directly-playable (instance-proxied)
-  // audio URLs, so the browser can play in ONE round trip (no /api/stream hop).
+  // ONE unified race across every source, starting all of them at once —
+  // whichever answers with playable audio FIRST wins. Google's own InnerTube
+  // endpoint is usually the fastest (direct, not a loaded public instance),
+  // so it must compete from the start, not be tried only after everything
+  // else has already failed.
   if (videoId) {
     const hasPlayableAudio = (d: any) =>
       Array.isArray(d?.adaptiveFormats) &&
       d.adaptiveFormats.some((f: any) => (f.type || '').startsWith('audio') && /^https?:\/\//.test(f.url || ''));
 
-    const playable = await Promise.any([
-      // Piped audioStreams are already instance-proxied -> play cross-IP
+    const attempts: Promise<any>[] = [
+      // Google-direct — fastest, but the URL is IP-locked, so route it
+      // through /api/stream (byte proxy) instead of using it raw.
+      fetchInnertube(videoId).then(d => {
+        d.adaptiveFormats = [{
+          url: `/api/stream?id=${videoId}`,
+          type: 'audio/webm; codecs="opus"',
+          bitrate: '128000',
+          container: 'webm',
+          audioQuality: 'AUDIO_QUALITY_MEDIUM',
+          audioSampleRate: '48000',
+          audioChannels: 2,
+          encoding: 'opus',
+        }];
+        d.formatStreams = [];
+        return d;
+      }),
+      // Piped audioStreams are already instance-proxied -> play cross-IP directly
       ...PIPED.map(inst =>
         tryFetch(`${inst}/streams/${videoId}`).then(d => {
           const data = pipedToInvidious(d, videoId);
@@ -134,8 +153,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           return data;
         })
       ),
-      // Invidious with local=true -> instance-proxied audio
-      ...INVIDIOUS.map(inst =>
+      // Invidious with local=true -> instance-proxied audio, also direct
+      ...INVIDIOUS.slice(0, 6).map(inst =>
         tryFetch(`${inst}/api/v1/videos/${videoId}?local=true`).then(d => {
           d.adaptiveFormats = (d.adaptiveFormats || []).map((f: any) => ({
             ...f, url: f.url?.startsWith('/') ? inst + f.url : f.url,
@@ -144,42 +163,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           return d;
         })
       ),
-    ]).catch(() => null);
+    ];
 
-    if (playable && 'lengthSeconds' in playable) {
-      res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=3600');
-      return res.status(200).json(playable);
-    }
+    const winner = await Promise.any(attempts).catch(() => null);
 
-    // FALLBACK: couldn't get a proxied URL — get metadata any way we can and
-    // route audio through /api/stream (which byte-proxies InnerTube).
-    let meta: any = null;
-    try {
-      meta = await Promise.any([
-        fetchInnertube(videoId),
-        ...INVIDIOUS.map(inst => tryFetch(`${inst}${path}${suffix}`)),
-        ...PIPED.map(inst => tryFetch(`${inst}/streams/${videoId}`).then(d => pipedToInvidious(d, videoId))),
-      ]);
-    } catch { /* nothing answered */ }
-
-    if (!meta || !('lengthSeconds' in meta)) {
+    if (!winner || !('lengthSeconds' in winner)) {
       return res.status(502).json({ error: 'All sources failed' });
     }
 
-    meta.adaptiveFormats = [{
-      url: `/api/stream?id=${videoId}`,
-      type: 'audio/webm; codecs="opus"',
-      bitrate: '128000',
-      container: 'webm',
-      audioQuality: 'AUDIO_QUALITY_MEDIUM',
-      audioSampleRate: '48000',
-      audioChannels: 2,
-      encoding: 'opus',
-    }];
-    meta.formatStreams = [];
-
     res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=3600');
-    return res.status(200).json(meta);
+    return res.status(200).json(winner);
   }
 
   // ── Search / channels: race Invidious instances ──

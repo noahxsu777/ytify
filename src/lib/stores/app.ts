@@ -4,7 +4,6 @@ import { config } from "@lib/utils/config";
 const storeInit: {
   invidious: string[],
   index: number
-  useSaavn: boolean,
   api: string,
   updater?: () => void,
   actionsMenu?: CollectionItem,
@@ -22,7 +21,6 @@ const storeInit: {
   ],
   index: 0,
   api: Backend[Math.floor(Math.random() * Backend.length)],
-  useSaavn: true,
   homeView: (config.home || 'Hub') as "" | "Hub" | "Library" | "Search",
 };
 

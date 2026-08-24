@@ -1,40 +1,38 @@
 /* ============================================================
-   SonicBoom — iOS 26 Liquid Glass Design System
+   SonicBoom — Light "Home" design system
    ============================================================ */
 
 /* ── Glass primitives ────────────────────────────────────── */
 :root {
-  --gl-blur:        blur(60px) saturate(180%);
-  --gl-blur-heavy:  blur(80px) saturate(200%) brightness(1.15);
-  --gl-bg:          rgba(18, 18, 18, 0.55);
-  --gl-bg-light:    rgba(255, 255, 255, 0.07);
-  --gl-border:      rgba(255, 255, 255, 0.14);
-  --gl-border-top:  rgba(255, 255, 255, 0.22);
-  --gl-shadow:      0 0 0 0.5px rgba(255,255,255,0.08) inset,
-                    0 1px 0 rgba(255,255,255,0.14) inset,
-                    0 24px 64px rgba(0,0,0,0.55);
-  --gl-shadow-sm:   0 0 0 0.5px rgba(255,255,255,0.06) inset,
-                    0 1px 0 rgba(255,255,255,0.1) inset,
-                    0 8px 32px rgba(0,0,0,0.4);
+  --gl-blur:        blur(40px) saturate(160%);
+  --gl-blur-heavy:  blur(50px) saturate(160%);
+  --gl-bg:          rgba(255, 255, 255, 0.7);
+  --gl-bg-light:    rgba(0, 0, 0, 0.03);
+  --gl-border:      rgba(0, 0, 0, 0.07);
+  --gl-border-top:  rgba(255, 255, 255, 0.9);
+  --gl-shadow:      0 1px 0 rgba(255,255,255,0.7) inset,
+                    0 10px 30px rgba(20,15,10,0.08);
+  --gl-shadow-sm:   0 1px 0 rgba(255,255,255,0.7) inset,
+                    0 4px 16px rgba(20,15,10,0.06);
   --gl-radius:      22px;
   --gl-radius-sm:   14px;
 
   /* Brand tokens */
   --sp-primary:     #FF5F1F;
-  --sp-bg:          #050505;
-  --sp-text:        #ffffff;
-  --sp-text-dim:    #8e8e93;
-  --sp-surface:     rgba(28, 28, 30, 0.8);
+  --sp-bg:          #F7F5F2;
+  --sp-text:        #17161A;
+  --sp-text-dim:    #6b6b72;
+  --sp-surface:     rgba(0, 0, 0, 0.035);
 
   /* Override ytify vars */
   --bg:          var(--sp-bg)         !important;
   --trueBg:      var(--sp-bg)         !important;
   --text:        var(--sp-text)       !important;
   --text2:       var(--sp-primary)    !important;
-  --onBg:        rgba(44,44,46,0.9)   !important;
-  --onBg2:       rgba(58,58,60,0.9)   !important;
-  --scheme:      rgba(28,28,30,0.8)   !important;
-  --borderColor: rgba(255,255,255,0.1) !important;
+  --onBg:        rgba(0,0,0,0.04)     !important;
+  --onBg2:       rgba(0,0,0,0.07)     !important;
+  --scheme:      rgba(0,0,0,0.03)     !important;
+  --borderColor: rgba(0,0,0,0.08)     !important;
   --roundness:   0.6rem               !important;
   --chroma:      0                    !important;
   --font: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif !important;
@@ -43,18 +41,18 @@
 /* ── Base ──────────────────────────────────────────────── */
 html, body {
   background: var(--sp-bg) !important;
-  color: #fff !important;
+  color: var(--sp-text) !important;
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Ambient gradient behind everything */
+/* Ambient warm gradient behind everything */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(255,95,31,0.12) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(168,85,247,0.08) 0%, transparent 60%);
+    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(255,95,31,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(168,85,247,0.04) 0%, transparent 60%);
   pointer-events: none;
   z-index: 0;
 }
@@ -67,22 +65,23 @@ main {
 
   section > header > p {
     font-family: 'Plus Jakarta Sans', sans-serif !important;
-    font-size: 22px !important;
-    font-weight: 700 !important;
-    color: #fff !important;
+    font-size: 30px !important;
+    font-weight: 800 !important;
+    color: var(--sp-text) !important;
+    letter-spacing: -0.02em !important;
     opacity: 1 !important;
   }
 }
 
 /* ── Footer glass bar ───────────────────────────────────── */
 footer {
-  background: rgba(10,10,10,0.7) !important;
+  background: rgba(255,255,255,0.75) !important;
   backdrop-filter: var(--gl-blur-heavy) !important;
   -webkit-backdrop-filter: var(--gl-blur-heavy) !important;
-  border-top: 1px solid var(--gl-border-top) !important;
+  border-top: 1px solid rgba(0,0,0,0.06) !important;
   box-shadow:
-    0 1px 0 rgba(255,255,255,0.12) inset,
-    0 -20px 60px rgba(0,0,0,0.6) !important;
+    0 1px 0 rgba(255,255,255,0.8) inset,
+    0 -20px 40px rgba(20,15,10,0.05) !important;
 }
 
 /* ── Mini-player — solid orange "now playing" pill ── */
