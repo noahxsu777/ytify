@@ -292,11 +292,11 @@ nav {
 
 /* ── Section headers ────────────────────────────────────── */
 section > header {
-  background: rgba(5,5,5,0.75) !important;
+  background: rgba(247,245,242,0.85) !important;
   backdrop-filter: blur(40px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
-  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
-  > p { font-family: 'Plus Jakarta Sans', sans-serif !important; font-size: 22px !important; font-weight: 700 !important; color: #fff !important; opacity: 1 !important; }
+  border-bottom: 1px solid rgba(0,0,0,0.06) !important;
+  > p { font-family: 'Plus Jakarta Sans', sans-serif !important; font-size: 22px !important; font-weight: 800 !important; color: var(--sp-text) !important; opacity: 1 !important; }
 }
 
 /* ── Search ─────────────────────────────────────────────── */

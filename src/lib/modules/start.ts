@@ -103,10 +103,14 @@ export default async function() {
   if (import.meta.env.PROD)
     await import('virtual:pwa-register').then(pwa => {
 
+      // Auto-apply updates immediately instead of showing a dismissible
+      // prompt — a tap on any nav button closes overlays (including this
+      // one) without updating, leaving users stuck on a stale cached build
+      // indefinitely. Always serving the latest build is safer here.
       const handleUpdate = pwa.registerSW({
+        immediate: true,
         onNeedRefresh() {
-          setStore({ updater: handleUpdate });
-          setNavStore('updater', 'state', true)
+          handleUpdate(true);
         }
       });
     });
