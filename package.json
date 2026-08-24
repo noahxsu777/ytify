@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "solid-js": "1.9.10",
-    "sortablejs": "^1.15.6"
+    "sortablejs": "^1.15.6",
+    "youtubei.js": "^18.0.0"
   },
   "devDependencies": {
     "@netlify/blobs": "^10.5.0",

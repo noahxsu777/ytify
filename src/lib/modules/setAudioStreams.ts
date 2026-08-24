@@ -6,9 +6,6 @@ export default async function(
   prefetchNode?: HTMLAudioElement
 ) {
 
-  if (!prefetchNode)
-    setPlayerStore('status', t('player_audiostreams_setup'));
-
   const noOfBitrates = audioStreams.length;
 
   if (!noOfBitrates) {
@@ -17,8 +14,15 @@ export default async function(
     return;
   }
 
-
   const id = playerStore.stream.id;
+  const audio = prefetchNode || playerStore.audio;
+  // Don't interrupt an already-loading same-origin stream with the same URL.
+  if (!prefetchNode && id && audio.src.includes('/api/stream') && audio.src.includes(id))
+    return;
+
+  if (!prefetchNode)
+    setPlayerStore('status', t('player_audiostreams_setup'));
+
   const sameOrigin = id ? `/api/stream?id=${id}` : '';
   const stream = await preferredStream(handleXtags(audioStreams));
   const url = sameOrigin || stream?.url;
@@ -27,10 +31,6 @@ export default async function(
     setPlayerStore('playbackState', 'none');
     return;
   }
-  const audio = prefetchNode || playerStore.audio;
-  // Don't interrupt an already-loading same-origin stream with the same URL.
-  if (!prefetchNode && audio.src.includes('/api/stream') && audio.src.includes(id))
-    return;
   audio.src = proxyHandler(url, Boolean(prefetchNode));
 
 }

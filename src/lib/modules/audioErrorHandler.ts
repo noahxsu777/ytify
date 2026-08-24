@@ -7,11 +7,16 @@ export default function(
   audio: HTMLAudioElement,
   prefetch = ''
 ) {
-  audio.pause();
-
   const { stream } = playerStore;
   const id = prefetch || stream.id;
   if (!id) return;
+
+  // A 403/502 on a later byte-range must not kill a track that's already playing.
+  if (!prefetch && (audio.currentTime > 0.5 || playerStore.playbackState === 'playing')) {
+    return;
+  }
+
+  audio.pause();
 
   const fallbackSrc = `/api/stream?id=${id}&t=${Date.now()}`;
 
