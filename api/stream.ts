@@ -122,13 +122,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Access-Control-Allow-Headers', 'Range');
   res.setHeader('Access-Control-Expose-Headers', 'Content-Length, Content-Range, Accept-Ranges');
 
+  const CHUNK = 512 * 1024;
   const rawRange = Array.isArray(req.headers.range) ? req.headers.range[0] : req.headers.range;
   const clientRange = parseRange(rawRange);
+  // googlevideo 403s full-file and open-ended `bytes=N-` requests.
   const rangeHeader = clientRange
     ? (clientRange.end !== undefined
       ? `bytes=${clientRange.start}-${clientRange.end}`
-      : `bytes=${clientRange.start}-`)
-    : 'bytes=0-';
+      : `bytes=${clientRange.start}-${clientRange.start + CHUNK - 1}`)
+    : `bytes=0-${CHUNK - 1}`;
 
   const src = (String(req.query.src || 'auto') as Source);
   const resolvers = orderFor(src);
@@ -147,14 +149,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       res.setHeader('Cache-Control', 'private, max-age=0');
       const len = upstream.headers.get('content-length');
       const cr = upstream.headers.get('content-range');
-      if (!clientRange) {
-        res.status(200);
-        if (len) res.setHeader('Content-Length', len);
-      } else {
-        res.status(upstream.status);
-        if (len) res.setHeader('Content-Length', len);
-        if (cr) res.setHeader('Content-Range', cr);
-      }
+      res.status(upstream.status);
+      if (len) res.setHeader('Content-Length', len);
+      if (cr) res.setHeader('Content-Range', cr);
       await pipeBody(upstream, res);
       return;
     } catch (e) {
