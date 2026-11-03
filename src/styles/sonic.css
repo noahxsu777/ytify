@@ -1,0 +1,42 @@
+/* Sonic Boome: dark music discovery theme */
+:root {
+  --sp-primary:#ff1760; --sp-bg:#120913; --sp-text:#fff; --sp-text-dim:#bcb2c1;
+  --sp-surface:#211323; --sp-elevated:#301a2d;
+  --gl-bg:rgba(31,18,31,.96); --gl-border:rgba(255,255,255,.11);
+  --gl-border-top:rgba(255,255,255,.1); --gl-shadow:0 10px 30px rgba(0,0,0,.25);
+  --bg:#120913!important; --trueBg:#120913!important; --text:#fff!important;
+  --scheme:#211323!important; --onBg:rgba(255,255,255,.07)!important; --onBg2:rgba(255,255,255,.12)!important;
+  --borderColor:rgba(255,255,255,.12)!important;
+}
+html {color-scheme:dark}
+html,body {background:#120913!important;color:#fff!important}
+body::before {background:radial-gradient(ellipse 100% 35% at 95% -2%,rgba(213,0,78,.38),transparent 65%),radial-gradient(ellipse 80% 40% at 0% 70%,rgba(105,0,48,.22),transparent 70%)}
+main .home {padding-left:0!important;padding-right:0!important}
+main .hub {display:block!important;width:100%;padding:0 0 32px;max-width:1100px;margin:auto}
+/* Section rules for main panels must not apply to the nested home sections. */
+main .hub .hub-section {height:auto!important;min-width:0!important;overflow:visible!important;padding:0!important;margin:0 0 28px!important;scroll-snap-align:none}
+.sonic-brand {display:flex;align-items:center;gap:8px;padding:21px 20px 0;color:white;font-size:21px;letter-spacing:-.04em;font-weight:800;line-height:1.15}
+.sonic-wave {display:flex;align-items:center;gap:3px;height:28px}
+.sonic-wave i {width:3px;height:12px;border-radius:8px;background:#ff1760}.sonic-wave i:nth-child(2),.sonic-wave i:nth-child(4){height:20px}.sonic-wave i:nth-child(3){height:28px}
+.home header.hub-chrome {top:14px;left:auto;right:18px;width:auto}
+.home header.hub-chrome details {top:0;right:0}
+.home header.hub-chrome details summary {background:rgba(255,23,96,.12)!important;border:1px solid #ff1760!important;width:38px;height:38px;margin:0!important}
+.home header.hub-chrome details summary i {margin:0;color:#fff!important}
+section > header details ul {background:#2b192b!important}
+section > header details ul li {color:#fff!important;border-color:rgba(255,255,255,.08)!important}
+.hub .hub-greeting {padding:26px 20px 0}
+.hub .hub-greeting h1 {font-size:clamp(31px,8vw,46px);font-weight:800;line-height:1.05;letter-spacing:-.045em;color:#fff;margin:0 0 16px;position:relative}
+.hub .hub-greeting h1::after {content:'';position:absolute;left:2px;bottom:-9px;width:60px;height:3px;border-radius:10px;background:linear-gradient(90deg,#ff1760,transparent)}
+.hub .hub-greeting p {font-size:14px;line-height:1.35;color:#c5bac9;margin:0}
+.sonic-chips {display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:16px 16px 18px}.sonic-chips::-webkit-scrollbar {display:none}
+.sonic-chips button {white-space:nowrap;display:flex;align-items:center;gap:5px;border:1px solid rgba(255,255,255,.09);border-radius:30px;padding:9px 12px;color:#fff;background:#321d30;font-size:12px;font-weight:700;cursor:pointer}.sonic-chips button .ms,.sonic-chips button span {font-size:18px}.sonic-chips button.active {background:linear-gradient(110deg,#ff286e,#e6004c);border-color:transparent}
+.sonic-featured {margin:0 14px 24px;border:1px solid rgba(255,50,130,.26);border-radius:18px;overflow:hidden;min-height:210px;display:flex;align-items:center;background:linear-gradient(90deg,rgba(35,9,32,.97) 0%,rgba(35,9,32,.82) 37%,rgba(35,9,32,.08) 78%),url('/late-night-vibes.webp') center/cover no-repeat}
+.sonic-featured-content {padding:20px;width:57%}.sonic-eyebrow {color:#ff216b;letter-spacing:.18em;font-size:10px;font-weight:800}.sonic-featured h2 {color:#fff;font-size:clamp(28px,7vw,44px);line-height:.98;letter-spacing:-.05em;font-weight:800;margin:9px 0}.sonic-featured p {font-size:12px;line-height:1.35;color:#d4c6d6;margin:0 0 14px}.sonic-featured-actions {display:flex;gap:9px;align-items:center}.sonic-featured-actions button {cursor:pointer}.sonic-play {display:flex;align-items:center;gap:5px;border:0;border-radius:30px;padding:8px 18px;color:white;background:linear-gradient(100deg,#ff286e,#db004b);font-size:13px;font-weight:700}.sonic-play .ms {font-size:22px}.sonic-featured-open {border:1px solid rgba(255,255,255,.15);background:rgba(54,30,53,.85);border-radius:50%;width:36px;height:36px;color:#fff;display:grid;place-items:center}.sonic-featured-open .ms {font-size:20px}
+.hub .hub-section .hub-section-header {padding:0 20px;margin-bottom:12px}.hub .hub-section .hub-section-header h2 {font-size:21px;letter-spacing:-.035em;color:#fff}.hub .hub-section .hub-section-header button {font-size:11px;color:#ff1760;letter-spacing:.06em;padding:4px 0}.hub .hub-section .hub-section-header .hub-section-subtitle {font-size:12px;color:#bcb2c1}
+.hub .hub-section .hub-scroll {padding:0 20px 4px;gap:10px}.hub .hub-section .hub-card {width:120px}.hub .hub-section .hub-card .hub-card-art {width:120px;height:120px;border-radius:15px;margin-bottom:7px;background:#2a1929;box-shadow:none}.hub .hub-card-title {font-size:12px;max-width:120px;color:white}.hub .hub-card-sub {font-size:11px;max-width:120px;color:#bcb2c1}
+.sonic-mix {flex:0 0 145px;min-width:0;cursor:pointer}.sonic-mix-art {height:120px;border-radius:15px;overflow:hidden;position:relative;background:#3b193d}.sonic-mix-art img {width:100%;height:100%;object-fit:cover}.sonic-mix-art::after {content:'';position:absolute;left:0;right:0;bottom:0;height:50%;background:linear-gradient(transparent,rgba(220,0,83,.88))}.sonic-mix-name {position:absolute;bottom:8px;left:10px;font-weight:800;color:white;font-size:13px;z-index:1}.sonic-mix-play {position:absolute;bottom:7px;right:8px;border-radius:50%;background:rgba(17,9,23,.82);font-size:22px;color:#fff;z-index:1}.sonic-mix p,.sonic-mix small {display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#bcb2c1;font-size:11px;margin:5px 2px 0}.sonic-mix small {margin-top:1px}
+.hub-list-row,.streamItem,.listItem {background:#241626!important;color:#fff!important}.hub-list-row:hover,.hub-list-row:active {background:#321d30!important}.hub-list .hub-list-row .hub-list-info p:first-child {color:#fff}.hub-list .hub-list-row .hub-list-info p:last-child {color:#bcb2c1}
+.search .superInputContainer,.search .superInputContainer:focus-within,input[type=search],input[type=text] {background:#2a1a2b!important;color:white!important}.search .superInputContainer .suggestions {background:#29192a!important}
+#playerSection {background:linear-gradient(#30152f,#110913)!important}.miniplayer {background:rgba(39,22,38,.97)!important;border:1px solid rgba(255,105,164,.25)!important;border-radius:18px!important;bottom:calc(70px + env(safe-area-inset-bottom,0px))!important;padding:9px 10px!important;gap:10px!important}.miniplayer .mp-info {flex:1;min-width:0}.miniplayer .mediaDetails a {color:#fff!important}.miniplayer .mediaDetails p {color:#bcb2c1!important}.miniplayer progress {position:static!important;width:100%!important;height:3px!important;display:block;margin-top:7px;background:rgba(255,255,255,.15)!important}.miniplayer progress::-webkit-progress-bar {background:rgba(255,255,255,.15)!important}.miniplayer #playButton {width:40px!important;height:40px!important;background:#ff1760!important}
+footer {padding:0 0 env(safe-area-inset-bottom,0px)!important;background:rgba(19,10,22,.96)!important;border-top:1px solid rgba(255,255,255,.08)!important}nav {border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;height:62px!important}nav .nav-item {font-size:10px!important;color:#aca2b0!important}nav .nav-item .ms {padding:2px!important;font-size:24px!important}nav .nav-item.on {color:#ff1760!important}nav .nav-item.on .ms {color:#ff1760!important;background:transparent!important;filter:drop-shadow(0 0 10px #ff1760)}
+@media (min-width:900px) and (orientation:landscape) {footer {padding:8px!important;background:var(--gl-bg)!important}.hub .hub-greeting {padding-top:28px}.sonic-brand {padding-top:30px}.sonic-featured {min-height:300px}.sonic-featured-content {max-width:390px}.sonic-featured p {font-size:16px}.sonic-mix {flex-basis:190px}.sonic-mix-art {height:160px}.miniplayer {bottom:0!important}}
