@@ -2,6 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Readable } from 'node:stream';
 import { forgetPlayable, getPlayableAudio } from '../src/backend/yt_player.js';
 import { getInstances } from '../src/backend/instances.js';
+import { firstPlayable } from '../src/backend/race_playable.js';
 
 export const config = { maxDuration: 60 };
 
@@ -32,19 +33,14 @@ function pickAudio(formats: any[]): any | null {
   return audio[0];
 }
 
-async function fetchUpstream(url: string, range?: string) {
+async function fetchUpstream(url: string, range?: string, signal?: AbortSignal) {
   const googlevideo = url.includes('googlevideo.com');
   const headers: Record<string, string> = {
     'User-Agent': googlevideo ? IOS_UA : BROWSER_UA,
     Accept: '*/*',
   };
   if (range) headers.Range = range;
-  let upstream = await fetch(url, { headers, redirect: 'follow' });
-  if (!upstream.ok && upstream.status !== 206) {
-    await new Promise((r) => setTimeout(r, 200));
-    upstream = await fetch(url, { headers, redirect: 'follow' });
-  }
-  return upstream;
+  return fetch(url, { headers, redirect: 'follow', signal });
 }
 
 async function pipeBody(upstream: Response, res: VercelResponse) {
@@ -135,29 +131,36 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const src = (String(req.query.src || 'auto') as Source);
   const resolvers = orderFor(src);
 
-  for (const resolve of resolvers) {
-    const playable = await resolve(id);
-    if (!playable?.url) continue;
-    try {
-      const upstream = await fetchUpstream(playable.url, rangeHeader);
+  try {
+    // Resolve and validate all available sources at once. A resolver only wins
+    // once it actually supplies audio, so a fast but unusable URL cannot win.
+    const { upstream, mime } = await firstPlayable(resolvers.map(resolve => async (signal: AbortSignal) => {
+      const playable = await resolve(id);
+      if (signal.aborted || !playable?.url) throw new Error('Source unavailable');
+      const upstream = await fetchUpstream(playable.url, rangeHeader, signal);
       if (!upstream.ok && upstream.status !== 206) {
         if (resolve === viaInnertube) forgetPlayable(id);
-        continue;
+        throw new Error(`Upstream ${upstream.status}`);
       }
-      res.setHeader('Content-Type', upstream.headers.get('content-type') || playable.mime);
-      res.setHeader('Accept-Ranges', 'bytes');
-      res.setHeader('Cache-Control', 'private, max-age=0');
-      const len = upstream.headers.get('content-length');
-      const cr = upstream.headers.get('content-range');
-      res.status(upstream.status);
-      if (len) res.setHeader('Content-Length', len);
-      if (cr) res.setHeader('Content-Range', cr);
-      await pipeBody(upstream, res);
-      return;
-    } catch (e) {
-      console.error('pipe failed', resolve.name, e);
-      if (resolve === viaInnertube) forgetPlayable(id);
-    }
+      const contentType = upstream.headers.get('content-type') || '';
+      if (!upstream.body || /text\/html|application\/json/i.test(contentType)) {
+        upstream.body?.cancel().catch(() => {});
+        throw new Error('Source did not return audio');
+      }
+      return { upstream, mime: playable.mime };
+    }), 8000);
+    res.setHeader('Content-Type', upstream.headers.get('content-type') || mime);
+    res.setHeader('Accept-Ranges', 'bytes');
+    res.setHeader('Cache-Control', 'private, max-age=0');
+    const len = upstream.headers.get('content-length');
+    const cr = upstream.headers.get('content-range');
+    res.status(upstream.status);
+    if (len) res.setHeader('Content-Length', len);
+    if (cr) res.setHeader('Content-Range', cr);
+    await pipeBody(upstream, res);
+    return;
+  } catch (e) {
+    console.error('audio sources unavailable', e instanceof Error ? e.message : 'unknown error');
   }
 
   return res.status(502).json({ error: 'No playable source found' });
