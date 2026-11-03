@@ -1,5 +1,5 @@
 import { createSignal, For, Show, createMemo } from "solid-js";
-import { fetchCollection, getCollectionsKeys, getTracksMap } from "@lib/utils";
+import { fetchCollection, getCollection, getCollectionsKeys, getTracksMap } from "@lib/utils";
 import { t } from "@lib/stores";
 import StreamItem from "@components/StreamItem";
 import searchTracks from "@lib/modules/finder";
@@ -77,29 +77,19 @@ export default function() {
         </Show>
       </Show>
       <Show when={!searchText()}>
-        <Show when={getCollectionsKeys().length} fallback={t('library_empty')}>
-          <For each={getCollectionsKeys()}>
-            {(item) => (
-              <a
-                href={'?collection=' + item}
-                class='clxn_item'
-                onclick={(e) => {
-                  e.preventDefault();
-                  fetchCollection(item);
-                }}
-              >{<Show
-                when={item in reservedCollections}
-                fallback={<><i class='ri-play-list-2-fill'></i>{item}</>
-                }
-              >
-                <i class={reservedCollections[item as 'history'][0]}></i>
-                {t(reservedCollections[item as 'history'][1] as 'library_history')}
-              </Show>
-                }</a>
-            )}
-
-          </For>
-        </Show>
+        <div class="library-collection-heading"><h2>{document.documentElement.lang.startsWith('es') ? 'Tu colección' : 'Your collection'}</h2><span>{getCollectionsKeys().length}</span></div>
+        <div class="collection-grid">
+          <Show when={getCollectionsKeys().length} fallback={t('library_empty')}>
+            <For each={getCollectionsKeys()}>{item => (
+              <a href={'?collection=' + item} class="clxn_item" onclick={(e) => { e.preventDefault(); fetchCollection(item); }}>
+                <span class="collection-icon"><i class={item in reservedCollections ? reservedCollections[item as 'history'][0] : 'ri-play-list-2-fill'}></i></span>
+                <span class="collection-copy"><strong>{item in reservedCollections ? t(reservedCollections[item as 'history'][1] as 'library_history') : item}</strong>
+                  <small>{getCollection(item).length} {document.documentElement.lang.startsWith('es') ? 'canciones' : 'tracks'}</small></span>
+                <i class="ri-arrow-right-s-line collection-chevron" aria-hidden="true"></i>
+              </a>
+            )}</For>
+          </Show>
+        </div>
       </Show>
     </>
   );

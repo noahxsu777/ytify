@@ -148,6 +148,7 @@ export default function() {
       </header>
 
 
+      <div class="list-intro"><span class="list-intro-icon ms material-symbols-outlined" aria-hidden="true">library_music</span><div><span>{document.documentElement.lang.startsWith('es') ? 'TU MÚSICA' : 'YOUR MUSIC'}</span><p>{listStore.list.length} {document.documentElement.lang.startsWith('es') ? 'canciones' : 'tracks'}</p></div></div>
       <Show when={showSortMenu()}>
         <span>
           <label for="sortMenu">{t('list_sort_order')} :</label>
