@@ -53,10 +53,10 @@ const NewAlbums = () => {
 export default function() {
   return (
     <div class='library'>
+      <div class="library-brand"><span class="sonic-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span>Sonic Boome</span></div>
+      <div class="library-intro"><h1>{t('nav_library')}</h1><p>{document.documentElement.lang.startsWith('es') ? 'Toda tu música, en un solo lugar' : 'All your music, in one place'}</p></div>
       <Collections />
-      <br />
       <NewAlbums />
-      <br />
       <For each={['albums', 'playlists', 'channels']}>
         {(item) =>
           <SubLists flag={item as 'albums' | 'playlists' | 'channels'} />
