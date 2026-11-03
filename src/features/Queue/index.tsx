@@ -24,7 +24,7 @@ export default function() {
 
       <div class="queue-brand"><span class="sonic-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span>Sonic Boome</span></div>
       <header>
-        <div class="queue-heading"><h1>{t('nav_queue')}</h1><p>{queueStore.list.length} {document.documentElement.lang.startsWith('es') ? 'canciones' : 'tracks'}<Show when={queueStore.list.length}> · {totalQueueDuration(queueStore.list)}</Show></p></div>
+        <div class="queue-heading"><h1>{t('nav_queue')}</h1><p>{queueStore.list.length} {document.documentElement.lang.startsWith('es') ? (queueStore.list.length === 1 ? 'canción' : 'canciones') : (queueStore.list.length === 1 ? 'track' : 'tracks')}<Show when={queueStore.list.length}> · {totalQueueDuration(queueStore.list)}</Show></p></div>
         <div class="right-group">
           <i
             class="ri-shuffle-line"
