@@ -1,6 +1,7 @@
 import { convertSStoHHMMSS } from "./helpers";
 import { playerStore, setPlayerStore, setStore, store } from "@lib/stores";
 import { config } from "./config";
+import { generateImageUrl } from "./image";
 import getStreamData from "../modules/getStreamData";
 import { clearStreamRetry } from "../modules/audioErrorHandler";
 
@@ -23,6 +24,7 @@ export async function player(id?: string, isRetry = false) {
     if (playerStore.stream.id !== id) {
       setPlayerStore('stream', { id, title: '', author: '', authorId: '', duration: '' });
     }
+    if (config.loadImage) setPlayerStore('mediaArtwork', generateImageUrl(id, 'hq', playerStore.stream.author?.endsWith('- Topic')));
     setPlayerStore({ playbackState: 'loading', status: 'Loading Audio...', currentTime: 0, fullDuration: 0 });
     const audio = playerStore.audio;
     audio.src = `/api/stream?id=${encodeURIComponent(id)}`;

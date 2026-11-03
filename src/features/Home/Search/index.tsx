@@ -52,7 +52,7 @@ export default function() {
       <form class="superInputContainer" onsubmit={e => e.preventDefault()}>
         <span class="search-icon ms material-symbols-outlined" aria-hidden="true">search</span>
         <Input />
-        <Filters onFilterChange={setActiveFilter} />
+        <Filters value={activeFilter()} onFilterChange={setActiveFilter} />
       </form>
       <div class="search-chips" aria-label={es() ? 'Filtros de búsqueda' : 'Search filters'}>
         <For each={chips()}>{chip => <button type="button" classList={{ active: activeFilter() === chip.value }} aria-pressed={activeFilter() === chip.value} onclick={() => changeFilter(chip.value)}>{chip.label}</button>}</For>
