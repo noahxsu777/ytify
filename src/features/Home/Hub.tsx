@@ -3,6 +3,7 @@ import { updateSubfeed } from "@lib/modules/hub";
 import { fetchCollection, getCollection, getTracksMap, drawer, generateImageUrl, player } from "@lib/utils";
 import { setListStore, setNavStore, setPlayerStore, navStore, t } from "@lib/stores";
 import { config } from "@lib/utils";
+import { addToQueue } from "@lib/stores/queue";
 
 type FeedItem = { id: string; title: string; author: string; duration: string; authorId: string };
 
@@ -69,26 +70,6 @@ function SongCard(props: { item: CollectionItem | FeedItem; contextId: string; c
   );
 }
 
-/* Large featured banner card */
-function FeaturedCard(props: { item: CollectionItem | FeedItem; contextId: string; contextSrc: Context; label?: string }) {
-  // 'hq' — YouTube only serves default/mq/hq/sd/maxres thumbnails. A bogus
-  // size (e.g. '480') 404s and renders as a broken image.
-  const img = () => generateImageUrl(props.item.id, 'hq', props.item.author?.endsWith('- Topic'));
-  return (
-    <div class="hub-featured" onclick={() => playItem(props.item, props.contextId, props.contextSrc)}>
-      <img src={img()} alt={props.item.title} loading="lazy" />
-      <div class="hub-featured-overlay">
-        <span class="hub-featured-label">{props.label || 'Top Pick'}</span>
-        <h3 class="hub-featured-title">{props.item.title}</h3>
-        <p class="hub-featured-sub">{props.item.author?.replace(' - Topic', '')}</p>
-        <div class="hub-featured-play">
-          <span class="ms material-symbols-outlined">play_arrow</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* Compact list row — used for Frequently Played & Trending */
 function ListRow(props: { item: CollectionItem | FeedItem; contextId: string; contextSrc: Context; rank?: number }) {
   const img = () => generateImageUrl(props.item.id, 'mq', props.item.author?.endsWith('- Topic'));
@@ -134,12 +115,9 @@ export default function() {
     .slice(0, 5) as CollectionItem[];
 
   function goToSearch(query: string) {
-    import('@lib/stores').then(({ setStore }) => setStore('homeView', 'Search'));
+    import('@lib/stores').then(({ setStore, setSearchStore }) => { setSearchStore('query', query); setStore('homeView', 'Search'); });
     import('@lib/utils').then(({ setConfig }) => setConfig('home', 'Search'));
-    setTimeout(() => {
-      const input = document.querySelector<HTMLInputElement>('input[type="search"], .search input, #searchInput');
-      if (input) { input.value = query; input.dispatchEvent(new Event('input', { bubbles: true })); }
-    }, 150);
+
   }
 
   const featuredItems = () => subfeed().length ? subfeed() : trending();
@@ -147,51 +125,56 @@ export default function() {
   return (
     <div class="hub">
 
-      {/* Greeting */}
+      <div class="sonic-brand"><span class="sonic-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span>Sonic Boome</span></div>
       <div class="hub-greeting">
         <h1>{greeting()}</h1>
-        <p>What do you want to listen to?</p>
+        <p>What do you want to listen to today?</p>
       </div>
 
-      {/* Recently Played — square rounded cards */}
+      <div class="sonic-chips" aria-label="Explore music">
+        <button class="active" onclick={() => document.getElementById('sonic-featured')?.scrollIntoView({ behavior: 'smooth', block: 'center' })}><span>✦</span> Discover</button>
+        <button onclick={() => document.getElementById('sonic-trending')?.scrollIntoView({ behavior: 'smooth' })}><span class="ms material-symbols-outlined">local_fire_department</span> Trending</button>
+        <button onclick={() => document.getElementById('sonic-genres')?.scrollIntoView({ behavior: 'smooth' })}><span class="ms material-symbols-outlined">equalizer</span> Mood</button>
+        <button onclick={() => goToSearch('music radio mixes')}><span class="ms material-symbols-outlined">podcasts</span> Radio</button>
+      </div>
+
+      <div id="sonic-featured" class="sonic-featured">
+        <div class="sonic-featured-content">
+          <span class="sonic-eyebrow">FEATURED PLAYLIST</span>
+          <h2>Late Night<br />Vibes</h2>
+          <p>Chill hits, indie gems and electronic moods for after dark.</p>
+          <div class="sonic-featured-actions">
+            <button class="sonic-play" onclick={() => {
+              const picks = featuredItems();
+              if (!picks.length) return;
+              addToQueue(picks.slice(1) as CollectionItem[], { replace: true });
+              playItem(picks[0], 'Late Night Vibes', 'hub');
+            }}><span class="ms material-symbols-outlined">play_arrow</span> Play</button>
+            <button class="sonic-featured-open" aria-label="Explore featured music" onclick={() => {
+              setListStore({ name: 'Late Night Vibes', list: featuredItems() as CollectionItem[] });
+              setNavStore('list', 'state', true);
+            }}><span class="ms material-symbols-outlined">queue_music</span></button>
+          </div>
+        </div>
+      </div>
+
       <Show when={recents().length > 0}>
         <section class="hub-section">
-          <div class="hub-section-header">
-            <div class="hub-section-titles">
-              <h2>Recently Played</h2>
-            </div>
-            <button onclick={() => fetchCollection('history')}>SEE ALL</button>
-          </div>
-          <div class="hub-scroll">
-            <For each={recents()}>
-              {item => <SongCard item={item} contextId="Recently Played" contextSrc="hub" />}
-            </For>
-          </div>
+          <div class="hub-section-header"><h2>Recently Played</h2><button onclick={() => fetchCollection('history')}>SEE ALL ›</button></div>
+          <div class="hub-scroll"><For each={recents()}>{item => <SongCard item={item} contextId="Recently Played" contextSrc="hub" />}</For></div>
         </section>
       </Show>
 
-      {/* Top Picks — featured banner + square scroll */}
       <Show when={featuredItems().length > 0}>
-        <section class="hub-section">
-          <div class="hub-section-header">
-            <div class="hub-section-titles">
-              <h2>Made for you</h2>
-              <p class="hub-section-subtitle">Mixes and tracks to start with</p>
-            </div>
-            <button onclick={() => {
-              const items = featuredItems().map(i => ({ ...i, duration: i.duration || '' }));
-              setListStore({ name: 'Top Picks', list: items as CollectionItem[] });
-              setNavStore('list', 'state', true);
-            }}>SEE ALL</button>
-          </div>
-          <FeaturedCard item={featuredItems()[0]} contextId="Top Picks" contextSrc="hub" label="Playlist of the Day" />
-          <Show when={featuredItems().length > 1}>
-            <div class="hub-scroll" style={{ 'margin-top': '14px' }}>
-              <For each={featuredItems().slice(1, 8)}>
-                {item => <SongCard item={item} contextId="Top Picks" contextSrc="hub" />}
-              </For>
-            </div>
-          </Show>
+        <section class="hub-section sonic-mixes">
+          <div class="hub-section-header"><div class="hub-section-titles"><h2>Made for you</h2><p class="hub-section-subtitle">Mixes and tracks to match your taste</p></div><button onclick={() => {
+            setListStore({ name: 'Top Picks', list: featuredItems() as CollectionItem[] });
+            setNavStore('list', 'state', true);
+          }}>SEE ALL ›</button></div>
+          <div class="hub-scroll"><For each={featuredItems().slice(0, 8)}>{(item, i) => <div class="sonic-mix" onclick={() => { const picks = featuredItems(); addToQueue([...picks.slice(i() + 1), ...picks.slice(0, i())] as CollectionItem[], { replace: true }); playItem(item, 'Top Picks', 'hub'); }}>
+            <div class="sonic-mix-art"><img src={generateImageUrl(item.id, 'mq', item.author?.endsWith('- Topic'))} alt={item.title} loading="lazy" /><span class="sonic-mix-name">{i() === 0 ? 'Daily Mix 1' : i() === 1 ? 'Daily Mix 2' : i() === 2 ? 'Chill Mix' : 'Your Mix'}</span><span class="sonic-mix-play ms material-symbols-outlined">play_arrow</span></div>
+            <p>{item.title}</p><small>{item.author?.replace(' - Topic', '')}</small>
+          </div>}</For></div>
         </section>
       </Show>
 
@@ -223,7 +206,7 @@ export default function() {
 
       {/* Trending Now — compact list rows */}
       <Show when={trending().length >= 3}>
-        <section class="hub-section">
+        <section id="sonic-trending" class="hub-section">
           <div class="hub-section-header">
             <h2>Trending Now</h2>
           </div>
@@ -236,7 +219,7 @@ export default function() {
       </Show>
 
       {/* Browse by Genre */}
-      <section class="hub-section">
+      <section id="sonic-genres" class="hub-section">
         <div class="hub-section-header">
           <h2>Browse by Genre</h2>
         </div>

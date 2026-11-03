@@ -2,6 +2,7 @@
 
 import { For, lazy, onMount, Show } from 'solid-js';
 import '../styles/global.css';
+import '../styles/sonic.css';
 import { navStore, playerStore, setStore, store } from '@lib/stores';
 import { config } from '@lib/utils';
 import NavBar from '@components/NavBar.tsx';
