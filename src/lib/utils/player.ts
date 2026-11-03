@@ -36,6 +36,18 @@ export async function player(id?: string, isRetry = false) {
   if (!data || !('adaptiveFormats' in data)) return;
 
   const invidiousData = data as Invidious;
+  // Prefer the fast browser-to-Invidious stream if it resolves before the
+  // same-origin source has started; do not interrupt audio already playing.
+  if (!enforceVideo && playerStore.playbackState === 'loading' && playerStore.audio.currentTime === 0) {
+    const audio = playerStore.audio;
+    const formats = invidiousData.adaptiveFormats.filter(f => f.type?.startsWith('audio') && f.url && audio.canPlayType(f.type));
+    formats.sort ( (a, b) => Number(b.bitrate || 0) - Number(a.bitrate || 0));
+    if (formats[0]) {
+      audio.src = formats[0].url;
+      audio.load();
+      audio.play().catch(() => {});
+    }
+  }
   setPlayerStore('data', data);
   if (invidiousData.lengthSeconds > 0) setPlayerStore('fullDuration', invidiousData.lengthSeconds);
 
