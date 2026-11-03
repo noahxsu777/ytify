@@ -22,18 +22,15 @@ export default async function() {
 
 
 
-  await fetchUma()
+  void fetchUma()
     .then(data => {
       // Merge Uma instances with the built-in fallbacks (dedup, Uma first)
       const merged = [...new Set([...data, ...store.invidious])];
-      setStore({
-        invidious: merged,
-        index: 0
-      })
+      setStore('invidious', merged)
     })
     .catch(() => {
       // Keep the built-in fallback instances already in the store
-      setStore('snackbar', '⚠️  Failed to Fetch Instances from Uma');
+      // Built-in instances remain available when the background refresh fails.
     });
 
   const collection = params.get('collection');

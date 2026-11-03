@@ -6,10 +6,10 @@ import { config, setConfig, drawer, setDrawer, cssVar, themer, quickSwitch, dele
 import Dropdown from "./Dropdown";
 import ToggleSwitch from "./ToggleSwitch";
 
-function Group(props: { label: string; children: any }) {
+function Group(props: { label: string; icon: string; children: any }) {
   return (
     <div class="settings-group">
-      <p class="settings-group-label">{props.label}</p>
+      <p class="settings-group-label"><span class="settings-group-icon ms material-symbols-outlined" aria-hidden="true">{props.icon}</span>{props.label}</p>
       <div class="settings-group-body">{props.children}</div>
     </div>
   );
@@ -30,49 +30,17 @@ export default function() {
       ref={settingsSection}
       class="settingsSection"
     >
-      <header>
-        <p>Settings</p>
-        <i
-          aria-label={t('close')}
-          class="ri-close-large-line" onclick={() => closeFeature('settings')}
-        />
+      <header class="settings-hero">
+        <div class="settings-brand"><span class="sonic-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span>Sonic Boome</span></div>
+        <button type="button" class="settings-back" aria-label={t('close')} onclick={() => closeFeature('settings')}><span class="ms material-symbols-outlined">arrow_back</span></button>
+        <h1>{t('nav_settings')}</h1>
+        <p>{document.documentElement.lang.startsWith('es') ? 'Personaliza tu experiencia' : 'Personalize your experience'}</p>
         <Dropdown />
       </header>
 
       <div>
-        <Group label="App">
-          <Selector
-            label='settings_language'
-            id='languageSelector'
-            onchange={(e) => {
-              setConfig('language', e.target.value);
-              setI18nStore('locale', e.target.value);
-              setStore('snackbar', t('settings_reload'));
-            }}
-            value={document.documentElement.lang}
-          >
-            <For each={Locales}>
-              {(item) => (
-                <option value={item}>{new Intl.DisplayNames(document.documentElement.lang, { type: 'language' }).of(item)}</option>
-              )}
-            </For>
-          </Selector>
 
-          <Selector
-            id='shareAction'
-            label='settings_pwa_share_action'
-            onchange={(e) => {
-              setConfig('shareAction', e.target.value as 'play' | 'watch' | 'download');
-            }}
-            value={config.shareAction}
-          >
-            <option value='play'>{t('player_play_button')}</option>
-            <option value='watch'>{t('settings_pwa_watch')}</option>
-            <option value='dl'>{t('actions_menu_download')}</option>
-          </Selector>
-        </Group>
-
-        <Group label="Playback">
+        <Group label={document.documentElement.lang.startsWith('es') ? "Reproducción" : "Playback"} icon="play_arrow">
           <Selector
             label='settings_audio_quality'
             id='qualityPreference'
@@ -108,7 +76,39 @@ export default function() {
           />
         </Group>
 
-        <Group label="Library">
+        <Group label={document.documentElement.lang.startsWith('es') ? "Aplicación" : "App"} icon="apps">
+          <Selector
+            label='settings_language'
+            id='languageSelector'
+            onchange={(e) => {
+              setConfig('language', e.target.value);
+              setI18nStore('locale', e.target.value);
+              setStore('snackbar', t('settings_reload'));
+            }}
+            value={document.documentElement.lang}
+          >
+            <For each={Locales}>
+              {(item) => (
+                <option value={item}>{new Intl.DisplayNames(document.documentElement.lang, { type: 'language' }).of(item)}</option>
+              )}
+            </For>
+          </Selector>
+
+          <Selector
+            id='shareAction'
+            label='settings_pwa_share_action'
+            onchange={(e) => {
+              setConfig('shareAction', e.target.value as 'play' | 'watch' | 'download');
+            }}
+            value={config.shareAction}
+          >
+            <option value='play'>{t('player_play_button')}</option>
+            <option value='watch'>{t('settings_pwa_watch')}</option>
+            <option value='dl'>{t('actions_menu_download')}</option>
+          </Selector>
+        </Group>
+
+        <Group label={document.documentElement.lang.startsWith('es') ? "Biblioteca e historial" : "Library and history"} icon="shield">
           <ToggleSwitch
             id='discoverSwitch'
             name='settings_store_discoveries'
@@ -145,7 +145,7 @@ export default function() {
           />
         </Group>
 
-        <Group label="Search">
+        <Group label={document.documentElement.lang.startsWith('es') ? "Búsqueda" : "Search"} icon="search">
           <ToggleSwitch
             id="LinkCaptureSwitch"
             name='settings_link_capturing'
@@ -175,7 +175,7 @@ export default function() {
           />
         </Group>
 
-        <Group label="Appearance">
+        <Group label={document.documentElement.lang.startsWith('es') ? "Personalización" : "Personalization"} icon="palette">
           <ToggleSwitch
             id='imgLoadSwitch'
             name='settings_load_images'

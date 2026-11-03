@@ -1,9 +1,10 @@
-import { onCleanup, Show } from "solid-js";
+import { createSignal, onCleanup, Show, For } from "solid-js";
 import './Search.css';
 import Results from './Results';
 import Input from "./Input";
-import { resetSearch, searchStore } from "@lib/stores";
+import { getSearchResults, resetSearch, searchStore, setSearchStore, updateParam } from "@lib/stores";
 import Filters from "./Filters";
+import { config, setConfig } from "@lib/utils";
 
 const categories = [
   { label: 'Pop',        gradient: 'linear-gradient(135deg,#E13300,#FF6437)', shadow: 'rgba(225,51,0,0.3)',   query: 'pop music hits' },
@@ -18,6 +19,22 @@ const categories = [
 
 export default function() {
   onCleanup(resetSearch);
+  const [activeFilter, setActiveFilter] = createSignal(config.searchFilter);
+  const es = () => document.documentElement.lang.startsWith('es');
+  const chips = () => [
+    { value: 'all', label: es() ? 'Todos' : 'All' },
+    { value: 'music_songs', label: es() ? 'Canciones' : 'Songs' },
+    { value: 'music_artists', label: es() ? 'Artistas' : 'Artists' },
+    { value: 'music_playlists', label: es() ? 'Listas' : 'Playlists' },
+  ];
+  function changeFilter(value: string) {
+    searchStore.observer.disconnect();
+    setActiveFilter(value);
+    setSearchStore({ page: 1, results: [] });
+    setConfig('searchFilter', value);
+    updateParam('f', value === 'all' ? '' : value);
+    if (searchStore.query.trim()) getSearchResults();
+  }
 
   function searchCategory(q: string) {
     import('@lib/stores').then(({ setSearchStore, getSearchResults }) => {
@@ -30,10 +47,17 @@ export default function() {
 
   return (
     <div class="search">
+      <div class="search-brand"><span class="sonic-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span>Sonic Boome</span></div>
+      <div class="search-intro"><h1>{es() ? 'Buscar' : 'Search'}</h1><p>{es() ? 'Encuentra canciones, artistas, álbumes y listas' : 'Find songs, artists, albums and playlists'}</p></div>
       <form class="superInputContainer" onsubmit={e => e.preventDefault()}>
+        <span class="search-icon ms material-symbols-outlined" aria-hidden="true">search</span>
         <Input />
-        <Filters />
+        <Filters onFilterChange={setActiveFilter} />
       </form>
+      <div class="search-chips" aria-label={es() ? 'Filtros de búsqueda' : 'Search filters'}>
+        <For each={chips()}>{chip => <button type="button" classList={{ active: activeFilter() === chip.value }} aria-pressed={activeFilter() === chip.value} onclick={() => changeFilter(chip.value)}>{chip.label}</button>}</For>
+      </div>
+      <Show when={searchStore.query && (searchStore.isLoading || searchStore.results.length > 0)}><h2 class="search-results-title">{es() ? 'Resultados' : 'Results'} <span aria-hidden="true">✦</span></h2></Show>
 
       {/* Keep categories visible while typing; only hide once a search is in flight or has results. */}
       <Show when={!searchStore.isLoading && searchStore.results.length === 0}>
