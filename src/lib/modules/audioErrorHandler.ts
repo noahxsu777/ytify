@@ -28,6 +28,7 @@ export default function(
   }
 
   const next = () => {
+    if (!prefetch && playerStore.stream.id !== id) return;
     audio.src = `/api/stream?id=${id}&src=${src}&t=${Date.now()}`;
     audio.load();
     audio.play().catch(() => {});

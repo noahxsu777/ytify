@@ -236,22 +236,13 @@ createRoot(() => {
     });
   }
 
-  playerStore.audio.oncanplaythrough = async function() {
-    const nextItem = config.queuePrefetch && queueStore.list[0]?.id;
-
-    if (!nextItem) return;
-
-    const data = await getStreamData(nextItem, true);
-    const prefetchRef = new Audio();
-    prefetchRef.onerror = () => audioErrorHandler(prefetchRef, nextItem);
-    if (data && 'adaptiveFormats' in data)
-      import('../modules/setAudioStreams')
-        .then(mod => mod.default(
-          data.adaptiveFormats
-            .filter(f => f.type.startsWith('audio'))
-            .sort((a, b) => (parseInt(a.bitrate) - parseInt(b.bitrate))),
-          prefetchRef
-        ));
+  playerStore.audio.oncanplaythrough = function() {
+    const nextId = config.queuePrefetch && queueStore.list[0]?.id;
+    if (!nextId || prefetchedFor === nextId) return;
+    prefetchedFor = nextId;
+    getStreamData(nextId, true).catch(() => {});
+    prefetchAudio.src = `/api/stream?id=${encodeURIComponent(nextId)}`;
+    prefetchAudio.load();
   }
 
   playerStore.audio.onerror = () => audioErrorHandler(playerStore.audio);
