@@ -184,6 +184,8 @@ export default function(data: {
 
           <img
             crossorigin='anonymous'
+            loading='lazy'
+            decoding='async'
             onerror={handleThumbnailError}
             onload={handleThumbnailLoad}
             src={getImage()}

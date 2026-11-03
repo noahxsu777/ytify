@@ -17,6 +17,7 @@ export default async function fetchSearchSuggestions(
     return fetchJson<{ suggestions: string[] }>(`/api/iv?path=${encodeURIComponent(path)}`, signal)
       .then(data => Array.isArray(data?.suggestions) ? data.suggestions : [])
       .catch(e => {
+        if (signal.aborted) throw e;
         const api = getApi(index);
         const url = `${api}/api/v1/search/suggestions?q=${encodeURIComponent(text)}`;
         return fetchJson<{ suggestions: string[] }>(url, signal)

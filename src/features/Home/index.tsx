@@ -30,7 +30,7 @@ export default function() {
   return (
     <section class="home" ref={homeRef}>
 
-      <header classList={{ 'hub-chrome': store.homeView === 'Hub' }}>
+      <header classList={{ 'hub-chrome': store.homeView === 'Hub', 'search-chrome': store.homeView === 'Search' }}>
         <p class="home-title">
           {store.homeView === 'Hub' ? '' : store.homeView ? t(map[store.homeView]) : 'Sonic Boom'}</p>
 

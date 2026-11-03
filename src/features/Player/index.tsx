@@ -73,6 +73,7 @@ export default function() {
         ></i>
       </header>
       <article>
+        <div class="player-kicker"><span class="player-kicker-wave" aria-hidden="true"><i></i><i></i><i></i><i></i></span>{t('player_now_playing')}</div>
 
         <Show when={playerStore.isWatching && !playerStore.isMusic}>
           <Video />

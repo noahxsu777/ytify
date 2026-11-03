@@ -21,7 +21,10 @@ const createInitialState = () => ({
 
 export const [searchStore, setSearchStore] = createStore(createInitialState());
 
+let searchRequest = 0;
 export function resetSearch() {
+  searchRequest++;
+  searchStore.suggestions.controller.abort();
   searchStore.observer.disconnect();
   setSearchStore(createInitialState());
   updateParam('q');
@@ -30,6 +33,7 @@ export function resetSearch() {
 
 export function getSearchSuggestions(text: string) {
   if (text.length < 3) {
+    searchStore.suggestions.controller.abort();
     setSearchStore('suggestions', 'data', []);
     return;
   }
@@ -43,7 +47,7 @@ export function getSearchSuggestions(text: string) {
 
   fetchSearchSuggestions(text, newController.signal)
     .then(data => {
-      setSearchStore('suggestions', 'data', data);
+      if (!newController.signal.aborted && searchStore.query === text) setSearchStore('suggestions', 'data', data);
     })
     .catch(e => {
       if (e.name === 'AbortError') return;
@@ -58,6 +62,7 @@ export async function getSearchResults() {
 
   if (!query) return;
 
+  const requestId = ++searchRequest;
   setSearchStore('isLoading', true);
   searchStore.suggestions.controller.abort();
   setSearchStore('suggestions', 'data', []);
@@ -102,6 +107,7 @@ export async function getSearchResults() {
 
   getData()
     .then(data => {
+      if (requestId !== searchRequest || searchStore.query !== query || config.searchFilter !== searchFilter) return;
       setSearchStore('results', data);
       if (!isMusic) {
         setSearchStore('page', page + 1);
@@ -113,6 +119,7 @@ export async function getSearchResults() {
               searchFilter,
               searchStore.page
             );
+            if (requestId !== searchRequest || searchStore.query !== query || config.searchFilter !== searchFilter) return;
             if (moreData) {
               const existingIds = new Set(searchStore.results.map(item => 'id' in item ? item.id : (item as YTListItem).url));
               const uniqueMoreData = moreData.filter(item => item && !existingIds.has('id' in item ? item.id : (item as YTListItem).url));
@@ -128,11 +135,12 @@ export async function getSearchResults() {
       }
     })
     .catch(e => {
+      if (requestId !== searchRequest || searchStore.query !== query || config.searchFilter !== searchFilter) return;
       setStore('snackbar', e.message);
       setSearchStore('results', []);
     })
     .finally(() => {
-      setSearchStore('isLoading', false);
+      if (requestId === searchRequest) setSearchStore('isLoading', false);
     });
 
   updateParam('q', query);

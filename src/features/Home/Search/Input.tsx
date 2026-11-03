@@ -1,21 +1,21 @@
-import { For, onMount, Show } from "solid-js";
+import { For, onCleanup, onMount, Show } from "solid-js";
 import { getSearchResults, getSearchSuggestions, playerStore, searchStore, setSearchStore, t } from "@lib/stores";
 import { config, drawer, idFromURL, player } from "@lib/utils";
 
 export default function() {
 
   let superInput!: HTMLInputElement;
+  let suggestionTimer: ReturnType<typeof setTimeout> | undefined;
+  onCleanup(() => { clearTimeout(suggestionTimer); searchStore.suggestions.controller.abort(); });
 
   onMount(() => {
 
-    setTimeout(() => {
-      superInput.focus();
-    }, 500);
     getSearchResults();
 
   });
 
   function textToSearch(text: string) {
+    clearTimeout(suggestionTimer);
     superInput.blur();
     setSearchStore('suggestions', 'data', []);
     setSearchStore('page', 1);
@@ -69,6 +69,8 @@ export default function() {
         }}
         oninput={async (e) => {
           const { value } = e.target;
+          clearTimeout(suggestionTimer);
+          searchStore.suggestions.controller.abort();
           setSearchStore('query', value);
 
           if (!value) {
@@ -76,7 +78,7 @@ export default function() {
             return;
           }
 
-          getSearchSuggestions(value);
+          suggestionTimer = setTimeout(() => getSearchSuggestions(value), 250);
         }}
         onkeydown={(e) => {
           const { data, index } = searchStore.suggestions;
@@ -103,6 +105,9 @@ export default function() {
 
         }}
       />
+      <Show when={searchStore.query}>
+        <button type="button" class="search-clear" aria-label={document.documentElement.lang.startsWith('es') ? 'Limpiar búsqueda' : 'Clear search'} onclick={() => { clearTimeout(suggestionTimer); searchStore.suggestions.controller.abort(); setSearchStore({ query: '', results: [], isLoading: false, page: 1 }); superInput.focus(); }}>×</button>
+      </Show>
       <Show
         when={config.searchSuggestions && searchStore.suggestions.data.length > 0}
       >

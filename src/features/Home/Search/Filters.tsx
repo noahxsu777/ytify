@@ -1,13 +1,14 @@
 import { getSearchResults, searchStore, setSearchStore, updateParam, t } from "@lib/stores";
 import { config, setConfig } from "@lib/utils";
 
-export default function() {
+export default function(props: { onFilterChange?: (value: string) => void }) {
 
 
 
   return (
     <select
       class="searchFilters"
+      aria-label={t('search_filter_all')}
       onchange={(e) => {
         const { value } = e.target;
         searchStore.observer.disconnect();
@@ -16,6 +17,7 @@ export default function() {
           results: [],
         });
         setConfig('searchFilter', value);
+        props.onFilterChange?.(value);
         updateParam('f', value);
 
         getSearchResults();
