@@ -18,3 +18,5 @@ dialog.displayer {background:#291729!important;color:#fff!important;border:1px s
 @keyframes sonic-surface-arrive {from {opacity:0;transform:translateY(7px)} to {opacity:1;transform:translateY(0)}}
 .library .collection-grid a,.queue-empty,#listSection .list-intro {animation:sonic-surface-arrive .25s ease both}
 @media (prefers-reduced-motion:reduce) {.library .collection-grid a,.queue-empty,#listSection .list-intro {animation:none!important}}
+
+.queue-empty h2 {text-align:center;max-width:none;width:100%}

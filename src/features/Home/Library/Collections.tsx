@@ -35,10 +35,9 @@ export default function() {
     liked: ['ri-thumb-up-fill', 'library_liked']
   };
 
-  if (getCollectionsKeys().length === 0) {
-    for (const collection in reservedCollections) {
-      localStorage.setItem('library_' + collection, '[]');
-    }
+  for (const collection in reservedCollections) {
+    const key = 'library_' + collection;
+    if (localStorage.getItem(key) === null) localStorage.setItem(key, '[]');
   }
 
   const searchResults = createMemo(() => {
@@ -84,7 +83,7 @@ export default function() {
               <a href={'?collection=' + item} class="clxn_item" onclick={(e) => { e.preventDefault(); fetchCollection(item); }}>
                 <span class="collection-icon"><i class={item in reservedCollections ? reservedCollections[item as 'history'][0] : 'ri-play-list-2-fill'}></i></span>
                 <span class="collection-copy"><strong>{item in reservedCollections ? t(reservedCollections[item as 'history'][1] as 'library_history') : item}</strong>
-                  <small>{getCollection(item).length} {document.documentElement.lang.startsWith('es') ? 'canciones' : 'tracks'}</small></span>
+                  <small>{getCollection(item).length} {document.documentElement.lang.startsWith('es') ? (getCollection(item).length === 1 ? 'canción' : 'canciones') : (getCollection(item).length === 1 ? 'track' : 'tracks')}</small></span>
                 <i class="ri-arrow-right-s-line collection-chevron" aria-hidden="true"></i>
               </a>
             )}</For>
