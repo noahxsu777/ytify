@@ -1,14 +1,14 @@
 import { getSearchResults, searchStore, setSearchStore, updateParam, t } from "@lib/stores";
-import { config, setConfig } from "@lib/utils";
+import { setConfig } from "@lib/utils";
 
-export default function(props: { onFilterChange?: (value: string) => void }) {
+export default function(props: { value: string; onFilterChange?: (value: string) => void }) {
 
 
 
   return (
     <select
       class="searchFilters"
-      aria-label={t('search_filter_all')}
+      aria-label={document.documentElement.lang.startsWith('es') ? 'Filtros avanzados' : 'Advanced filters'}
       onchange={(e) => {
         const { value } = e.target;
         searchStore.observer.disconnect();
@@ -23,7 +23,7 @@ export default function(props: { onFilterChange?: (value: string) => void }) {
         getSearchResults();
 
       }}
-      value={config.searchFilter}
+      value={props.value}
     >
       <optgroup label={t('search_filter_youtube')}>
         <option value="all">{t('search_filter_all')}</option>
