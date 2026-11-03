@@ -2,12 +2,14 @@ import { convertSStoHHMMSS } from "./helpers";
 import { playerStore, setPlayerStore, setStore, store } from "@lib/stores";
 import { config } from "./config";
 import getStreamData from "../modules/getStreamData";
+import { clearStreamRetry } from "../modules/audioErrorHandler";
 
 let playerAbortController: AbortController;
 export async function player(id?: string, isRetry = false) {
   playerAbortController?.abort();
   if (!id) return;
 
+  clearStreamRetry(id);
   const controller = new AbortController();
   playerAbortController = controller;
   const enforceVideo = !playerStore.isMusic && playerStore.isWatching;
