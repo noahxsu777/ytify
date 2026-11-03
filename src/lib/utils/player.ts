@@ -5,74 +5,57 @@ import getStreamData from "../modules/getStreamData";
 
 let playerAbortController: AbortController;
 export async function player(id?: string, isRetry = false) {
-
-  if (playerAbortController)
-    playerAbortController.abort();
-
-  playerAbortController = new AbortController();
-
+  playerAbortController?.abort();
   if (!id) return;
 
+  const controller = new AbortController();
+  playerAbortController = controller;
   const enforceVideo = !playerStore.isMusic && playerStore.isWatching;
 
-  if (!enforceVideo)
-    setPlayerStore({
-      playbackState: 'loading',
-      status: 'Loading Audio...'
-    });
+  if (!isRetry) setStore('index', 0);
+  if (!store.invidious.length) setStore('snackbar', 'No Instances are Available');
 
-  if (!store.invidious.length)
-    setStore('snackbar', 'No Instances are Available');
-
-  const data = await getStreamData(id, false, playerAbortController.signal);
-
-  if (!isRetry)
-    setStore('index', 0);
-
-  if (data && 'adaptiveFormats' in data)
-    setPlayerStore({
-      data,
-      fullDuration: data.lengthSeconds
-    });
-  else {
-    // Still try the same-origin stream — don't show Playback failed.
-    if (!enforceVideo) {
-      const audio = playerStore.audio;
-      audio.src = `/api/stream?id=${id}&t=${Date.now()}`;
-      audio.load();
-      audio.play().catch(() => {});
+  // Start the audio request during the user's tap. Metadata and recommendations
+  // arrive independently and never restart an already loading/playing stream.
+  if (!enforceVideo) {
+    if (playerStore.stream.id !== id) {
+      setPlayerStore('stream', { id, title: '', author: '', authorId: '', duration: '' });
     }
-    return;
+    setPlayerStore({ playbackState: 'loading', status: 'Loading Audio...', currentTime: 0, fullDuration: 0 });
+    const audio = playerStore.audio;
+    audio.src = `/api/stream?id=${encodeURIComponent(id)}`;
+    audio.load();
+    audio.play().catch(() => {});
   }
 
-  const invidiousData = data as Invidious;
+  const data = await getStreamData(id, false, controller.signal);
+  // A slower response for the previous song must never replace the new song.
+  if (controller.signal.aborted || playerStore.stream.id !== id) return;
+  if (!data || !('adaptiveFormats' in data)) return;
 
-  await import('../modules/setMetadata')
-    .then(mod => mod.default({
+  const invidiousData = data as Invidious;
+  setPlayerStore('data', data);
+  if (invidiousData.lengthSeconds > 0) setPlayerStore('fullDuration', invidiousData.lengthSeconds);
+
+  // The local stream fallback has no metadata; preserve the known track details.
+  if (invidiousData.title) {
+    const setMetadata = await import('../modules/setMetadata');
+    if (controller.signal.aborted || playerStore.stream.id !== id) return;
+    await setMetadata.default({
       id,
       title: invidiousData.title,
       author: invidiousData.author,
       duration: convertSStoHHMMSS(invidiousData.lengthSeconds),
       authorId: invidiousData.authorId
-    }));
+    });
+  }
 
-  import('../modules/setAudioStreams')
-    .then(mod => mod.default(
-      invidiousData.adaptiveFormats
-        .filter(f => f.type.startsWith('audio'))
-        .sort((a, b) => (parseInt(a.bitrate) - parseInt(b.bitrate)))
-    ));
-
-    if (!enforceVideo)
-      import('../modules/enqueueRelatedStreams')
-        .then(mod => mod.default(invidiousData.recommendedVideos));
+  if (!enforceVideo)
+    import('../modules/enqueueRelatedStreams')
+      .then(mod => { if (!controller.signal.aborted) mod.default(invidiousData.recommendedVideos); });
 
   if (config.discover)
-    import('../modules/setDiscoveries')
-      .then(mod => {
-        setTimeout(() => {
-          mod.default(id, invidiousData.recommendedVideos);
-        }, 1e5);
-      });
-
+    import('../modules/setDiscoveries').then(mod => {
+      setTimeout(() => { if (!controller.signal.aborted) mod.default(id, invidiousData.recommendedVideos); }, 1e5);
+    });
 }
