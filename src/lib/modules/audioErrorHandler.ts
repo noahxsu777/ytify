@@ -1,4 +1,5 @@
 import { playerStore, setPlayerStore } from '@lib/stores/player.ts';
+import { setStore } from '@lib/stores/app';
 
 const attempts = new Map<string, number>();
 const SOURCES = ['auto', 'piped', 'iv'] as const;
@@ -17,6 +18,13 @@ export default function(
   }
 
   const n = attempts.get(id) || 0;
+  if (prefetch) return;
+  if (n >= SOURCES.length) {
+    setPlayerStore('playbackState', 'paused');
+    setPlayerStore('status', 'Audio unavailable');
+    setStore('snackbar', 'Audio unavailable. Please try another track or try again later.');
+    return;
+  }
   attempts.set(id, n + 1);
   const src = SOURCES[n % SOURCES.length];
   const delay = n >= SOURCES.length ? 600 : 0;
